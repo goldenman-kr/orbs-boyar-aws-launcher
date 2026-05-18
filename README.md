@@ -1,10 +1,10 @@
 # KRYP Labs Orbs Boyar AWS Launcher
 
-Release candidate for launching an Orbs Boyar validator node on AWS with CloudFormation.
+Public early-access release for launching an Orbs Boyar validator node on AWS with CloudFormation.
 
-This package is intended for a future free AWS Marketplace / GitHub Launch Stack distribution under the **KRYP Labs** brand.
+This package is the **KRYP Labs** GitHub Launch Stack early-access flow. It is intended to evolve toward a future free AWS Marketplace distribution.
 
-## Current release-candidate status
+## Current early-access status
 
 - Region support: `us-east-2` only
 - Public AMI ID: `ami-0bfc554348685c913`
@@ -14,6 +14,7 @@ This package is intended for a future free AWS Marketplace / GitHub Launch Stack
 - Higher-security production template: `cloudformation/template-medium-ami-secrets.yaml`
 - Marketplace submission: not yet started
 - Distribution mode: GitHub Launch Stack using a public S3 TemplateURL
+- AWS costs: users pay their own EC2, EBS, data transfer, Elastic IP, and optional Secrets Manager costs
 
 ## What this launcher does
 
@@ -36,25 +37,18 @@ You must provide:
 - `NodeAddressWithNoLeading0x` — 40 hex characters, no `0x`
 - `PrivateKeyNoLeading0x` — direct NoEcho private key parameter, 64 hex characters with no `0x`
 
-The secret may contain either the raw 64-hex private key string or JSON with one of these keys:
-
-- `PRIVATE_KEY_NO_LEADING_0x`
-- `privateKeyNoLeading0x`
-- `privateKey`
+For the retained Secrets Manager template, the secret may contain either the raw 64-hex private key string or JSON with `PRIVATE_KEY_NO_LEADING_0x`, `privateKeyNoLeading0x`, or `privateKey`.
 
 ## AWS resources created
 
-The template creates:
+The direct-input template creates:
 
 - One EC2 instance
 - One Security Group
-- One IAM Role for the EC2 instance
-- One IAM Instance Profile
-- One inline IAM policy allowing `secretsmanager:GetSecretValue` only on `PrivateKeySecretArn`
-- One Elastic IP allocated and associated with the instance
+- One Elastic IP allocated and associated with the instance, unless `ExistingEipAllocationId` is provided
 - One root EBS volume attached to the instance, with `DeleteOnTermination: true`
 
-The template does not create the Secrets Manager secret. Create the secret before launching.
+The retained Secrets Manager template also creates an EC2 IAM Role, Instance Profile, and inline policy allowing `secretsmanager:GetSecretValue` only on `PrivateKeySecretArn`. It does not create the Secrets Manager secret.
 
 ## Private key handling
 
@@ -141,7 +135,7 @@ By default, the template exposes SSH (`tcp/22`) and the Boyar/status endpoints (
 
 ### Supported region
 
-This release candidate supports `us-east-2` only. The official public AMI ID is `ami-0bfc554348685c913`.
+This early-access release supports `us-east-2` only. The official public AMI ID is `ami-0bfc554348685c913`.
 
 ### Estimated AWS costs
 
