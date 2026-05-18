@@ -42,7 +42,7 @@ Required parameters:
 
 - `VpcId` — VPC in `us-east-2`
 - `SubnetId` — public subnet in `us-east-2`
-- `SSHLocation` — your public IP CIDR, preferably `/32`
+- `AccessCidr` — CIDR allowed to access SSH (`22`) and node/status endpoints (`80`, `7666`); default `0.0.0.0/0`
 - `KeyName` — EC2 Key Pair in `us-east-2`
 - `EthereumEndpoint` — Ethereum RPC endpoint URL
 - `NodeAddressWithNoLeading0x` — validator node address, 40 hex characters, no `0x`
@@ -55,6 +55,8 @@ Defaults:
 - `VolumeSize`: `256`
 
 Acknowledge `CAPABILITY_IAM` because the stack creates an EC2 IAM role and instance profile.
+
+Default network access exposes SSH and node/status endpoints publicly (`0.0.0.0/0`). This is intentional for the launcher default and public node accessibility. You are responsible for securing your EC2 key pair and AWS account. Advanced users can restrict `AccessCidr` to a narrower CIDR if desired.
 
 ## 4. Verify endpoints
 

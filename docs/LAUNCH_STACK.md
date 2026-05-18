@@ -47,7 +47,7 @@ aws cloudformation create-stack \
   --parameters \
     ParameterKey=VpcId,ParameterValue=<vpc-id> \
     ParameterKey=SubnetId,ParameterValue=<subnet-id> \
-    ParameterKey=SSHLocation,ParameterValue=<your-ip>/32 \
+    ParameterKey=AccessCidr,ParameterValue=0.0.0.0/0 \
     ParameterKey=KeyName,ParameterValue=<ec2-key-pair-name> \
     ParameterKey=EthereumEndpoint,ParameterValue=<ethereum-rpc-url> \
     ParameterKey=NodeAddressWithNoLeading0x,ParameterValue=<40-hex-node-address> \

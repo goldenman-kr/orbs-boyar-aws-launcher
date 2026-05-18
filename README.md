@@ -26,7 +26,7 @@ You must provide:
 
 - `VpcId` — target VPC
 - `SubnetId` — public subnet in `us-east-2`
-- `SSHLocation` — CIDR allowed to access SSH and status ports, preferably your IP `/32`
+- `AccessCidr` — CIDR allowed to access all exposed ports (`22`, `80`, and `7666`); default `0.0.0.0/0`. Advanced users can restrict it later.
 - `KeyName` — existing EC2 Key Pair name for SSH access
 - `InstanceType` — default `r5.large`
 - `VolumeSize` — default `256` GiB
@@ -120,6 +120,10 @@ The EC2 instance role created by the stack receives only `secretsmanager:GetSecr
 
 Create the private key secret before clicking Launch Stack. The template accepts only the secret ARN; it does not accept the raw private key as a CloudFormation parameter.
 
+### Network access default
+
+By default, the template exposes SSH (`tcp/22`) and the Boyar/status endpoints (`tcp/80`, `tcp/7666`) to `0.0.0.0/0`. This keeps the public node endpoints reachable for blockchain/node accessibility and simplifies early-access testing. Users are responsible for protecting their EC2 key pair, validator secret, and AWS account. Advanced users can restrict `AccessCidr` to a narrower CIDR such as their own IP `/32`.
+
 ### Supported region
 
 This release candidate supports `us-east-2` only. The official public AMI ID is `ami-0bfc554348685c913`.
@@ -144,7 +148,7 @@ aws cloudformation create-stack \
   --parameters \
     ParameterKey=VpcId,ParameterValue=<vpc-id> \
     ParameterKey=SubnetId,ParameterValue=<subnet-id> \
-    ParameterKey=SSHLocation,ParameterValue=<your-ip>/32 \
+    ParameterKey=AccessCidr,ParameterValue=0.0.0.0/0 \
     ParameterKey=KeyName,ParameterValue=<ec2-key-pair-name> \
     ParameterKey=EthereumEndpoint,ParameterValue=<ethereum-rpc-url> \
     ParameterKey=NodeAddressWithNoLeading0x,ParameterValue=<40-hex-node-address> \

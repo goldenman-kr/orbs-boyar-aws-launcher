@@ -46,13 +46,17 @@ The private key must be 64 hex characters. A leading `0x` is accepted by the Use
 
 `NodeAddressWithNoLeading0x` must be exactly 40 hex characters and must not include `0x`.
 
+## Network access defaults
+
+By default, the stack exposes SSH (`22`) and node/status endpoints (`80`, `7666`) publicly with `AccessCidr=0.0.0.0/0`. Users are responsible for securing their EC2 key pair and AWS account. Advanced users can restrict `AccessCidr` if they intentionally want narrower access.
+
 ## Status URLs are not reachable
 
 Check:
 
 - The instance has a public IPv4 address.
-- Your current IP is included in `SSHLocation`.
-- Security Group allows ports `80` and `7666` from your CIDR.
+- `AccessCidr` allows your client IP, or is left at the default `0.0.0.0/0`.
+- Security Group allows ports `22`, `80`, and `7666` from `AccessCidr`.
 - The service has finished its startup transition.
 
 Commands on the instance:
