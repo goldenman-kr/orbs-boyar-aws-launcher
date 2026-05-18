@@ -139,6 +139,16 @@ Resources:
         - Key: Project
           Value: orbs-boyar-aws-launcher
 
+  OrbsBoyarElasticIp:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-orbs-boyar-eip'
+        - Key: Project
+          Value: orbs-boyar-aws-launcher
+
   OrbsBoyarInstance:
     Type: AWS::EC2::Instance
     Properties:
@@ -222,22 +232,28 @@ Resources:
           ORBS_ENV_FILE="${!ENV_FILE}" "${!INSTALLER_DIR}/install.sh" --configure-and-start
           log "Orbs Boyar Medium AMI direct-input first-boot configuration completed"
 
+  OrbsBoyarElasticIpAssociation:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      AllocationId: !GetAtt OrbsBoyarElasticIp.AllocationId
+      InstanceId: !Ref OrbsBoyarInstance
+
 Outputs:
   InstanceId:
     Description: EC2 instance ID
     Value: !Ref OrbsBoyarInstance
 
-  PublicIp:
-    Description: Public IPv4 address assigned to the instance
-    Value: !GetAtt OrbsBoyarInstance.PublicIp
+  ElasticIp:
+    Description: Elastic IP address allocated and associated with the validator instance
+    Value: !Ref OrbsBoyarElasticIp
 
   BoyarStatusUrl:
     Description: Boyar status endpoint
-    Value: !Sub 'http://${OrbsBoyarInstance.PublicIp}/services/boyar/status'
+    Value: !Sub 'http://${OrbsBoyarElasticIp}/services/boyar/status'
 
   ManagementStatusUrl:
     Description: Management service direct status endpoint
-    Value: !Sub 'http://${OrbsBoyarInstance.PublicIp}:7666/status'
+    Value: !Sub 'http://${OrbsBoyarElasticIp}:7666/status'
 
   PrivateKeyInputMode:
     Description: Private key input mode used by this stack. The private key value is NoEcho and is never output.
@@ -245,4 +261,4 @@ Outputs:
 
   SSHCommand:
     Description: Example SSH command. Replace key path with your local private key file path.
-    Value: !Sub 'ssh -i <path-to-${KeyName}.pem> ubuntu@${OrbsBoyarInstance.PublicIp}'
+    Value: !Sub 'ssh -i <path-to-${KeyName}.pem> ubuntu@${OrbsBoyarElasticIp}'

@@ -50,6 +50,7 @@ The template creates:
 - One IAM Role for the EC2 instance
 - One IAM Instance Profile
 - One inline IAM policy allowing `secretsmanager:GetSecretValue` only on `PrivateKeySecretArn`
+- One Elastic IP allocated and associated with the instance
 - One root EBS volume attached to the instance, with `DeleteOnTermination: true`
 
 The template does not create the Secrets Manager secret. Create the secret before launching.
@@ -129,6 +130,10 @@ Recommended for early-access testing: use the direct-input template and enter `P
 
 Recommended for higher-security production and future Marketplace packaging: use the Secrets Manager template, create the private key secret before clicking Launch Stack, and pass only the secret ARN.
 
+### Elastic IP behavior
+
+The template automatically creates and associates an Elastic IP with the validator instance. Stack outputs use this stable `ElasticIp` value for Boyar status, management status, and SSH examples. Record the `ElasticIp` output after launch. When the stack is deleted, CloudFormation releases the EIP automatically. A future enhancement may allow reusing an existing EIP AllocationId for reinstall/recovery workflows.
+
 ### Network access default
 
 By default, the template exposes SSH (`tcp/22`) and the Boyar/status endpoints (`tcp/80`, `tcp/7666`) to `0.0.0.0/0`. This keeps the public node endpoints reachable for blockchain/node accessibility and simplifies early-access testing. Users are responsible for protecting their EC2 key pair, validator secret, and AWS account. Advanced users can restrict `AccessCidr` to a narrower CIDR such as their own IP `/32`.
@@ -172,15 +177,15 @@ aws cloudformation create-stack \
 Expected results:
 
 - CloudFormation stack status: `CREATE_COMPLETE`
-- `http://<public-ip>/services/boyar/status`: HTTP 200
-- `http://<public-ip>:7666/status`: HTTP 200
+- `http://<ElasticIp>/services/boyar/status`: HTTP 200
+- `http://<ElasticIp>:7666/status`: HTTP 200
 - `boyar.service`: active/running
 - `management-service`: healthy
 
 SSH example:
 
 ```bash
-ssh -i <key-file.pem> ubuntu@<public-ip>
+ssh -i <key-file.pem> ubuntu@<ElasticIp>
 sudo systemctl status boyar.service --no-pager --full
 sudo docker service ls
 sudo docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'
@@ -202,7 +207,7 @@ After deletion, confirm:
 - Security Group is deleted
 - IAM Role and Instance Profile are deleted
 - EBS root volume is deleted
-- No Elastic IP was allocated by this template
+- The Elastic IP allocated by this template is released
 
 If you used the Secrets Manager template, the stack does not delete your Secrets Manager secret. Delete or rotate it separately if no longer needed.
 
@@ -215,8 +220,7 @@ This launcher is intended to be free as software, but AWS infrastructure costs s
 - Data transfer
 - AWS Secrets Manager secret monthly storage/API calls
 - CloudWatch or other monitoring if users add it later
-
-No Elastic IP is allocated by the template.
+- Elastic IP while the stack exists; CloudFormation releases it when the stack is deleted.
 
 ## Limitations
 

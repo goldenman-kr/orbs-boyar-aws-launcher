@@ -50,12 +50,18 @@ Acknowledge `CAPABILITY_IAM` because the stack creates an EC2 IAM role and insta
 
 Default network access exposes SSH and node/status endpoints publicly (`0.0.0.0/0`). This is intentional for the launcher default and public node accessibility. You are responsible for securing your EC2 key pair and AWS account. Advanced users can restrict `AccessCidr` to a narrower CIDR if desired.
 
-## 4. Verify endpoints
+## 4. Record the Elastic IP
+
+The stack automatically creates and associates an Elastic IP. Record the `ElasticIp` stack output; the status URLs and SSH command use this address. When the stack is deleted, CloudFormation releases the EIP automatically. A future enhancement may allow reusing an existing EIP AllocationId for reinstall/recovery.
+
+## 5. Verify endpoints
 
 After stack status is `CREATE_COMPLETE`, check stack outputs for:
 
+- `ElasticIp`
 - `BoyarStatusUrl`
 - `ManagementStatusUrl`
+- `SSHCommand`
 
 Expected:
 
@@ -72,7 +78,7 @@ sudo docker service ls
 sudo docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'
 ```
 
-## 5. Cleanup
+## 6. Cleanup
 
 Delete the CloudFormation stack when done:
 

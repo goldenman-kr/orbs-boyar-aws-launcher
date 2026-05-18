@@ -58,11 +58,15 @@ The private key must be 64 hex characters. In direct-input mode, enter it withou
 
 By default, the stack exposes SSH (`22`) and node/status endpoints (`80`, `7666`) publicly with `AccessCidr=0.0.0.0/0`. Users are responsible for securing their EC2 key pair and AWS account. Advanced users can restrict `AccessCidr` if they intentionally want narrower access.
 
+## Elastic IP issues
+
+Check the `ElasticIp` stack output and use it for status URLs and SSH. If stack creation rolls back, CloudFormation should release the EIP automatically. After stack deletion, verify there is no remaining Elastic IP allocated by the stack.
+
 ## Status URLs are not reachable
 
 Check:
 
-- The instance has a public IPv4 address.
+- The stack has an `ElasticIp` output and the EIP is associated with the instance.
 - `AccessCidr` allows your client IP, or is left at the default `0.0.0.0/0`.
 - Security Group allows ports `22`, `80`, and `7666` from `AccessCidr`.
 - The service has finished its startup transition.
@@ -84,7 +88,7 @@ After deleting the stack, confirm:
 ```bash
 aws ec2 describe-instances --region us-east-2 --instance-ids <instance-id>
 aws ec2 describe-volumes --region us-east-2 --filters Name=attachment.instance-id,Values=<instance-id>
-aws ec2 describe-addresses --region us-east-2 --filters Name=instance-id,Values=<instance-id>
+aws ec2 describe-addresses --region us-east-2 --filters Name=tag:Project,Values=orbs-boyar-aws-launcher
 ```
 
 If using the Secrets Manager template, the Secrets Manager secret is user-managed and is not deleted by the template.

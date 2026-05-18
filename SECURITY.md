@@ -25,6 +25,10 @@ The direct-input template does not require Secrets Manager read permissions or a
 
 The Secrets Manager template keeps the least-privilege model: the EC2 instance role can call only `secretsmanager:GetSecretValue` on the specified `PrivateKeySecretArn`.
 
+## Elastic IP lifecycle
+
+The launcher creates a new Elastic IP and associates it with the validator instance. This gives testers a stable public address while the stack exists. CloudFormation releases the EIP when the stack is deleted; users should record the `ElasticIp` output for operational checks. A future enhancement may allow reusing an existing EIP AllocationId for reinstall/recovery.
+
 ## Network exposure model
 
 The launcher default exposes all currently configured ingress ports to `0.0.0.0/0`:

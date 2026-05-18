@@ -34,7 +34,7 @@ The AMI is a Medium AMI:
 - `cloudformation/template-medium-ami-direct.yaml`: simpler early-access template. It accepts `PrivateKeyNoLeading0x` directly as a CloudFormation `NoEcho` parameter. This improves public testing usability, but the private key still passes through CloudFormation parameter handling during stack creation.
 - `cloudformation/template-medium-ami-secrets.yaml`: retained for higher-security production and future Marketplace use. Users create an AWS Secrets Manager secret and pass only `PrivateKeySecretArn`.
 
-Recommended posture: use direct-input mode for early-access testers who need the simplest Launch Stack path; use Secrets Manager mode for Marketplace/public production packaging.
+Recommended posture: use direct-input mode for early-access testers who need the simplest Launch Stack path; use Secrets Manager mode for Marketplace/public production packaging. Both templates automatically allocate an Elastic IP and release it on stack deletion. Future Marketplace packaging should consider an option to reuse an existing EIP AllocationId for reinstall/recovery.
 
 ## Required future AWS Marketplace steps
 
@@ -44,7 +44,7 @@ Before public listing:
 2. Decide whether to rebuild or copy the AMI to the required Marketplace source region.
 3. Run AWS Marketplace AMI scanning and hardening checks.
 4. Review root volume encryption requirements.
-5. Review public Security Group defaults and exposed status ports.
+5. Review public Security Group defaults, exposed status ports, and Elastic IP lifecycle behavior.
 6. Replace release-candidate/test tag names with final product tags if needed.
 7. Prepare public product title, short description, long description, usage instructions, support contacts, EULA/license, and refund/pricing details.
 8. Confirm KRYP Labs seller account, tax, banking, and support profile readiness.
@@ -59,7 +59,7 @@ Before public listing:
 - No final legal/license/support package is included.
 - Template has not been reviewed by an AWS Marketplace specialist.
 - Root volume encryption default should be reviewed.
-- Public endpoint exposure model should be reviewed.
+- Public endpoint exposure and Elastic IP lifecycle model should be reviewed.
 - Monitoring, alerting, TLS/domain setup, and upgrade policy are not yet packaged.
 
 ## Do not do yet

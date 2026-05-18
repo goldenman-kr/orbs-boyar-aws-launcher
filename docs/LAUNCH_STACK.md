@@ -90,3 +90,7 @@ aws cloudformation delete-stack \
 ```
 
 The stack does not delete your Secrets Manager secret. Delete or rotate it separately when appropriate.
+
+## Elastic IP automation
+
+The public Launch Stack templates allocate and associate a new Elastic IP automatically. Outputs expose `ElasticIp`, `BoyarStatusUrl`, `ManagementStatusUrl`, and `SSHCommand` using that address. CloudFormation releases the EIP when the stack is deleted. A future enhancement may allow reusing an existing EIP AllocationId for reinstall/recovery.
