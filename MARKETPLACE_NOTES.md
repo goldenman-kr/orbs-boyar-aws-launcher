@@ -27,7 +27,14 @@ The AMI is a Medium AMI:
 
 - Stable dependencies and installer files are baked in.
 - Secrets and validator-specific runtime config are not baked in.
-- Runtime configuration happens at first boot through CloudFormation and AWS Secrets Manager.
+- Runtime configuration happens at first boot through CloudFormation. Early-access users can use direct NoEcho private key input; higher-security production and Marketplace flows should prefer the retained Secrets Manager template.
+
+## Launch templates
+
+- `cloudformation/template-medium-ami-direct.yaml`: simpler early-access template. It accepts `PrivateKeyNoLeading0x` directly as a CloudFormation `NoEcho` parameter. This improves public testing usability, but the private key still passes through CloudFormation parameter handling during stack creation.
+- `cloudformation/template-medium-ami-secrets.yaml`: retained for higher-security production and future Marketplace use. Users create an AWS Secrets Manager secret and pass only `PrivateKeySecretArn`.
+
+Recommended posture: use direct-input mode for early-access testers who need the simplest Launch Stack path; use Secrets Manager mode for Marketplace/public production packaging.
 
 ## Required future AWS Marketplace steps
 

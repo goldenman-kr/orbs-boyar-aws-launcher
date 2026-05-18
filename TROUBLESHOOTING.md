@@ -16,7 +16,7 @@ Common causes:
 - Missing EC2 Key Pair
 - Invalid AMI region
 - IAM capability not acknowledged; use `--capabilities CAPABILITY_IAM`
-- Invalid Secrets Manager ARN
+- Invalid direct private key format, or invalid Secrets Manager ARN if using the Secrets Manager template
 
 ## First boot fails before services start
 
@@ -29,9 +29,17 @@ sudo tail -n 200 /var/log/orbs-boyar-install.log
 
 The logs should not print private key values. If a log contains sensitive data, stop and treat it as a secret exposure incident.
 
-## Secrets Manager access fails
+## Direct private key input fails
 
 Check:
+
+- `PrivateKeyNoLeading0x` is exactly 64 hex characters.
+- Do not include a leading `0x` in the CloudFormation parameter.
+- The value is entered only in the NoEcho parameter field, not in stack names, descriptions, tags, tickets, logs, or chat.
+
+## Secrets Manager access fails
+
+If using the Secrets Manager template, check:
 
 - `PrivateKeySecretArn` is in `us-east-2`.
 - The secret exists and is not scheduled for deletion.
@@ -40,7 +48,7 @@ Check:
 
 ## Private key validation fails
 
-The private key must be 64 hex characters. A leading `0x` is accepted by the UserData parser and removed before writing `.env`, but the final value must be 64 hex characters.
+The private key must be 64 hex characters. In direct-input mode, enter it without a leading `0x` because the CloudFormation parameter validation expects exactly 64 hex characters.
 
 ## Node address validation fails
 
@@ -79,4 +87,4 @@ aws ec2 describe-volumes --region us-east-2 --filters Name=attachment.instance-i
 aws ec2 describe-addresses --region us-east-2 --filters Name=instance-id,Values=<instance-id>
 ```
 
-The Secrets Manager secret is user-managed and is not deleted by the template.
+If using the Secrets Manager template, the Secrets Manager secret is user-managed and is not deleted by the template.

@@ -1,39 +1,31 @@
 # Quick Start
 
-This guide launches the KRYP Labs Orbs Boyar AWS Launcher release candidate with the public S3-backed Launch Stack flow.
+This guide launches the KRYP Labs Orbs Boyar AWS Launcher release candidate with the public S3-backed direct-input Launch Stack flow.
 
-## 1. Create the Secrets Manager secret
+## 1. Prepare the private key value
 
-Create a Secrets Manager secret in `us-east-2` that contains the validator private key.
+For early-access testing, the default Launch Stack flow accepts the validator private key directly as `PrivateKeyNoLeading0x`.
 
-Accepted formats:
-
-Raw string:
+Accepted format:
 
 ```text
 <64-hex-private-key-without-0x>
 ```
 
-JSON:
+The CloudFormation parameter is marked `NoEcho`, so the value is hidden in the Create Stack UI and API outputs. However, it still exists temporarily in CloudFormation parameter handling during stack creation. Do not paste real private keys into issue trackers, screenshots, logs, shell history, or chat.
 
-```json
-{
-  "PRIVATE_KEY_NO_LEADING_0x": "<64-hex-private-key-without-0x>"
-}
-```
-
-Do not paste real private keys into issue trackers, screenshots, logs, shell history, or chat.
+For higher-security production use, use the separate Secrets Manager template instead.
 
 ## 2. Click Launch Stack
 
 Launch in `us-east-2`:
 
-[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-secrets.yaml)
+[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct.yaml)
 
 If you prefer to inspect the exact CloudFormation template before launching, open the public S3 template URL:
 
 ```text
-https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-secrets.yaml
+https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct.yaml
 ```
 
 ## 3. Fill stack parameters
@@ -46,7 +38,7 @@ Required parameters:
 - `KeyName` — EC2 Key Pair in `us-east-2`
 - `EthereumEndpoint` — Ethereum RPC endpoint URL
 - `NodeAddressWithNoLeading0x` — validator node address, 40 hex characters, no `0x`
-- `PrivateKeySecretArn` — ARN of the Secrets Manager secret
+- `PrivateKeyNoLeading0x` — direct NoEcho private key parameter, 64 hex characters with no `0x`
 
 Defaults:
 
@@ -90,4 +82,4 @@ aws cloudformation delete-stack \
   --stack-name orbs-boyar-validator
 ```
 
-The stack does not delete your Secrets Manager secret. Delete or rotate the secret separately if no longer needed.
+If you used the Secrets Manager template, the stack does not delete your Secrets Manager secret. Delete or rotate the secret separately if no longer needed.

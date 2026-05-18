@@ -10,7 +10,8 @@ This package is intended for a future free AWS Marketplace / GitHub Launch Stack
 - Public AMI ID: `ami-0bfc554348685c913`
 - Snapshot: `snap-0ecb5473ac7987f1f` retained by the publisher
 - Public AMI status: publicly launchable in `us-east-2` for early-access testing
-- Preferred template: `cloudformation/template-medium-ami-secrets.yaml`
+- Preferred early-access template: `cloudformation/template-medium-ami-direct.yaml`
+- Higher-security production template: `cloudformation/template-medium-ami-secrets.yaml`
 - Marketplace submission: not yet started
 - Distribution mode: GitHub Launch Stack using a public S3 TemplateURL
 
@@ -32,7 +33,7 @@ You must provide:
 - `VolumeSize` — default `256` GiB
 - `EthereumEndpoint` — Ethereum RPC endpoint URL
 - `NodeAddressWithNoLeading0x` — 40 hex characters, no `0x`
-- `PrivateKeySecretArn` — AWS Secrets Manager secret ARN containing the validator private key
+- `PrivateKeyNoLeading0x` — direct NoEcho private key parameter, 64 hex characters with no `0x`
 
 The secret may contain either the raw 64-hex private key string or JSON with one of these keys:
 
@@ -55,17 +56,16 @@ The template does not create the Secrets Manager secret. Create the secret befor
 
 ## Private key handling
 
-The private key is not accepted as a raw CloudFormation parameter.
+The default early-access Launch Stack flow uses direct private key input:
 
-Instead:
+1. You enter `PrivateKeyNoLeading0x` in the CloudFormation Create Stack UI.
+2. The parameter is marked `NoEcho`, so CloudFormation hides it in the UI/API outputs.
+3. First boot writes `/opt/orbs/ami_creator/.env` locally with mode `0600` and runs the installer.
+4. Installer logs redact private key values.
 
-1. You store the private key in AWS Secrets Manager.
-2. You pass only the secret ARN to CloudFormation.
-3. The EC2 instance role reads only that specified secret during first boot.
-4. UserData writes `/opt/orbs/ami_creator/.env` locally with mode `0600`.
-5. Installer logs redact private key values.
+This is easier for public early-access testing, but `NoEcho` is not the same as a dedicated secret store. The value still exists temporarily in CloudFormation parameter handling during stack creation. Do not paste private keys into stack descriptions, tickets, logs, screenshots, or chat messages.
 
-Do not paste private keys into CloudFormation parameters, stack descriptions, tickets, logs, or chat messages.
+The existing Secrets Manager template is retained for higher-security production and future Marketplace use. In that mode, users create a Secrets Manager secret first and pass only `PrivateKeySecretArn` to CloudFormation.
 
 
 ## Launch Stack
@@ -76,23 +76,30 @@ The public Launch Stack flow now uses a public S3 HTTPS object URL for the Cloud
 
 **Tradeoffs:** S3 delivery is accepted directly by CloudFormation and can be controlled with bucket policy, versioning, content type, and cache settings. GitHub remains the source repository, but GitHub raw URLs are no longer the primary Launch Stack delivery path because CloudFormation does not accept them reliably in all flows.
 
-[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-secrets.yaml)
+[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct.yaml)
 
 Direct Launch Stack URL:
 
 ```text
-https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-secrets.yaml
+https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct.yaml
 ```
 
-Public S3 template URL:
+Public S3 direct-input template URL:
+
+```text
+https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct.yaml
+```
+
+Public S3 Secrets Manager template URL:
 
 ```text
 https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-secrets.yaml
 ```
 
-GitHub source template for review:
+GitHub source templates for review:
 
 ```text
+https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-direct.yaml
 https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-secrets.yaml
 ```
 
@@ -101,7 +108,7 @@ https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/clou
 - AWS account with access to `us-east-2`
 - VPC and public subnet in `us-east-2`
 - EC2 Key Pair in `us-east-2`
-- AWS Secrets Manager secret in `us-east-2` containing the validator private key
+- Orbs validator private key for direct NoEcho input, or an AWS Secrets Manager secret in `us-east-2` if using the Secrets Manager template
 - Ethereum RPC endpoint URL
 - Orbs node address without leading `0x`
 
@@ -116,9 +123,11 @@ The launching principal needs permission to create and manage the stack resource
 
 The EC2 instance role created by the stack receives only `secretsmanager:GetSecretValue` for the specified `PrivateKeySecretArn`.
 
-### Secrets Manager requirement
+### Private key input modes
 
-Create the private key secret before clicking Launch Stack. The template accepts only the secret ARN; it does not accept the raw private key as a CloudFormation parameter.
+Recommended for early-access testing: use the direct-input template and enter `PrivateKeyNoLeading0x` as a NoEcho parameter.
+
+Recommended for higher-security production and future Marketplace packaging: use the Secrets Manager template, create the private key secret before clicking Launch Stack, and pass only the secret ARN.
 
 ### Network access default
 
@@ -152,7 +161,7 @@ aws cloudformation create-stack \
     ParameterKey=KeyName,ParameterValue=<ec2-key-pair-name> \
     ParameterKey=EthereumEndpoint,ParameterValue=<ethereum-rpc-url> \
     ParameterKey=NodeAddressWithNoLeading0x,ParameterValue=<40-hex-node-address> \
-    ParameterKey=PrivateKeySecretArn,ParameterValue=<secret-arn>
+    ParameterKey=PrivateKeyNoLeading0x,ParameterValue=<64-hex-private-key-without-0x>
 ```
 
 5. Wait for stack creation to complete.
@@ -195,7 +204,7 @@ After deletion, confirm:
 - EBS root volume is deleted
 - No Elastic IP was allocated by this template
 
-The template does not delete your Secrets Manager secret. Delete or rotate it separately if no longer needed.
+If you used the Secrets Manager template, the stack does not delete your Secrets Manager secret. Delete or rotate it separately if no longer needed.
 
 ## Expected AWS costs
 
@@ -213,5 +222,5 @@ No Elastic IP is allocated by the template.
 
 - Current AMI is available only in `us-east-2`.
 - The template is a release candidate, not a public Marketplace listing.
-- Users must create and manage the Secrets Manager secret separately.
+- Direct-input users enter the private key as a NoEcho CloudFormation parameter; Secrets Manager users must create and manage the secret separately.
 - HTTPS/TLS, domain setup, monitoring dashboards, and alerting are not included.
