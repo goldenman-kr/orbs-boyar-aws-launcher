@@ -14,12 +14,13 @@ The software listing should be free. Users still pay their own AWS infrastructur
 
 ## AMI-based product notes
 
-Current validated AMI:
+Current public early-access AMI:
 
 ```text
 Region: us-east-2
 AMI ID: ami-0bfc554348685c913
 Snapshot: snap-0ecb5473ac7987f1f
+AMI visibility: public in us-east-2 for early-access GitHub Launch Stack testing
 ```
 
 The AMI is a Medium AMI:

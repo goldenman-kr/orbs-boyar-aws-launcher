@@ -50,7 +50,7 @@ Required parameters:
 
 Defaults:
 
-- `ImageId`: `ami-0bfc554348685c913`
+- `ImageId`: `ami-0bfc554348685c913` (public AMI in `us-east-2`)
 - `InstanceType`: `r5.large`
 - `VolumeSize`: `256`
 

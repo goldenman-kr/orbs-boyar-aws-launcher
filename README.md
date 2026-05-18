@@ -7,10 +7,12 @@ This package is intended for a future free AWS Marketplace / GitHub Launch Stack
 ## Current release-candidate status
 
 - Region support: `us-east-2` only
-- AMI ID: `ami-0bfc554348685c913`
+- Public AMI ID: `ami-0bfc554348685c913`
 - Snapshot: `snap-0ecb5473ac7987f1f` retained by the publisher
+- Public AMI status: publicly launchable in `us-east-2` for early-access testing
 - Preferred template: `cloudformation/template-medium-ami-secrets.yaml`
 - Marketplace submission: not yet started
+- Distribution mode: GitHub Launch Stack using a public S3 TemplateURL
 
 ## What this launcher does
 
@@ -120,7 +122,7 @@ Create the private key secret before clicking Launch Stack. The template accepts
 
 ### Supported region
 
-This release candidate supports `us-east-2` only. The current AMI ID is `ami-0bfc554348685c913`.
+This release candidate supports `us-east-2` only. The official public AMI ID is `ami-0bfc554348685c913`.
 
 ### Estimated AWS costs
 
