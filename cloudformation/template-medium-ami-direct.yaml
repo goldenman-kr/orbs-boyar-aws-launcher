@@ -12,6 +12,7 @@ Metadata:
           - VpcId
           - SubnetId
           - AccessCidr
+          - ExistingEipAllocationId
       - Label:
           default: EC2 configuration
         Parameters:
@@ -40,6 +41,8 @@ Metadata:
         default: Public subnet ID
       AccessCidr:
         default: Public access CIDR
+      ExistingEipAllocationId:
+        default: Existing EIP AllocationId
       EthereumEndpoint:
         default: Ethereum RPC endpoint
       NodeAddressWithNoLeading0x:
@@ -86,6 +89,13 @@ Parameters:
     AllowedPattern: '^(\d{1,3}\.){3}\d{1,3}/\d{1,2}$'
     ConstraintDescription: Must be a valid IPv4 CIDR, for example 0.0.0.0/0 or 203.0.113.10/32.
 
+  ExistingEipAllocationId:
+    Type: String
+    Default: ''
+    Description: Existing Elastic IP AllocationId to reuse during reinstall or recovery. Leave empty to create a new EIP automatically.
+    AllowedPattern: '^(|eipalloc-[0-9a-f]+)$'
+    ConstraintDescription: Must be empty or a valid Elastic IP AllocationId such as eipalloc-0123456789abcdef0.
+
   EthereumEndpoint:
     Type: String
     NoEcho: true
@@ -106,6 +116,10 @@ Parameters:
     Description: Orbs node private key as 64 hex characters without leading 0x. NoEcho hides this value in CloudFormation UI/API outputs, but it is still handled by CloudFormation during stack creation.
     AllowedPattern: '^[0-9a-fA-F]{64}$'
     ConstraintDescription: Must be 64 hex characters without 0x.
+
+Conditions:
+  UseExistingEip: !Not [!Equals [!Ref ExistingEipAllocationId, '']]
+  CreateNewEip: !Equals [!Ref ExistingEipAllocationId, '']
 
 Resources:
   OrbsBoyarSecurityGroup:
@@ -141,6 +155,7 @@ Resources:
 
   OrbsBoyarElasticIp:
     Type: AWS::EC2::EIP
+    Condition: CreateNewEip
     Properties:
       Domain: vpc
       Tags:
@@ -235,7 +250,10 @@ Resources:
   OrbsBoyarElasticIpAssociation:
     Type: AWS::EC2::EIPAssociation
     Properties:
-      AllocationId: !GetAtt OrbsBoyarElasticIp.AllocationId
+      AllocationId: !If
+        - UseExistingEip
+        - !Ref ExistingEipAllocationId
+        - !GetAtt OrbsBoyarElasticIp.AllocationId
       InstanceId: !Ref OrbsBoyarInstance
 
 Outputs:
@@ -244,16 +262,31 @@ Outputs:
     Value: !Ref OrbsBoyarInstance
 
   ElasticIp:
-    Description: Elastic IP address allocated and associated with the validator instance
-    Value: !Ref OrbsBoyarElasticIp
+    Description: Elastic IP address associated with the validator instance
+    Value: !GetAtt OrbsBoyarInstance.PublicIp
+
+  ElasticIpAllocationId:
+    Description: Elastic IP AllocationId used by this stack
+    Value: !If
+      - UseExistingEip
+      - !Ref ExistingEipAllocationId
+      - !GetAtt OrbsBoyarElasticIp.AllocationId
+
+  ElasticIpMode:
+    Description: Whether the EIP was auto-created by this stack or reused from ExistingEipAllocationId
+    Value: !If [UseExistingEip, ReusedExistingEip, AutoCreatedEip]
 
   BoyarStatusUrl:
     Description: Boyar status endpoint
-    Value: !Sub 'http://${OrbsBoyarElasticIp}/services/boyar/status'
+    Value: !Sub
+      - 'http://${ElasticIpAddress}/services/boyar/status'
+      - ElasticIpAddress: !GetAtt OrbsBoyarInstance.PublicIp
 
   ManagementStatusUrl:
     Description: Management service direct status endpoint
-    Value: !Sub 'http://${OrbsBoyarElasticIp}:7666/status'
+    Value: !Sub
+      - 'http://${ElasticIpAddress}:7666/status'
+      - ElasticIpAddress: !GetAtt OrbsBoyarInstance.PublicIp
 
   PrivateKeyInputMode:
     Description: Private key input mode used by this stack. The private key value is NoEcho and is never output.
@@ -261,4 +294,6 @@ Outputs:
 
   SSHCommand:
     Description: Example SSH command. Replace key path with your local private key file path.
-    Value: !Sub 'ssh -i <path-to-${KeyName}.pem> ubuntu@${OrbsBoyarElasticIp}'
+    Value: !Sub
+      - 'ssh -i <path-to-${KeyName}.pem> ubuntu@${ElasticIpAddress}'
+      - ElasticIpAddress: !GetAtt OrbsBoyarInstance.PublicIp

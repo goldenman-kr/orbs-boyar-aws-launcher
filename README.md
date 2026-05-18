@@ -28,6 +28,7 @@ You must provide:
 - `VpcId` — target VPC
 - `SubnetId` — public subnet in `us-east-2`
 - `AccessCidr` — CIDR allowed to access all exposed ports (`22`, `80`, and `7666`); default `0.0.0.0/0`. Advanced users can restrict it later.
+- `ExistingEipAllocationId` — optional existing Elastic IP AllocationId for reinstall/recovery; leave empty to create a new EIP automatically.
 - `KeyName` — existing EC2 Key Pair name for SSH access
 - `InstanceType` — default `r5.large`
 - `VolumeSize` — default `256` GiB
@@ -132,7 +133,7 @@ Recommended for higher-security production and future Marketplace packaging: use
 
 ### Elastic IP behavior
 
-The template automatically creates and associates an Elastic IP with the validator instance. Stack outputs use this stable `ElasticIp` value for Boyar status, management status, and SSH examples. Record the `ElasticIp` output after launch. When the stack is deleted, CloudFormation releases the EIP automatically. A future enhancement may allow reusing an existing EIP AllocationId for reinstall/recovery workflows.
+By default, the direct-input template automatically creates and associates an Elastic IP with the validator instance. Stack outputs use this stable `ElasticIp` value for Boyar status, management status, and SSH examples. Record the `ElasticIp` and `ElasticIpAllocationId` outputs after launch. When the stack creates the EIP, CloudFormation releases it automatically on stack deletion. Advanced users can pass `ExistingEipAllocationId` to preserve the same node IP across reinstall/recovery; in that mode CloudFormation associates the existing EIP but does not release it when the stack is deleted, and users are responsible for any retained EIP charges.
 
 ### Network access default
 
@@ -207,7 +208,7 @@ After deletion, confirm:
 - Security Group is deleted
 - IAM Role and Instance Profile are deleted
 - EBS root volume is deleted
-- The Elastic IP allocated by this template is released
+- Auto-created Elastic IP is released; reused EIP is retained
 
 If you used the Secrets Manager template, the stack does not delete your Secrets Manager secret. Delete or rotate it separately if no longer needed.
 
@@ -220,7 +221,7 @@ This launcher is intended to be free as software, but AWS infrastructure costs s
 - Data transfer
 - AWS Secrets Manager secret monthly storage/API calls
 - CloudWatch or other monitoring if users add it later
-- Elastic IP while the stack exists; CloudFormation releases it when the stack is deleted.
+- Elastic IP while the stack exists; auto-created EIPs are released when the stack is deleted, while reused EIPs remain user-managed and may incur charges.
 
 ## Limitations
 

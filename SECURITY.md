@@ -27,7 +27,7 @@ The Secrets Manager template keeps the least-privilege model: the EC2 instance r
 
 ## Elastic IP lifecycle
 
-The launcher creates a new Elastic IP and associates it with the validator instance. This gives testers a stable public address while the stack exists. CloudFormation releases the EIP when the stack is deleted; users should record the `ElasticIp` output for operational checks. A future enhancement may allow reusing an existing EIP AllocationId for reinstall/recovery.
+The launcher creates a new Elastic IP and associates it with the validator instance by default. This gives testers a stable public address while the stack exists. CloudFormation releases auto-created EIPs when the stack is deleted; users should record the `ElasticIp` and `ElasticIpAllocationId` outputs for operational checks. Advanced users can pass `ExistingEipAllocationId` to preserve the same node IP across reinstall/recovery. Reused EIPs are not released by the stack and remain the user's responsibility, including any AWS charges.
 
 ## Network exposure model
 

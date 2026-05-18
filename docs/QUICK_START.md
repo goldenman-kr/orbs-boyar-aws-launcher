@@ -35,6 +35,7 @@ Required parameters:
 - `VpcId` — VPC in `us-east-2`
 - `SubnetId` — public subnet in `us-east-2`
 - `AccessCidr` — CIDR allowed to access SSH (`22`) and node/status endpoints (`80`, `7666`); default `0.0.0.0/0`
+- `ExistingEipAllocationId` — optional; leave empty for a new auto-created EIP, or provide an existing AllocationId to preserve the node IP during reinstall/recovery
 - `KeyName` — EC2 Key Pair in `us-east-2`
 - `EthereumEndpoint` — Ethereum RPC endpoint URL
 - `NodeAddressWithNoLeading0x` — validator node address, 40 hex characters, no `0x`
@@ -52,13 +53,15 @@ Default network access exposes SSH and node/status endpoints publicly (`0.0.0.0/
 
 ## 4. Record the Elastic IP
 
-The stack automatically creates and associates an Elastic IP. Record the `ElasticIp` stack output; the status URLs and SSH command use this address. When the stack is deleted, CloudFormation releases the EIP automatically. A future enhancement may allow reusing an existing EIP AllocationId for reinstall/recovery.
+By default, the stack automatically creates and associates an Elastic IP. Record the `ElasticIp` and `ElasticIpAllocationId` stack outputs; the status URLs and SSH command use this address. If `ExistingEipAllocationId` is empty, CloudFormation releases the auto-created EIP when the stack is deleted. Advanced users can provide an existing AllocationId to preserve the same node IP across reinstall/recovery; reused EIPs are not released by this stack and may incur charges.
 
 ## 5. Verify endpoints
 
 After stack status is `CREATE_COMPLETE`, check stack outputs for:
 
 - `ElasticIp`
+- `ElasticIpAllocationId`
+- `ElasticIpMode`
 - `BoyarStatusUrl`
 - `ManagementStatusUrl`
 - `SSHCommand`

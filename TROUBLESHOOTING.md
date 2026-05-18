@@ -60,13 +60,14 @@ By default, the stack exposes SSH (`22`) and node/status endpoints (`80`, `7666`
 
 ## Elastic IP issues
 
-Check the `ElasticIp` stack output and use it for status URLs and SSH. If stack creation rolls back, CloudFormation should release the EIP automatically. After stack deletion, verify there is no remaining Elastic IP allocated by the stack.
+Check the `ElasticIp`, `ElasticIpAllocationId`, and `ElasticIpMode` stack outputs and use `ElasticIp` for status URLs and SSH. If stack creation rolls back in auto-created mode, CloudFormation should release the EIP automatically. If `ExistingEipAllocationId` was provided, the EIP is user-managed and intentionally remains allocated after stack deletion.
 
 ## Status URLs are not reachable
 
 Check:
 
 - The stack has an `ElasticIp` output and the EIP is associated with the instance.
+- If using reuse mode, `ExistingEipAllocationId` exists in the same region and is not already associated with another instance.
 - `AccessCidr` allows your client IP, or is left at the default `0.0.0.0/0`.
 - Security Group allows ports `22`, `80`, and `7666` from `AccessCidr`.
 - The service has finished its startup transition.
@@ -88,7 +89,7 @@ After deleting the stack, confirm:
 ```bash
 aws ec2 describe-instances --region us-east-2 --instance-ids <instance-id>
 aws ec2 describe-volumes --region us-east-2 --filters Name=attachment.instance-id,Values=<instance-id>
-aws ec2 describe-addresses --region us-east-2 --filters Name=tag:Project,Values=orbs-boyar-aws-launcher
+aws ec2 describe-addresses --region us-east-2 --allocation-ids <allocation-id>
 ```
 
 If using the Secrets Manager template, the Secrets Manager secret is user-managed and is not deleted by the template.
