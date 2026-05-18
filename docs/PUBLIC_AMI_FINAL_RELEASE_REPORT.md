@@ -84,12 +84,7 @@ https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/crea
 
 Do not delete older AMIs/snapshots until the public AMI is externally verified and explicit cleanup approval is given.
 
-Candidates for later cleanup after approval:
-
-- Previous test AMI: `ami-06d0ede0e331a96d2`
-- Previous test snapshot: `snap-0039ee6a089ecb6a2`
-- Intermediate failed sanitized AMI: `ami-016b1be091f5a9278`
-- Intermediate failed sanitized snapshot: `snap-0537161ad7b32a47c`
+Obsolete pre-release AMIs/snapshots are tracked in the dedicated cleanup report once cleanup approval is granted.
 
 ## Marketplace next steps
 
