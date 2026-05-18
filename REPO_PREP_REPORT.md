@@ -1,8 +1,6 @@
 # Repository Preparation Report
 
 - Repository: `goldenman-kr/orbs-boyar-aws-launcher`
-- Local path: `repos/orbs-boyar-aws-launcher/`
-- Source package: `release/orbs-boyar-aws-launcher/`
 - Brand: KRYP Labs
 - Prepared for: public GitHub release-candidate repository
 - AWS resources created: none
@@ -69,7 +67,7 @@ The remote already had a `main` branch, so the repository was cloned first and t
 
 ## SSH authentication result
 
-SSH authentication with `~/.ssh/id_ed25519_goldenman-kr` succeeded for GitHub. GitHub returned the expected no-shell-access message for `ssh -T`.
+SSH authentication with the repository GitHub deploy identity succeeded. GitHub returned the expected no-shell-access message for `ssh -T`.
 
 ## Push result
 

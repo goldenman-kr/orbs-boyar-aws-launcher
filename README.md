@@ -65,6 +65,59 @@ Instead:
 
 Do not paste private keys into CloudFormation parameters, stack descriptions, tickets, logs, or chat messages.
 
+
+## Launch Stack
+
+The safest simple public delivery approach for this release candidate is to host the CloudFormation template in this public GitHub repository and use the GitHub raw URL as the CloudFormation `templateURL`.
+
+**Tradeoffs:** GitHub raw delivery is easy to audit, version, and use directly from a Launch Stack button. For a production Marketplace listing, KRYP Labs should later consider version-pinned release assets or an AWS-owned S3 publishing flow for stronger immutability and availability guarantees.
+
+[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fraw.githubusercontent.com%2Fgoldenman-kr%2Forbs-boyar-aws-launcher%2Fmain%2Fcloudformation%2Ftemplate-medium-ami-secrets.yaml)
+
+Direct Launch Stack URL:
+
+```text
+https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fraw.githubusercontent.com%2Fgoldenman-kr%2Forbs-boyar-aws-launcher%2Fmain%2Fcloudformation%2Ftemplate-medium-ami-secrets.yaml
+```
+
+Template raw URL:
+
+```text
+https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-secrets.yaml
+```
+
+### Launch prerequisites
+
+- AWS account with access to `us-east-2`
+- VPC and public subnet in `us-east-2`
+- EC2 Key Pair in `us-east-2`
+- AWS Secrets Manager secret in `us-east-2` containing the validator private key
+- Ethereum RPC endpoint URL
+- Orbs node address without leading `0x`
+
+### Required AWS permissions
+
+The launching principal needs permission to create and manage the stack resources:
+
+- CloudFormation stack operations
+- EC2 instance, Security Group, and EBS root volume operations
+- IAM Role, Instance Profile, and inline policy creation; the stack requires `CAPABILITY_IAM`
+- Permission to pass the created IAM role to EC2
+
+The EC2 instance role created by the stack receives only `secretsmanager:GetSecretValue` for the specified `PrivateKeySecretArn`.
+
+### Secrets Manager requirement
+
+Create the private key secret before clicking Launch Stack. The template accepts only the secret ARN; it does not accept the raw private key as a CloudFormation parameter.
+
+### Supported region
+
+This release candidate supports `us-east-2` only. The current AMI ID is `ami-06d0ede0e331a96d2`.
+
+### Estimated AWS costs
+
+The launcher software is free, but AWS infrastructure costs apply, primarily EC2 `r5.large`, a 256 GiB gp3 root volume, data transfer, and Secrets Manager secret storage/API calls.
+
 ## Launch steps
 
 1. Create or select a VPC and public subnet in `us-east-2`.

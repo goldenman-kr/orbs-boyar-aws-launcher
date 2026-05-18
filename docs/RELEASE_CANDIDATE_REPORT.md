@@ -14,7 +14,7 @@
 ## Files included
 
 ```text
-release/orbs-boyar-aws-launcher/
+orbs-boyar-aws-launcher/
 ├── ARCHITECTURE.md
 ├── CHANGELOG.md
 ├── MARKETPLACE_NOTES.md
@@ -66,7 +66,7 @@ Public-release safety scan passed.
 Evidence:
 
 ```text
-release/orbs-boyar-aws-launcher/public-release-safety-scan.log
+orbs-boyar-aws-launcher/public-release-safety-scan.log
 ```
 
 Checks performed:
