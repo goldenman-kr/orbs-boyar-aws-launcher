@@ -1,0 +1,45 @@
+# Local environment and secrets
+.env
+.env.*
+!.env.template
+*.pem
+*.key
+*.p8
+*.p12
+*.crt
+*.csr
+id_rsa*
+id_ed25519*
+
+# AWS credentials and local config
+.aws/
+aws/credentials
+aws/config
+credentials
+config
+*_credentials
+*credentials*.json
+*credentials*.csv
+
+# Logs, temporary deploy reports, and generated artifacts
+*.log
+*.tar.gz
+*.tgz
+*.zip
+archive-delivery.env
+cloudformation/*deploy*.env
+cloudformation/*deploy*.json
+cloudformation/*deploy*.log
+cloudformation/*test-report*.md
+cloudformation/*secret*.log
+cloudformation/*cleanup*.log
+cloudformation/*outputs*.json
+cloudformation/*outputs*.env
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
