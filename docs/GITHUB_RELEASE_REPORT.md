@@ -6,7 +6,7 @@
 - Public AMI: `ami-0bfc554348685c913`
 - Region: `us-east-2`
 - Release prep commit / tag target: `5f0b7e0`
-- Latest main after report finalization: `3dcf64a`
+- Latest main after report finalization: see current `origin/main` (report-only follow-up commits may be newer than the release tag)
 
 ## Launch Stack URL
 
