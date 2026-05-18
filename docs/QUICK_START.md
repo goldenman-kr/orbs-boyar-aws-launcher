@@ -1,6 +1,6 @@
 # Quick Start
 
-This guide launches the KRYP Labs Orbs Boyar AWS Launcher release candidate with the public GitHub Launch Stack flow.
+This guide launches the KRYP Labs Orbs Boyar AWS Launcher release candidate with the public S3-backed Launch Stack flow.
 
 ## 1. Create the Secrets Manager secret
 
@@ -28,12 +28,12 @@ Do not paste real private keys into issue trackers, screenshots, logs, shell his
 
 Launch in `us-east-2`:
 
-[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fraw.githubusercontent.com%2Fgoldenman-kr%2Forbs-boyar-aws-launcher%2Fmain%2Fcloudformation%2Ftemplate-medium-ami-secrets.yaml)
+[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-secrets.yaml)
 
-If you prefer to inspect the template first, open:
+If you prefer to inspect the exact CloudFormation template before launching, open the public S3 template URL:
 
 ```text
-https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-secrets.yaml
+https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-secrets.yaml
 ```
 
 ## 3. Fill stack parameters

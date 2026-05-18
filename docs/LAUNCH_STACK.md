@@ -2,6 +2,22 @@
 
 This guide launches the KRYP Labs Orbs Boyar AWS Launcher release candidate in `us-east-2`.
 
+## Template delivery
+
+CloudFormation Launch Stack uses the public S3 template URL:
+
+```text
+https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-secrets.yaml
+```
+
+Launch Stack URL:
+
+```text
+https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-secrets.yaml
+```
+
+The GitHub repository remains the source of truth for review and pull requests. The S3 object is the CloudFormation delivery artifact because CloudFormation accepts S3 `TemplateURL` reliably.
+
 ## Prerequisites
 
 - AWS CLI configured for the target AWS account
@@ -26,7 +42,7 @@ Do not paste real private keys into shell history if your shell records commands
 aws cloudformation create-stack \
   --region us-east-2 \
   --stack-name orbs-boyar-validator \
-  --template-body file://cloudformation/template-medium-ami-secrets.yaml \
+  --template-url https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-secrets.yaml \
   --capabilities CAPABILITY_IAM \
   --parameters \
     ParameterKey=VpcId,ParameterValue=<vpc-id> \

@@ -68,19 +68,27 @@ Do not paste private keys into CloudFormation parameters, stack descriptions, ti
 
 ## Launch Stack
 
-The safest simple public delivery approach for this release candidate is to host the CloudFormation template in this public GitHub repository and use the GitHub raw URL as the CloudFormation `templateURL`.
+The public Launch Stack flow now uses a public S3 HTTPS object URL for the CloudFormation template.
 
-**Tradeoffs:** GitHub raw delivery is easy to audit, version, and use directly from a Launch Stack button. For a production Marketplace listing, KRYP Labs should later consider version-pinned release assets or an AWS-owned S3 publishing flow for stronger immutability and availability guarantees.
+**Recommended delivery strategy:** KRYP Labs publishes the template to a dedicated public-read S3 object in `us-east-2`. This is more reliable for CloudFormation `TemplateURL` than GitHub raw URLs, while the same template remains version-controlled in GitHub for review.
 
-[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fraw.githubusercontent.com%2Fgoldenman-kr%2Forbs-boyar-aws-launcher%2Fmain%2Fcloudformation%2Ftemplate-medium-ami-secrets.yaml)
+**Tradeoffs:** S3 delivery is accepted directly by CloudFormation and can be controlled with bucket policy, versioning, content type, and cache settings. GitHub remains the source repository, but GitHub raw URLs are no longer the primary Launch Stack delivery path because CloudFormation does not accept them reliably in all flows.
+
+[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-secrets.yaml)
 
 Direct Launch Stack URL:
 
 ```text
-https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fraw.githubusercontent.com%2Fgoldenman-kr%2Forbs-boyar-aws-launcher%2Fmain%2Fcloudformation%2Ftemplate-medium-ami-secrets.yaml
+https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-secrets.yaml
 ```
 
-Template raw URL:
+Public S3 template URL:
+
+```text
+https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-secrets.yaml
+```
+
+GitHub source template for review:
 
 ```text
 https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-secrets.yaml
