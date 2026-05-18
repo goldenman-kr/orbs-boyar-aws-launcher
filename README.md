@@ -30,7 +30,7 @@ You must provide:
 
 - `VpcId` — target VPC
 - `SubnetId` — public subnet in `us-east-2`
-- `AccessCidr` — CIDR allowed to access all exposed ports (`22`, `80`, and `7666`); default `0.0.0.0/0`. Advanced users can restrict it later.
+- `AccessCidr` — CIDR allowed to access exposed ports (`22`, `80`, and `7666`); secure default `127.0.0.1/32`. Use your own `x.x.x.x/32` for one trusted IP, another CIDR range you control, or explicitly enter `0.0.0.0/0` only if you want public access from all IPs.
 - `ExistingEipAllocationId` — optional existing Elastic IP AllocationId for reinstall/recovery; leave empty to create a new EIP automatically.
 - `KeyName` — existing EC2 Key Pair name for SSH access
 - `InstanceType` — default `r5.large`
@@ -133,7 +133,7 @@ By default, the direct-input template automatically creates and associates an El
 
 ### Network access default
 
-By default, the template exposes SSH (`tcp/22`) and the Boyar/status endpoints (`tcp/80`, `tcp/7666`) to `0.0.0.0/0`. This keeps the public node endpoints reachable for blockchain/node accessibility and simplifies early-access testing. Users are responsible for protecting their EC2 key pair, validator secret, and AWS account. Advanced users can restrict `AccessCidr` to a narrower CIDR such as their own IP `/32`.
+For Marketplace review, the direct-input template now defaults `AccessCidr` to `127.0.0.1/32` instead of public ingress. Users should enter their own trusted public IP as `x.x.x.x/32` or another CIDR range they control. Public access remains optional and user-controlled: entering `0.0.0.0/0` allows all IPs to reach SSH (`tcp/22`) and the Boyar/status endpoints (`tcp/80`, `tcp/7666`).
 
 ### Supported region
 
@@ -159,7 +159,7 @@ aws cloudformation create-stack \
   --parameters \
     ParameterKey=VpcId,ParameterValue=<vpc-id> \
     ParameterKey=SubnetId,ParameterValue=<subnet-id> \
-    ParameterKey=AccessCidr,ParameterValue=0.0.0.0/0 \
+    ParameterKey=AccessCidr,ParameterValue=<your-ip>/32 \
     ParameterKey=KeyName,ParameterValue=<ec2-key-pair-name> \
     ParameterKey=EthereumEndpoint,ParameterValue=<ethereum-rpc-url> \
     ParameterKey=NodeAddressWithNoLeading0x,ParameterValue=<40-hex-node-address> \

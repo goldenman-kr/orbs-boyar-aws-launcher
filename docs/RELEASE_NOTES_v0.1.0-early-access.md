@@ -60,6 +60,6 @@ The launcher software is free. Users pay their own AWS infrastructure costs, inc
 - Region support is `us-east-2` only.
 - This is an early-access GitHub release, not an AWS Marketplace listing.
 - Users must provide their own VPC, public subnet, EC2 Key Pair, Ethereum RPC endpoint, validator node address, and validator private key.
-- Default network access exposes ports `22`, `80`, and `7666` to `0.0.0.0/0`; advanced users can restrict `AccessCidr`.
+- Marketplace-remediated template defaults `AccessCidr` to `127.0.0.1/32`; users may explicitly enter their own trusted CIDR or `0.0.0.0/0` if they intentionally want public access.
 - HTTPS/TLS, domain setup, monitoring dashboards, alerts, backups, and upgrade automation are not included.
 - Reused EIPs remain user-managed and may incur charges after stack deletion.

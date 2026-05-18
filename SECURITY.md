@@ -31,13 +31,13 @@ The launcher creates a new Elastic IP and associates it with the validator insta
 
 ## Network exposure model
 
-The launcher default exposes all currently configured ingress ports to `0.0.0.0/0`:
+The Marketplace-oriented direct-input template uses a secure ingress default: `AccessCidr=127.0.0.1/32`. The configured CIDR controls all currently configured ingress ports:
 
 - `tcp/22` for SSH
 - `tcp/80` for Boyar HTTP/status access
 - `tcp/7666` for management-service/status access
 
-The public node/status endpoints may need broad access for blockchain node accessibility and early-access testing. SSH is also public by default in this launcher, so users are responsible for securing their EC2 key pair, AWS credentials, IAM permissions, and validator secret. Advanced users can restrict `AccessCidr` to a narrower CIDR such as a trusted office range or a single `/32` IP.
+Public access is optional and user-controlled. Use `x.x.x.x/32` for a single trusted IP, a trusted office/VPN CIDR for a range, or `0.0.0.0/0` only if you intentionally want all IPs to reach SSH and node/status endpoints. Users remain responsible for securing their EC2 key pair, AWS credentials, IAM permissions, and validator secret.
 
 ## What users should not do
 
@@ -46,7 +46,7 @@ Do not:
 - Put private keys into non-NoEcho CloudFormation parameters, stack descriptions, logs, tickets, screenshots, or chat messages.
 - Store private keys in Git, shell history, issue trackers, logs, screenshots, or chat messages.
 - Share the generated `.env` file.
-- Treat the default public `AccessCidr` as a convenience only; do not treat it as a substitute for key management. SSH is exposed by default, so protect your EC2 private key and AWS account.
+- Do not enter `0.0.0.0/0` for `AccessCidr` unless you intentionally want public access from all IPs. Even with restricted CIDRs, protect your EC2 private key and AWS account.
 - Reuse validator private keys across unrelated environments.
 - Publish stack events, UserData, or support bundles without reviewing them for sensitive data.
 
@@ -54,7 +54,7 @@ Do not:
 
 - Region support is currently `us-east-2` only.
 - The EC2 root volume is not encrypted by default in the current template.
-- The default `AccessCidr` is `0.0.0.0/0`, so SSH (`22`) and node/status endpoints (`80`, `7666`) are publicly reachable unless you restrict the parameter.
+- The direct-input template default `AccessCidr` is `127.0.0.1/32` for secure Marketplace review. Users can explicitly choose broader access, including `0.0.0.0/0`, if desired.
 - The direct-input template does not create or require a Secrets Manager secret; the Secrets Manager template still requires users to create one separately.
 - The template does not configure TLS, domain names, monitoring, alerting, backups, or automatic secret rotation.
 - The UserData implementation signs the Secrets Manager API request directly using IMDSv2 role credentials to avoid adding AWS CLI installation to the AMI. This should be reviewed before public listing.

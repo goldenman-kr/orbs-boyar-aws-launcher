@@ -34,7 +34,7 @@ Required parameters:
 
 - `VpcId` — VPC in `us-east-2`
 - `SubnetId` — public subnet in `us-east-2`
-- `AccessCidr` — CIDR allowed to access SSH (`22`) and node/status endpoints (`80`, `7666`); default `0.0.0.0/0`
+- `AccessCidr` — CIDR allowed to access SSH (`22`) and node/status endpoints (`80`, `7666`); secure default `127.0.0.1/32`. Enter your own `x.x.x.x/32`, another trusted CIDR, or `0.0.0.0/0` only if you intentionally want public access.
 - `ExistingEipAllocationId` — optional; leave empty for a new auto-created EIP, or provide an existing AllocationId to preserve the node IP during reinstall/recovery
 - `KeyName` — EC2 Key Pair in `us-east-2`
 - `EthereumEndpoint` — Ethereum RPC endpoint URL
@@ -49,7 +49,7 @@ Defaults:
 
 Acknowledge `CAPABILITY_IAM` because the stack creates an EC2 IAM role and instance profile.
 
-Default network access exposes SSH and node/status endpoints publicly (`0.0.0.0/0`). This is intentional for the launcher default and public node accessibility. You are responsible for securing your EC2 key pair and AWS account. Advanced users can restrict `AccessCidr` to a narrower CIDR if desired.
+Marketplace-safe default network access is restricted with `AccessCidr=127.0.0.1/32`. To connect after launch, enter your own trusted public IP as `x.x.x.x/32` or another CIDR you control. Public access is optional and user-controlled; enter `0.0.0.0/0` only if you intentionally want all IPs to reach the exposed endpoints.
 
 ## 4. Record the Elastic IP
 

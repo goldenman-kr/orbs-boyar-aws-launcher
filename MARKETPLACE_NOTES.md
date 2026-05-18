@@ -53,7 +53,7 @@ Before public listing:
 2. Use prepared `us-east-1` AMI `ami-0c8d6f2b1c7acdc67` for Marketplace source-region review if accepted.
 3. Run AWS Marketplace AMI scanning and hardening checks.
 4. Review root volume encryption requirements.
-5. Review public Security Group defaults, exposed status ports, and Elastic IP lifecycle/reuse behavior.
+5. Review Security Group defaults, optional public access guidance, exposed status ports, and Elastic IP lifecycle/reuse behavior.
 6. Replace release-candidate/test tag names with final product tags if needed.
 7. Prepare public product title, short description, long description, usage instructions, support contacts, EULA/license, and refund/pricing details.
 8. Confirm KRYP Labs seller account, tax, banking, and support profile readiness.
@@ -68,7 +68,7 @@ Before public listing:
 - No final legal/license/support package is included.
 - Template has not been reviewed by an AWS Marketplace specialist.
 - Root volume encryption default should be reviewed.
-- Public endpoint exposure and Elastic IP lifecycle/reuse model should be reviewed.
+- Optional public endpoint exposure and Elastic IP lifecycle/reuse model should be reviewed.
 - Monitoring, alerting, TLS/domain setup, and upgrade policy are not yet packaged.
 
 ## Do not do yet
@@ -77,3 +77,8 @@ Before public listing:
 - Do not copy/share the AMI to another account.
 - Do not create a new AMI unless explicitly approved.
 - Do not delete the current AMI or snapshot while next-stage work is active.
+
+
+## Marketplace ingress remediation
+
+The direct-input Marketplace-oriented template now defaults `AccessCidr` to `127.0.0.1/32` instead of `0.0.0.0/0`. Users can still explicitly enter their own `x.x.x.x/32`, another trusted CIDR range, or `0.0.0.0/0` if they intentionally want public access. This preserves functionality while using secure defaults for Marketplace review.

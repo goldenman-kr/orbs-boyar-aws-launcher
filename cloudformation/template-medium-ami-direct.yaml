@@ -84,10 +84,10 @@ Parameters:
 
   AccessCidr:
     Type: String
-    Default: 0.0.0.0/0
-    Description: CIDR allowed to access all exposed endpoints, including SSH on port 22 and public Boyar/node endpoints on ports 80 and 7666. Advanced users can restrict this to a narrower CIDR.
+    Default: 127.0.0.1/32
+    Description: CIDR allowed to access exposed endpoints, including SSH on port 22 and Boyar/node endpoints on ports 80 and 7666. Use x.x.x.x/32 to allow a single trusted IP, 0.0.0.0/0 to allow all IPs, or another CIDR range you control.
     AllowedPattern: '^(\d{1,3}\.){3}\d{1,3}/\d{1,2}$'
-    ConstraintDescription: Must be a valid IPv4 CIDR, for example 0.0.0.0/0 or 203.0.113.10/32.
+    ConstraintDescription: Must be a valid IPv4 CIDR, for example 127.0.0.1/32, 203.0.113.10/32, or 0.0.0.0/0.
 
   ExistingEipAllocationId:
     Type: String
