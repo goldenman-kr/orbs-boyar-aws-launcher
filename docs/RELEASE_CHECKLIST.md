@@ -6,8 +6,8 @@
 - [ ] Run the public repo safety scan.
 - [ ] Validate the CloudFormation template in `us-east-2`.
 - [ ] Perform a clean-room launch test from this repository directory.
-- [ ] Confirm AMI `ami-06d0ede0e331a96d2` is still available in `us-east-2`.
-- [ ] Confirm snapshot `snap-0039ee6a089ecb6a2` is intentionally retained.
+- [ ] Confirm AMI `ami-0bfc554348685c913` is still available in `us-east-2`.
+- [ ] Confirm snapshot `snap-0ecb5473ac7987f1f` is intentionally retained.
 - [ ] Review `README.md`, `SECURITY.md`, and `TROUBLESHOOTING.md` for public wording.
 - [ ] Confirm KRYP Labs branding and support contact details.
 - [ ] Confirm license and Marketplace notes.

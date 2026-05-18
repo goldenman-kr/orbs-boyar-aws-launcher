@@ -4,7 +4,7 @@
 - Repository: `goldenman-kr/orbs-boyar-aws-launcher`
 - Template: `cloudformation/template-medium-ami-secrets.yaml`
 - Supported region: `us-east-2`
-- AMI ID: `ami-06d0ede0e331a96d2`
+- AMI ID: `ami-0bfc554348685c913`
 - AWS resources created during this phase: none
 - CloudFormation deployment during this phase: none
 - AMI/snapshot changes during this phase: none

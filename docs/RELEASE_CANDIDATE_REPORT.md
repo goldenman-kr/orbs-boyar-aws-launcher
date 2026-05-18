@@ -4,8 +4,8 @@
 - Release candidate: `0.1.0-rc.1`
 - Created: 2026-05-18
 - Region support: `us-east-2` only
-- AMI ID: `ami-06d0ede0e331a96d2`
-- Snapshot: `snap-0039ee6a089ecb6a2`
+- AMI ID: `ami-0bfc554348685c913`
+- Snapshot: `snap-0ecb5473ac7987f1f`
 - Final preferred template: `cloudformation/template-medium-ami-secrets.yaml`
 - AWS resources created during packaging: none
 - AMI/snapshot changes during packaging: none
@@ -92,7 +92,7 @@ orbs-boyar-aws-launcher
 
 The runtime behavior remains the validated Secrets Manager Medium AMI flow:
 
-1. Launch EC2 from Medium AMI `ami-06d0ede0e331a96d2`.
+1. Launch EC2 from Medium AMI `ami-0bfc554348685c913`.
 2. Use EC2 IAM Role to read only the specified `PrivateKeySecretArn`.
 3. Write `/opt/orbs/ami_creator/.env` with mode `0600`.
 4. Run `install.sh --configure-and-start`.
@@ -126,8 +126,8 @@ Reason:
 Retained resources:
 
 ```text
-AMI: ami-06d0ede0e331a96d2
-Snapshot: snap-0039ee6a089ecb6a2
+AMI: ami-0bfc554348685c913
+Snapshot: snap-0ecb5473ac7987f1f
 ```
 
 Do not delete the AMI/snapshot until the next-stage packaging/Marketplace decision is complete or Eddy explicitly approves deletion.

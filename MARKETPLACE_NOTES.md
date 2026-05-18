@@ -18,8 +18,8 @@ Current validated AMI:
 
 ```text
 Region: us-east-2
-AMI ID: ami-06d0ede0e331a96d2
-Snapshot: snap-0039ee6a089ecb6a2
+AMI ID: ami-0bfc554348685c913
+Snapshot: snap-0ecb5473ac7987f1f
 ```
 
 The AMI is a Medium AMI:
