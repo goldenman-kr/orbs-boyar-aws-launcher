@@ -1,44 +1,57 @@
 # GitHub Release Report
 
 - Brand: KRYP Labs
-- Release: `v0.1.0-early-access`
-- Public AMI: `ami-0bfc554348685c913`
-- Region: `us-east-2`
-- Launch Stack URL:
+- Release tag: \
+- Release title: \
+- Public AMI: \
+- Region: \
+- Release prep commit: \
+- Tag target: \
 
-```text
-https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct.yaml
-```
+## Launch Stack URL
 
-## Summary
+\\\
 
-Prepared the repository for the public early-access GitHub release.
+## Completed actions
 
-## Release notes
-
-Release notes file:
-
-```text
-docs/RELEASE_NOTES_v0.1.0-early-access.md
-```
+- Updated \ for \.
+- Created \.
+- Confirmed README includes the Launch Stack URL, public AMI ID, \ support, direct NoEcho private key input, Elastic IP automation/reuse, and AWS cost responsibility.
+- Ran public repo safety scan.
+- Committed and pushed release prep docs.
+- Created and pushed git tag \.
 
 ## Safety scan
 
-Pending final safety scan.
+Final public repository safety scan passed:
 
-## Git status
+- no \ files
+- no private key blocks
+- no \ / key-like files
+- no AWS access key IDs or secret key assignments
+- no pre-signed URLs
+- no exact local private key or RPC endpoint values from the build environment
 
-Pending final commit/tag/release creation.
+## GitHub Release status
 
-## GitHub Release
+GitHub CLI was not available in the environment, and no GitHub API token was present. A GitHub Release was therefore **not created automatically**.
 
-Pending.
+Manual creation details:
+
+- Tag: \
+- Target: pushed tag \
+- Title: \
+- Body file: \
+
+Equivalent command if GitHub CLI is available later:
+
+\\\
 
 ## Known limitations
 
-- Region support is `us-east-2` only.
+- Region support is \ only.
 - This is a GitHub early-access release, not an AWS Marketplace listing.
-- Direct private key input uses CloudFormation `NoEcho`; this hides values from UI/API outputs but is not a dedicated secret store.
+- Direct private key input uses CloudFormation \; this hides values from UI/API outputs but is not a dedicated secret store.
 - Users pay their own AWS infrastructure costs.
-- Default network access exposes `22`, `80`, and `7666` to `0.0.0.0/0` unless users restrict `AccessCidr`.
+- Default network access exposes \, \, and \ to \ unless users restrict \.
 - HTTPS/TLS, domain setup, monitoring, alerting, backups, and upgrade automation are not included.
