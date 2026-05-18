@@ -76,11 +76,10 @@ SSH authentication with `~/.ssh/id_ed25519_goldenman-kr` succeeded for GitHub. G
 Succeeded.
 
 ```text
-Initial release-candidate commit: 88d4666
-Report update commit: 47d3b4b
 Branch: main
 Remote: origin
 Push: main -> main
+Commit author/committer identity corrected to goldenman-kr <i12bwithu@gmail.com>
 ```
 
 ## Remaining manual tasks before public announcement
