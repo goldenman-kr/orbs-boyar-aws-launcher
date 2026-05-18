@@ -6,9 +6,11 @@ This package is the **KRYP Labs** GitHub Launch Stack early-access flow. It is i
 
 ## Current early-access status
 
-- Region support: `us-east-2` only
-- Public AMI ID: `ami-0bfc554348685c913`
-- Snapshot: `snap-0ecb5473ac7987f1f` retained by the publisher
+- GitHub Launch Stack region support: `us-east-2` only
+- Public AMI ID for GitHub Launch Stack: `ami-0bfc554348685c913`
+- Marketplace source-region AMI: `ami-0c8d6f2b1c7acdc67` in `us-east-1`
+- GitHub Launch Stack snapshot: `snap-0ecb5473ac7987f1f` retained by the publisher
+- Marketplace source snapshot: `snap-0ed6a777975da2ea5` retained by the publisher
 - Public AMI status: publicly launchable in `us-east-2` for early-access testing
 - Preferred early-access template: `cloudformation/template-medium-ami-direct.yaml`
 - Higher-security production template: `cloudformation/template-medium-ami-secrets.yaml`
@@ -135,7 +137,7 @@ By default, the template exposes SSH (`tcp/22`) and the Boyar/status endpoints (
 
 ### Supported region
 
-This early-access release supports `us-east-2` only. The official public AMI ID is `ami-0bfc554348685c913`.
+This early-access GitHub Launch Stack supports `us-east-2` only. The official public Launch Stack AMI ID is `ami-0bfc554348685c913`. A public Marketplace source-region copy is prepared in `us-east-1` as `ami-0c8d6f2b1c7acdc67` for future AWS Marketplace registration.
 
 ### Estimated AWS costs
 

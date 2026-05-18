@@ -23,6 +23,15 @@ Snapshot: snap-0ecb5473ac7987f1f
 AMI visibility: public in us-east-2 for early-access GitHub Launch Stack testing
 ```
 
+Marketplace source-region AMI copy:
+
+```text
+Region: us-east-1
+AMI ID: ami-0c8d6f2b1c7acdc67
+Snapshot: snap-0ed6a777975da2ea5
+AMI visibility: public in us-east-1 for Marketplace source-region preparation
+```
+
 The AMI is a Medium AMI:
 
 - Stable dependencies and installer files are baked in.
@@ -40,8 +49,8 @@ Recommended posture: use direct-input mode for early-access testers who need the
 
 Before public listing:
 
-1. Confirm Marketplace source-region requirements.
-2. Decide whether to rebuild or copy the AMI to the required Marketplace source region.
+1. Confirm Marketplace source-region requirements and whether `us-east-1` is accepted for this listing.
+2. Use prepared `us-east-1` AMI `ami-0c8d6f2b1c7acdc67` for Marketplace source-region review if accepted.
 3. Run AWS Marketplace AMI scanning and hardening checks.
 4. Review root volume encryption requirements.
 5. Review public Security Group defaults, exposed status ports, and Elastic IP lifecycle/reuse behavior.
@@ -53,7 +62,7 @@ Before public listing:
 
 ## Remaining blockers before public listing
 
-- AMI currently available only in `us-east-2`.
+- GitHub Launch Stack is still `us-east-2` only; Marketplace source AMI is now prepared in `us-east-1` as `ami-0c8d6f2b1c7acdc67`.
 - Marketplace source-region and publication flow not yet confirmed.
 - No Marketplace scan has been run yet.
 - No final legal/license/support package is included.

@@ -30,3 +30,10 @@
 - [ ] Pre-signed URLs
 - [ ] Deployment logs with IPs or sensitive values
 - [ ] Temporary test reports that may contain account-specific details
+
+
+## Marketplace source-region AMI
+
+- [ ] Confirm `us-east-1` AMI `ami-0c8d6f2b1c7acdc67` remains public and available before Marketplace submission.
+- [ ] Confirm snapshot `snap-0ed6a777975da2ea5` remains available and correctly permissioned.
+- [ ] Run AWS Marketplace AMI scanning against the `us-east-1` AMI.

@@ -17,6 +17,14 @@ Region: us-east-2
 AMI ID: ami-0bfc554348685c913
 ```
 
+Marketplace source-region copy prepared after the early-access release:
+
+```text
+Region: us-east-1
+AMI ID: ami-0c8d6f2b1c7acdc67
+Snapshot: snap-0ed6a777975da2ea5
+```
+
 ## What is included
 
 - Public sanitized Orbs Boyar Medium AMI in `us-east-2`.
