@@ -18,8 +18,8 @@ Current public early-access AMI:
 
 ```text
 Region: us-east-2
-AMI ID: ami-0bfc554348685c913
-Snapshot: snap-0ecb5473ac7987f1f
+AMI ID: ami-0111607018603b1cb
+Snapshot: snap-0cce629ae703964d8
 AMI visibility: public in us-east-2 for early-access GitHub Launch Stack testing
 ```
 
@@ -27,8 +27,8 @@ Marketplace source-region AMI copy:
 
 ```text
 Region: us-east-1
-AMI ID: ami-0c8d6f2b1c7acdc67
-Snapshot: snap-0ed6a777975da2ea5
+AMI ID: ami-071db7a079c2d5b0c
+Snapshot: snap-0e5fc4a3dd3019e56
 AMI visibility: public in us-east-1 for Marketplace source-region preparation
 ```
 
@@ -50,7 +50,7 @@ Recommended posture: use direct-input mode for early-access testers who need the
 Before public listing:
 
 1. Confirm Marketplace source-region requirements and whether `us-east-1` is accepted for this listing.
-2. Use prepared `us-east-1` AMI `ami-0c8d6f2b1c7acdc67` for Marketplace source-region review if accepted.
+2. Use prepared `us-east-1` AMI `ami-071db7a079c2d5b0c` for Marketplace source-region review if accepted.
 3. Run AWS Marketplace AMI scanning and hardening checks.
 4. Review root volume encryption requirements.
 5. Review Security Group defaults, optional public access guidance, exposed status ports, and Elastic IP lifecycle/reuse behavior.
@@ -62,7 +62,7 @@ Before public listing:
 
 ## Remaining blockers before public listing
 
-- GitHub Launch Stack is still `us-east-2` only; Marketplace source AMI is now prepared in `us-east-1` as `ami-0c8d6f2b1c7acdc67`.
+- GitHub Launch Stack is still `us-east-2` only; Marketplace source AMI v0.1.1 AutoNet is prepared in `us-east-1` as `ami-071db7a079c2d5b0c`.
 - Marketplace source-region and publication flow not yet confirmed.
 - No Marketplace scan has been run yet.
 - No final legal/license/support package is included.
@@ -87,3 +87,8 @@ The direct-input Marketplace-oriented template now defaults `AccessCidr` to `127
 ## 3-value deployment UX
 
 The Marketplace-oriented autonet template requires only three user-provided runtime values by default: `EthereumEndpoint`, `NodeAddressWithNoLeading0x`, and `PrivateKeyNoLeading0x`. It automatically provisions VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP. SSH `KeyName` is optional; if omitted, the EC2 instance launches without an SSH key pair.
+
+
+## v0.1.1 AutoNet AMI versioning
+
+AWS Marketplace product versions require distinct AMI IDs. v0.1.1 AutoNet uses `ami-0111607018603b1cb` in `us-east-2` for the public GitHub Launch Stack and `ami-071db7a079c2d5b0c` in `us-east-1` as the Marketplace source AMI. The previous v0.1.0 AMIs remain available and were not deleted in this phase.

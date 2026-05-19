@@ -2,7 +2,7 @@
 
 ## Current identifiers
 
-- Public AMI: `ami-0bfc554348685c913`
+- Public AMI: `ami-0111607018603b1cb`
 - Region: `us-east-2`
 - GitHub repo: https://github.com/goldenman-kr/orbs-boyar-aws-launcher
 - Current Launch Stack URL:
@@ -106,7 +106,7 @@ https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/crea
 ## Marketplace source-region copy
 
 - Region: `us-east-1`
-- AMI ID: `ami-0c8d6f2b1c7acdc67`
-- Snapshot ID: `snap-0ed6a777975da2ea5`
+- AMI ID: `ami-071db7a079c2d5b0c`
+- Snapshot ID: `snap-0e5fc4a3dd3019e56`
 - Visibility: public
 - Purpose: AWS Marketplace source-region registration preparation

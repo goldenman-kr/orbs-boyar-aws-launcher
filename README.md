@@ -7,10 +7,10 @@ This package is the **KRYP Labs** GitHub Launch Stack early-access flow. It is i
 ## Current early-access status
 
 - GitHub Launch Stack region support: `us-east-2` only
-- Public AMI ID for GitHub Launch Stack: `ami-0bfc554348685c913`
-- Marketplace source-region AMI: `ami-0c8d6f2b1c7acdc67` in `us-east-1`
-- GitHub Launch Stack snapshot: `snap-0ecb5473ac7987f1f` retained by the publisher
-- Marketplace source snapshot: `snap-0ed6a777975da2ea5` retained by the publisher
+- Public AMI ID for GitHub Launch Stack v0.1.1 AutoNet: `ami-0111607018603b1cb`
+- Marketplace source-region AMI v0.1.1 AutoNet: `ami-071db7a079c2d5b0c` in `us-east-1`
+- GitHub Launch Stack snapshot v0.1.1 AutoNet: `snap-0cce629ae703964d8` retained by the publisher
+- Marketplace source snapshot v0.1.1 AutoNet: `snap-0e5fc4a3dd3019e56` retained by the publisher
 - Public AMI status: publicly launchable in `us-east-2` for early-access testing
 - Preferred early-access / Marketplace template: `cloudformation/template-medium-ami-direct-autonet.yaml`
 - Higher-security production template: `cloudformation/template-medium-ami-secrets.yaml`
@@ -141,7 +141,7 @@ For Marketplace review, the direct-input template now defaults `AccessCidr` to `
 
 ### Supported region
 
-This early-access GitHub Launch Stack supports `us-east-2` only. The official public Launch Stack AMI ID is `ami-0bfc554348685c913`. A public Marketplace source-region copy is prepared in `us-east-1` as `ami-0c8d6f2b1c7acdc67` for future AWS Marketplace registration.
+This early-access GitHub Launch Stack supports `us-east-2` only. The official public Launch Stack v0.1.1 AutoNet AMI ID is `ami-0111607018603b1cb`. A distinct public Marketplace source-region v0.1.1 AutoNet AMI is prepared in `us-east-1` as `ami-071db7a079c2d5b0c` for future AWS Marketplace registration.
 
 ### Estimated AWS costs
 

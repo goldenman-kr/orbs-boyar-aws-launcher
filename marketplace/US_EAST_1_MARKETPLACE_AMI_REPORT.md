@@ -2,11 +2,11 @@
 
 - Brand: KRYP Labs
 - Source region: `us-east-2`
-- Source AMI: `ami-0bfc554348685c913`
-- Source snapshot: `snap-0ecb5473ac7987f1f`
+- Source AMI: `ami-0111607018603b1cb`
+- Source snapshot: `snap-0cce629ae703964d8`
 - Target region: `us-east-1`
-- Marketplace source AMI: `ami-0c8d6f2b1c7acdc67`
-- Marketplace source snapshot: `snap-0ed6a777975da2ea5`
+- Marketplace source AMI: `ami-071db7a079c2d5b0c`
+- Marketplace source snapshot: `snap-0e5fc4a3dd3019e56`
 - AMI rebuild performed: no
 - AMI copy mechanism: AWS EC2 `copy-image`
 - CloudFormation stacks deployed: no
@@ -23,11 +23,11 @@ The existing `us-east-2` public AMI and snapshot were not modified.
 Before copy, the source AMI was verified:
 
 ```text
-AMI: ami-0bfc554348685c913
+AMI: ami-0111607018603b1cb
 Region: us-east-2
 State: available
 Public: true
-Snapshot: snap-0ecb5473ac7987f1f
+Snapshot: snap-0cce629ae703964d8
 Snapshot state: completed
 Encrypted: false
 Volume size: 256 GiB
@@ -36,11 +36,11 @@ Volume size: 256 GiB
 ## Copied artifact
 
 ```text
-AMI: ami-0c8d6f2b1c7acdc67
+AMI: ami-071db7a079c2d5b0c
 Region: us-east-1
 State: available
 Public: true
-Snapshot: snap-0ed6a777975da2ea5
+Snapshot: snap-0e5fc4a3dd3019e56
 Snapshot state: completed
 Encrypted: false
 Volume size: 256 GiB
@@ -61,7 +61,7 @@ Verified after copy:
 The public GitHub Launch Stack remains `us-east-2` only and continues to use:
 
 ```text
-ami-0bfc554348685c913
+ami-0111607018603b1cb
 ```
 
 Current Launch Stack URL:
@@ -79,7 +79,7 @@ The `us-east-1` AMI is now ready for Marketplace registration preparation from a
 Remaining Marketplace blockers still include:
 
 - Confirm AWS Marketplace source-region and seller-account requirements.
-- Run AWS Marketplace AMI scanning against `ami-0c8d6f2b1c7acdc67`.
+- Run AWS Marketplace AMI scanning against `ami-071db7a079c2d5b0c`.
 - Confirm seller onboarding, support contact, legal/EULA, and product metadata.
 - Review public SSH/default network exposure.
 - Review direct-input private key mode vs Secrets Manager mode as the primary Marketplace path.
