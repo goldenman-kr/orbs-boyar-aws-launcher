@@ -2,7 +2,7 @@
 
 - Brand: KRYP Labs
 - Reviewer concern: default ingress CIDR should not be `0.0.0.0/0`
-- Template updated: `cloudformation/template-medium-ami-direct.yaml`
+- Template updated: `cloudformation/template-medium-ami-direct-autonet.yaml`
 - Public AMI: `ami-0bfc554348685c913`
 - Region for current Launch Stack: `us-east-2`
 

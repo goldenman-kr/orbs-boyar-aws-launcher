@@ -29,6 +29,10 @@ The Secrets Manager template keeps the least-privilege model: the EC2 instance r
 
 The launcher creates a new Elastic IP and associates it with the validator instance by default. This gives testers a stable public address while the stack exists. CloudFormation releases auto-created EIPs when the stack is deleted; users should record the `ElasticIp` and `ElasticIpAllocationId` outputs for operational checks. Advanced users can pass `ExistingEipAllocationId` to preserve the same node IP across reinstall/recovery. Reused EIPs are not released by the stack and remain the user's responsibility, including any AWS charges.
 
+## Autonet deployment model
+
+The default Marketplace-oriented template creates an isolated VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP automatically. Users do not need to select an existing VPC or subnet. SSH key pair input is optional; leaving `KeyName` empty launches the instance without SSH key-pair access.
+
 ## Network exposure model
 
 The Marketplace-oriented direct-input template uses a secure ingress default: `AccessCidr=127.0.0.1/32`. The configured CIDR controls all currently configured ingress ports:

@@ -1,0 +1,362 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  Marketplace-oriented CloudFormation template for launching an Orbs Boyar validator node
+  from a pre-baked AMI with auto-provisioned networking and direct NoEcho private key input.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Required Orbs runtime configuration
+        Parameters:
+          - EthereumEndpoint
+          - NodeAddressWithNoLeading0x
+          - PrivateKeyNoLeading0x
+      - Label:
+          default: Optional network access and recovery
+        Parameters:
+          - AccessCidr
+          - ExistingEipAllocationId
+      - Label:
+          default: Optional EC2 configuration
+        Parameters:
+          - ImageId
+          - InstanceType
+          - VolumeSize
+          - KeyName
+    ParameterLabels:
+      ImageId:
+        default: Medium AMI ID
+      InstanceType:
+        default: EC2 instance type
+      VolumeSize:
+        default: Root volume size GiB
+      KeyName:
+        default: Optional EC2 Key Pair name
+      AccessCidr:
+        default: Public access CIDR
+      ExistingEipAllocationId:
+        default: Existing EIP AllocationId
+      EthereumEndpoint:
+        default: Ethereum RPC endpoint
+      NodeAddressWithNoLeading0x:
+        default: Orbs node address without 0x
+      PrivateKeyNoLeading0x:
+        default: Orbs private key without 0x
+
+Parameters:
+  ImageId:
+    Type: AWS::EC2::Image::Id
+    Default: ami-0bfc554348685c913
+    Description: Region-local Medium AMI with Docker, Boyar binary, and /opt/orbs/ami_creator installer files pre-baked.
+
+  InstanceType:
+    Type: String
+    Default: r5.large
+    Description: EC2 instance type. Orbs documentation maps validator requirements to r5.large.
+    AllowedPattern: '^[a-z][a-z0-9]*[0-9]*\.[a-z0-9]+$'
+    ConstraintDescription: Must be a valid EC2 instance type, for example r5.large.
+
+  VolumeSize:
+    Type: Number
+    Default: 256
+    MinValue: 64
+    MaxValue: 16384
+    Description: Root EBS volume size in GiB. Orbs documentation recommends 256GB SSD or larger.
+
+  KeyName:
+    Type: String
+    Default: ''
+    Description: Optional existing EC2 Key Pair name for SSH access. Leave empty to launch without an SSH key pair.
+
+  AccessCidr:
+    Type: String
+    Default: 127.0.0.1/32
+    Description: CIDR allowed to access exposed endpoints, including SSH on port 22 and Boyar/node endpoints on ports 80 and 7666. Use x.x.x.x/32 to allow a single trusted IP, 0.0.0.0/0 to allow all IPs, or another CIDR range you control.
+    AllowedPattern: '^(\d{1,3}\.){3}\d{1,3}/\d{1,2}$'
+    ConstraintDescription: Must be a valid IPv4 CIDR, for example 127.0.0.1/32, 203.0.113.10/32, or 0.0.0.0/0.
+
+  ExistingEipAllocationId:
+    Type: String
+    Default: ''
+    Description: Existing Elastic IP AllocationId to reuse during reinstall or recovery. Leave empty to create a new EIP automatically.
+    AllowedPattern: '^(|eipalloc-[0-9a-f]+)$'
+    ConstraintDescription: Must be empty or a valid Elastic IP AllocationId such as eipalloc-0123456789abcdef0.
+
+  EthereumEndpoint:
+    Type: String
+    NoEcho: true
+    Description: Ethereum RPC endpoint URL. May contain an API key; do not share stack parameters or logs externally.
+    AllowedPattern: '^https?://.+'
+    ConstraintDescription: Must start with http:// or https://.
+
+  NodeAddressWithNoLeading0x:
+    Type: String
+    NoEcho: true
+    Description: Orbs node Ethereum address without leading 0x. 40 hex characters. Marked NoEcho to reduce metadata exposure.
+    AllowedPattern: '^[0-9a-fA-F]{40}$'
+    ConstraintDescription: Must be 40 hex characters without 0x.
+
+  PrivateKeyNoLeading0x:
+    Type: String
+    NoEcho: true
+    Description: Orbs node private key as 64 hex characters without leading 0x. NoEcho hides this value in CloudFormation UI/API outputs, but it is still handled by CloudFormation during stack creation.
+    AllowedPattern: '^[0-9a-fA-F]{64}$'
+    ConstraintDescription: Must be 64 hex characters without 0x.
+
+Conditions:
+  UseExistingEip: !Not [!Equals [!Ref ExistingEipAllocationId, '']]
+  CreateNewEip: !Equals [!Ref ExistingEipAllocationId, '']
+  HasKeyName: !Not [!Equals [!Ref KeyName, '']]
+
+Resources:
+  OrbsBoyarVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.42.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-orbs-boyar-vpc'
+        - Key: Project
+          Value: orbs-boyar-aws-launcher
+
+  OrbsBoyarPublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref OrbsBoyarVpc
+      CidrBlock: 10.42.1.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-orbs-boyar-public-subnet'
+        - Key: Project
+          Value: orbs-boyar-aws-launcher
+
+  OrbsBoyarInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-orbs-boyar-igw'
+        - Key: Project
+          Value: orbs-boyar-aws-launcher
+
+  OrbsBoyarVpcGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref OrbsBoyarVpc
+      InternetGatewayId: !Ref OrbsBoyarInternetGateway
+
+  OrbsBoyarPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref OrbsBoyarVpc
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-orbs-boyar-public-rt'
+        - Key: Project
+          Value: orbs-boyar-aws-launcher
+
+  OrbsBoyarDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: OrbsBoyarVpcGatewayAttachment
+    Properties:
+      RouteTableId: !Ref OrbsBoyarPublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref OrbsBoyarInternetGateway
+
+  OrbsBoyarSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref OrbsBoyarPublicSubnet
+      RouteTableId: !Ref OrbsBoyarPublicRouteTable
+
+  OrbsBoyarSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: KRYP Labs Orbs Boyar AWS Launcher access
+      VpcId: !Ref OrbsBoyarVpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref AccessCidr
+          Description: SSH access from configured CIDR
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !Ref AccessCidr
+          Description: Boyar HTTP/node endpoint access from configured CIDR
+        - IpProtocol: tcp
+          FromPort: 7666
+          ToPort: 7666
+          CidrIp: !Ref AccessCidr
+          Description: Management-service/node endpoint access from configured CIDR
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+          Description: Allow outbound Secrets Manager, Docker pulls, Orbs endpoints, and Ethereum RPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-orbs-boyar-medium-ami-secrets-sg'
+        - Key: Project
+          Value: orbs-boyar-aws-launcher
+
+  OrbsBoyarElasticIp:
+    Type: AWS::EC2::EIP
+    Condition: CreateNewEip
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-orbs-boyar-eip'
+        - Key: Project
+          Value: orbs-boyar-aws-launcher
+
+  OrbsBoyarInstance:
+    Type: AWS::EC2::Instance
+    DependsOn: OrbsBoyarDefaultRoute
+    Properties:
+      ImageId: !Ref ImageId
+      InstanceType: !Ref InstanceType
+      KeyName: !If [HasKeyName, !Ref KeyName, !Ref AWS::NoValue]
+      NetworkInterfaces:
+        - DeviceIndex: '0'
+          SubnetId: !Ref OrbsBoyarPublicSubnet
+          GroupSet:
+            - !Ref OrbsBoyarSecurityGroup
+          AssociatePublicIpAddress: true
+      MetadataOptions:
+        HttpEndpoint: enabled
+        HttpTokens: required
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: !Ref VolumeSize
+            VolumeType: gp3
+            DeleteOnTermination: true
+            Encrypted: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-orbs-boyar-medium-ami-direct'
+        - Key: Project
+          Value: orbs-boyar-aws-launcher
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -Eeuo pipefail
+          touch /var/log/orbs-boyar-cloudformation.log
+          chmod 600 /var/log/orbs-boyar-cloudformation.log
+          exec >> /var/log/orbs-boyar-cloudformation.log 2>&1
+
+          log() {
+            printf '[%s] %s\n' "$(date -Is)" "$1"
+          }
+
+          INSTALLER_DIR="/opt/orbs/ami_creator"
+          ENV_FILE="${!INSTALLER_DIR}/.env"
+          ETHEREUM_ENDPOINT_VALUE='${EthereumEndpoint}'
+          NODE_ADDRESS_VALUE='${NodeAddressWithNoLeading0x}'
+          PRIVATE_KEY_VALUE='${PrivateKeyNoLeading0x}'
+
+          log "Starting Orbs Boyar Medium AMI first-boot configuration with direct NoEcho private key input"
+          log "Writing runtime environment file (private key is not logged)"
+          umask 077
+          ETHEREUM_ENDPOINT_VALUE="${!ETHEREUM_ENDPOINT_VALUE}" NODE_ADDRESS_VALUE="${!NODE_ADDRESS_VALUE}" PRIVATE_KEY_VALUE="${!PRIVATE_KEY_VALUE}" ENV_FILE="${!ENV_FILE}" python3 <<'PY'
+          import os
+          import re
+          import sys
+
+          def fail(message):
+              print(f"ERROR: {message}", file=sys.stderr)
+              sys.exit(1)
+
+          env_file = os.environ["ENV_FILE"]
+          ethereum_endpoint = os.environ["ETHEREUM_ENDPOINT_VALUE"]
+          node_address = os.environ["NODE_ADDRESS_VALUE"]
+          private_key = os.environ["PRIVATE_KEY_VALUE"]
+
+          if private_key.startswith("0x"):
+              private_key = private_key[2:]
+          if not re.fullmatch(r"[0-9a-fA-F]{64}", private_key):
+              fail("private key must be 64 hex characters, with optional 0x accepted")
+          if not re.fullmatch(r"[0-9a-fA-F]{40}", node_address):
+              fail("node address must be 40 hex characters without 0x")
+          if not re.match(r"^https?://.+", ethereum_endpoint):
+              fail("Ethereum endpoint must start with http:// or https://")
+          with open(env_file, "w") as f:
+              f.write(f"ETHEREUM_ENDPOINT={ethereum_endpoint}\n")
+              f.write(f"NODE_ADDRESS_WITH_NO_LEADING_0x={node_address}\n")
+              f.write(f"PRIVATE_KEY_NO_LEADING_0x={private_key}\n")
+          os.chown(env_file, 0, 0)
+          os.chmod(env_file, 0o600)
+          print("Runtime environment file written with private key redacted from logs")
+          PY
+
+          log "Running install.sh --configure-and-start with ORBS_ENV_FILE override"
+          ORBS_ENV_FILE="${!ENV_FILE}" "${!INSTALLER_DIR}/install.sh" --configure-and-start
+          log "Orbs Boyar Medium AMI direct-input first-boot configuration completed"
+
+  OrbsBoyarElasticIpAssociation:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      AllocationId: !If
+        - UseExistingEip
+        - !Ref ExistingEipAllocationId
+        - !GetAtt OrbsBoyarElasticIp.AllocationId
+      InstanceId: !Ref OrbsBoyarInstance
+
+Outputs:
+  InstanceId:
+    Description: EC2 instance ID
+    Value: !Ref OrbsBoyarInstance
+
+  VpcId:
+    Description: Auto-created VPC ID
+    Value: !Ref OrbsBoyarVpc
+
+  SubnetId:
+    Description: Auto-created public subnet ID
+    Value: !Ref OrbsBoyarPublicSubnet
+
+  ElasticIp:
+    Description: Elastic IP address associated with the validator instance
+    Value: !GetAtt OrbsBoyarInstance.PublicIp
+
+  ElasticIpAllocationId:
+    Description: Elastic IP AllocationId used by this stack
+    Value: !If
+      - UseExistingEip
+      - !Ref ExistingEipAllocationId
+      - !GetAtt OrbsBoyarElasticIp.AllocationId
+
+  ElasticIpMode:
+    Description: Whether the EIP was auto-created by this stack or reused from ExistingEipAllocationId
+    Value: !If [UseExistingEip, ReusedExistingEip, AutoCreatedEip]
+
+  BoyarStatusUrl:
+    Description: Boyar status endpoint
+    Value: !Sub
+      - 'http://${ElasticIpAddress}/services/boyar/status'
+      - ElasticIpAddress: !GetAtt OrbsBoyarInstance.PublicIp
+
+  ManagementStatusUrl:
+    Description: Management service direct status endpoint
+    Value: !Sub
+      - 'http://${ElasticIpAddress}:7666/status'
+      - ElasticIpAddress: !GetAtt OrbsBoyarInstance.PublicIp
+
+  PrivateKeyInputMode:
+    Description: Private key input mode used by this stack. The private key value is NoEcho and is never output.
+    Value: DirectNoEchoParameter
+
+  SSHCommand:
+    Description: Example SSH command when KeyName is provided. Empty when the instance was launched without an SSH key pair.
+    Value: !If
+      - HasKeyName
+      - !Sub
+        - 'ssh -i <path-to-${KeyName}.pem> ubuntu@${ElasticIpAddress}'
+        - ElasticIpAddress: !GetAtt OrbsBoyarInstance.PublicIp
+      - ''

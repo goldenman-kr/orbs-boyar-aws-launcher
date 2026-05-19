@@ -5,12 +5,12 @@
 - Intended pricing: free software; customers pay their own AWS infrastructure costs
 - Current public AMI: `ami-0bfc554348685c913`
 - Current GitHub Launch Stack AMI region: `us-east-2`
-- Current CloudFormation template: `cloudformation/template-medium-ami-direct.yaml`
+- Current CloudFormation template: `cloudformation/template-medium-ami-direct-autonet.yaml`
 - GitHub repository: https://github.com/goldenman-kr/orbs-boyar-aws-launcher
 - Current Launch Stack URL:
 
 ```text
-https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct.yaml
+https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml
 ```
 
 ## 1. Current release-candidate structure and public assets
@@ -19,8 +19,8 @@ Current public early-access distribution consists of:
 
 - Public sanitized AMI `ami-0bfc554348685c913` in `us-east-2`.
 - Public S3-backed direct-input CloudFormation template:
-  - `cloudformation/template-medium-ami-direct.yaml`
-  - Public TemplateURL: `https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct.yaml`
+  - `cloudformation/template-medium-ami-direct-autonet.yaml`
+  - Public TemplateURL: `https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet.yaml`
 - Retained Secrets Manager template for higher-security production positioning:
   - `cloudformation/template-medium-ami-secrets.yaml`
 - Public GitHub repository with quick start, security, troubleshooting, release notes, and validation reports.
@@ -131,7 +131,7 @@ Marketplace listing should include:
 
 Likely review questions/blockers:
 
-- Public SSH default: current `AccessCidr` defaults to `0.0.0.0/0`, including port 22. This is beginner-friendly but risky. Marketplace reviewers may require a restricted default or a stronger warning.
+- Ingress default has been remediated to `AccessCidr=127.0.0.1/32`; users can explicitly choose broader CIDRs.
 - Direct private key input: `NoEcho` hides values in CloudFormation UI/API outputs but does not equal Secrets Manager. Marketplace production flow should likely prefer `template-medium-ami-secrets.yaml`.
 - Root volume encryption: current template sets `Encrypted: false`; Marketplace/security review may require encryption or reliance on account default EBS encryption.
 - Region support: current AMI is `us-east-2` only. Marketplace may require source-region conventions, copies, or broader region support.
@@ -176,7 +176,7 @@ Rationale:
 
 Recommended positioning:
 
-- Direct-input template (`template-medium-ami-direct.yaml`): early-access and quick evaluation path.
+- Direct-input template (`template-medium-ami-direct-autonet.yaml`): early-access and quick evaluation path.
   - Easier for testers.
   - Uses `PrivateKeyNoLeading0x` with `NoEcho: true`.
   - Must clearly state that `NoEcho` is not a dedicated secret store.

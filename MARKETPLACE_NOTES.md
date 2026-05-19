@@ -40,7 +40,7 @@ The AMI is a Medium AMI:
 
 ## Launch templates
 
-- `cloudformation/template-medium-ami-direct.yaml`: simpler early-access template. It accepts `PrivateKeyNoLeading0x` directly as a CloudFormation `NoEcho` parameter. This improves public testing usability, but the private key still passes through CloudFormation parameter handling during stack creation.
+- `cloudformation/template-medium-ami-direct-autonet.yaml`: simpler early-access template. It accepts `PrivateKeyNoLeading0x` directly as a CloudFormation `NoEcho` parameter. This improves public testing usability, but the private key still passes through CloudFormation parameter handling during stack creation.
 - `cloudformation/template-medium-ami-secrets.yaml`: retained for higher-security production and future Marketplace use. Users create an AWS Secrets Manager secret and pass only `PrivateKeySecretArn`.
 
 Recommended posture: use direct-input mode for early-access testers who need the simplest Launch Stack path; use Secrets Manager mode for Marketplace/public production packaging. The direct-input template automatically allocates an Elastic IP by default and now supports optional `ExistingEipAllocationId` reuse for reinstall/recovery. Auto-created EIPs are released on stack deletion; reused EIPs remain user-managed and may incur charges. The Secrets Manager template keeps automatic EIP behavior for higher-security testing.
@@ -82,3 +82,8 @@ Before public listing:
 ## Marketplace ingress remediation
 
 The direct-input Marketplace-oriented template now defaults `AccessCidr` to `127.0.0.1/32` instead of `0.0.0.0/0`. Users can still explicitly enter their own `x.x.x.x/32`, another trusted CIDR range, or `0.0.0.0/0` if they intentionally want public access. This preserves functionality while using secure defaults for Marketplace review.
+
+
+## 3-value deployment UX
+
+The Marketplace-oriented autonet template requires only three user-provided runtime values by default: `EthereumEndpoint`, `NodeAddressWithNoLeading0x`, and `PrivateKeyNoLeading0x`. It automatically provisions VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP. SSH `KeyName` is optional; if omitted, the EC2 instance launches without an SSH key pair.

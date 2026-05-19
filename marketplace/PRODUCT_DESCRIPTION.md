@@ -53,15 +53,14 @@ https://github.com/goldenman-kr/orbs-boyar-aws-launcher
 Current Launch Stack URL:
 
 ```text
-https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct.yaml
+https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml
 ```
 
 ## Usage notes
 
-Before launch, customers need:
+Before launch, customers need only three required runtime values by default:
 
-- AWS account with access to `us-east-2`.
-- VPC and public subnet in `us-east-2`.
+- AWS account with access to `us-east-2`. The template creates networking automatically.
 - EC2 Key Pair in `us-east-2`.
 - Ethereum RPC endpoint URL.
 - Orbs node address without leading `0x`.

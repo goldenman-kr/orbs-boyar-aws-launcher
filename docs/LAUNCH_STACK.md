@@ -21,8 +21,6 @@ The GitHub repository remains the source of truth for review and pull requests. 
 ## Prerequisites
 
 - AWS CLI configured for the target AWS account
-- A VPC and public subnet in `us-east-2`
-- An EC2 Key Pair in `us-east-2`
 - A Secrets Manager secret in `us-east-2` containing the validator private key
 - Validator node address without leading `0x`
 - Ethereum RPC endpoint URL
@@ -43,12 +41,7 @@ aws cloudformation create-stack \
   --region us-east-2 \
   --stack-name orbs-boyar-validator \
   --template-url https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-secrets.yaml \
-  --capabilities CAPABILITY_IAM \
   --parameters \
-    ParameterKey=VpcId,ParameterValue=<vpc-id> \
-    ParameterKey=SubnetId,ParameterValue=<subnet-id> \
-    ParameterKey=AccessCidr,ParameterValue=0.0.0.0/0 \
-    ParameterKey=KeyName,ParameterValue=<ec2-key-pair-name> \
     ParameterKey=EthereumEndpoint,ParameterValue=<ethereum-rpc-url> \
     ParameterKey=NodeAddressWithNoLeading0x,ParameterValue=<40-hex-node-address> \
     ParameterKey=PrivateKeySecretArn,ParameterValue=<secret-arn>
@@ -94,3 +87,7 @@ The stack does not delete your Secrets Manager secret. Delete or rotate it separ
 ## Elastic IP automation
 
 The public Launch Stack templates allocate and associate a new Elastic IP automatically. Outputs expose `ElasticIp`, `BoyarStatusUrl`, `ManagementStatusUrl`, and `SSHCommand` using that address. CloudFormation releases the EIP when the stack is deleted. A future enhancement may allow reusing an existing EIP AllocationId for reinstall/recovery.
+
+## 3-value default
+
+The autonet Launch Stack requires only `EthereumEndpoint`, `NodeAddressWithNoLeading0x`, and `PrivateKeyNoLeading0x` by default. VPC, subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP are created automatically. `KeyName`, `AccessCidr`, and `ExistingEipAllocationId` are optional advanced parameters.

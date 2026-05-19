@@ -1,5 +1,9 @@
 # Troubleshooting
 
+## Autonet resources
+
+The default template creates its own VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP. If deletion fails, check these stack-owned resources first.
+
 ## Stack does not reach CREATE_COMPLETE
 
 Check stack events:
@@ -12,10 +16,10 @@ aws cloudformation describe-stack-events \
 
 Common causes:
 
-- Wrong VPC/subnet region
-- Missing EC2 Key Pair
+- AWS account limits for VPC, subnet, route table, Internet Gateway, Elastic IP, or EC2 resources
+- Invalid optional EC2 Key Pair name when `KeyName` is provided
 - Invalid AMI region
-- IAM capability not acknowledged; use `--capabilities CAPABILITY_IAM`
+- Missing IAM permissions for EC2/VPC/EIP resource creation in the launching AWS principal
 - Invalid direct private key format, or invalid Secrets Manager ARN if using the Secrets Manager template
 
 ## First boot fails before services start
@@ -56,7 +60,7 @@ The private key must be 64 hex characters. In direct-input mode, enter it withou
 
 ## Network access defaults
 
-By default, the stack exposes SSH (`22`) and node/status endpoints (`80`, `7666`) publicly with `AccessCidr=0.0.0.0/0`. Users are responsible for securing their EC2 key pair and AWS account. Advanced users can restrict `AccessCidr` if they intentionally want narrower access.
+By default, the Marketplace-oriented autonet stack uses secure ingress `AccessCidr=127.0.0.1/32`. To reach status endpoints externally, enter your trusted public IP as `x.x.x.x/32`, another CIDR you control, or explicitly `0.0.0.0/0` if you intentionally want public access.
 
 ## Elastic IP issues
 
@@ -68,7 +72,7 @@ Check:
 
 - The stack has an `ElasticIp` output and the EIP is associated with the instance.
 - If using reuse mode, `ExistingEipAllocationId` exists in the same region and is not already associated with another instance.
-- `AccessCidr` allows your client IP, or is left at the default `0.0.0.0/0`.
+- `AccessCidr` allows your client IP. The secure default `127.0.0.1/32` will not allow external clients.
 - Security Group allows ports `22`, `80`, and `7666` from `AccessCidr`.
 - The service has finished its startup transition.
 

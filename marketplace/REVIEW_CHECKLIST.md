@@ -8,7 +8,7 @@
 - Current Launch Stack URL:
 
 ```text
-https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct.yaml
+https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml
 ```
 
 ## Seller onboarding
@@ -33,11 +33,11 @@ https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/crea
 
 ## CloudFormation readiness
 
-- [ ] Validate `cloudformation/template-medium-ami-direct.yaml`.
+- [ ] Validate `cloudformation/template-medium-ami-direct-autonet.yaml`.
 - [ ] Validate `cloudformation/template-medium-ami-secrets.yaml`.
 - [ ] Decide primary Marketplace template: direct-input or Secrets Manager.
 - [ ] Consider making Secrets Manager mode the primary Marketplace path.
-- [ ] Review default `AccessCidr=0.0.0.0/0`, especially SSH on port 22.
+- [ ] Confirm secure default `AccessCidr=127.0.0.1/32` is accepted by Marketplace review.
 - [ ] Confirm Elastic IP auto-create/reuse behavior is acceptable.
 - [ ] Confirm stack deletion cleanup behavior.
 - [ ] Confirm outputs are reviewer-friendly.

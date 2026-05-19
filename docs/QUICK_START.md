@@ -20,26 +20,23 @@ For higher-security production use, use the separate Secrets Manager template in
 
 Launch in `us-east-2`:
 
-[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct.yaml)
+[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml)
 
 If you prefer to inspect the exact CloudFormation template before launching, open the public S3 template URL:
 
 ```text
-https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct.yaml
+https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet.yaml
 ```
 
 ## 3. Fill stack parameters
 
 Required parameters:
 
-- `VpcId` — VPC in `us-east-2`
-- `SubnetId` — public subnet in `us-east-2`
-- `AccessCidr` — CIDR allowed to access SSH (`22`) and node/status endpoints (`80`, `7666`); secure default `127.0.0.1/32`. Enter your own `x.x.x.x/32`, another trusted CIDR, or `0.0.0.0/0` only if you intentionally want public access.
-- `ExistingEipAllocationId` — optional; leave empty for a new auto-created EIP, or provide an existing AllocationId to preserve the node IP during reinstall/recovery
-- `KeyName` — EC2 Key Pair in `us-east-2`
 - `EthereumEndpoint` — Ethereum RPC endpoint URL
 - `NodeAddressWithNoLeading0x` — validator node address, 40 hex characters, no `0x`
 - `PrivateKeyNoLeading0x` — direct NoEcho private key parameter, 64 hex characters with no `0x`
+
+Optional advanced parameters include `AccessCidr`, `ExistingEipAllocationId`, `KeyName`, `InstanceType`, `VolumeSize`, and `ImageId`. VPC and subnet selection are no longer required; the template creates them automatically.
 
 Defaults:
 
@@ -47,9 +44,7 @@ Defaults:
 - `InstanceType`: `r5.large`
 - `VolumeSize`: `256`
 
-Acknowledge `CAPABILITY_IAM` because the stack creates an EC2 IAM role and instance profile.
-
-Marketplace-safe default network access is restricted with `AccessCidr=127.0.0.1/32`. To connect after launch, enter your own trusted public IP as `x.x.x.x/32` or another CIDR you control. Public access is optional and user-controlled; enter `0.0.0.0/0` only if you intentionally want all IPs to reach the exposed endpoints.
+No IAM capability acknowledgement is required for the default direct autonet template. Marketplace-safe default network access is restricted with `AccessCidr=127.0.0.1/32`. To connect after launch, enter your own trusted public IP as `x.x.x.x/32` or another CIDR you control. Public access is optional and user-controlled; enter `0.0.0.0/0` only if you intentionally want all IPs to reach the exposed endpoints.
 
 ## 4. Record the Elastic IP
 

@@ -7,7 +7,7 @@ Public early-access release for launching an Orbs Boyar validator node on AWS us
 Launch in `us-east-2`:
 
 ```text
-https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct.yaml
+https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml
 ```
 
 ## Public AMI
@@ -63,3 +63,8 @@ The launcher software is free. Users pay their own AWS infrastructure costs, inc
 - Marketplace-remediated template defaults `AccessCidr` to `127.0.0.1/32`; users may explicitly enter their own trusted CIDR or `0.0.0.0/0` if they intentionally want public access.
 - HTTPS/TLS, domain setup, monitoring dashboards, alerts, backups, and upgrade automation are not included.
 - Reused EIPs remain user-managed and may incur charges after stack deletion.
+
+
+## 3-value deployment UX update
+
+The current Marketplace-oriented Launch Stack template now requires only three user-provided values by default: Ethereum RPC endpoint, Orbs node address, and Orbs private key. VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP are provisioned automatically. SSH Key Pair is optional.

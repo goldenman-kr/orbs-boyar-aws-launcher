@@ -12,7 +12,7 @@ This package is the **KRYP Labs** GitHub Launch Stack early-access flow. It is i
 - GitHub Launch Stack snapshot: `snap-0ecb5473ac7987f1f` retained by the publisher
 - Marketplace source snapshot: `snap-0ed6a777975da2ea5` retained by the publisher
 - Public AMI status: publicly launchable in `us-east-2` for early-access testing
-- Preferred early-access template: `cloudformation/template-medium-ami-direct.yaml`
+- Preferred early-access / Marketplace template: `cloudformation/template-medium-ami-direct-autonet.yaml`
 - Higher-security production template: `cloudformation/template-medium-ami-secrets.yaml`
 - Marketplace submission: not yet started
 - Distribution mode: GitHub Launch Stack using a public S3 TemplateURL
@@ -26,27 +26,32 @@ The AMI already contains the stable non-secret components: Ubuntu 22.04, Docker,
 
 ## Required user inputs
 
-You must provide:
+Users only need to provide three values for the default Launch Stack flow:
 
-- `VpcId` — target VPC
-- `SubnetId` — public subnet in `us-east-2`
-- `AccessCidr` — CIDR allowed to access exposed ports (`22`, `80`, and `7666`); secure default `127.0.0.1/32`. Use your own `x.x.x.x/32` for one trusted IP, another CIDR range you control, or explicitly enter `0.0.0.0/0` only if you want public access from all IPs.
-- `ExistingEipAllocationId` — optional existing Elastic IP AllocationId for reinstall/recovery; leave empty to create a new EIP automatically.
-- `KeyName` — existing EC2 Key Pair name for SSH access
-- `InstanceType` — default `r5.large`
-- `VolumeSize` — default `256` GiB
 - `EthereumEndpoint` — Ethereum RPC endpoint URL
 - `NodeAddressWithNoLeading0x` — 40 hex characters, no `0x`
 - `PrivateKeyNoLeading0x` — direct NoEcho private key parameter, 64 hex characters with no `0x`
+
+Everything else is automatically provisioned or optional:
+
+- VPC and public subnet are created automatically.
+- Internet Gateway, route table, default route, and Security Group are created automatically.
+- Elastic IP is created automatically, with optional `ExistingEipAllocationId` reuse for advanced reinstall/recovery.
+- SSH Key Pair is optional; leave `KeyName` empty to launch without SSH access.
+- `AccessCidr` defaults to secure ingress `127.0.0.1/32`; users may enter their own `x.x.x.x/32`, another trusted CIDR, or explicitly `0.0.0.0/0` if they want public access.
 
 For the retained Secrets Manager template, the secret may contain either the raw 64-hex private key string or JSON with `PRIVATE_KEY_NO_LEADING_0x`, `privateKeyNoLeading0x`, or `privateKey`.
 
 ## AWS resources created
 
-The direct-input template creates:
+The autonet direct-input template creates:
 
-- One EC2 instance
+- One VPC
+- One public subnet
+- One Internet Gateway
+- One route table and default route
 - One Security Group
+- One EC2 instance
 - One Elastic IP allocated and associated with the instance, unless `ExistingEipAllocationId` is provided
 - One root EBS volume attached to the instance, with `DeleteOnTermination: true`
 
@@ -74,18 +79,18 @@ The public Launch Stack flow now uses a public S3 HTTPS object URL for the Cloud
 
 **Tradeoffs:** S3 delivery is accepted directly by CloudFormation and can be controlled with bucket policy, versioning, content type, and cache settings. GitHub remains the source repository, but GitHub raw URLs are no longer the primary Launch Stack delivery path because CloudFormation does not accept them reliably in all flows.
 
-[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct.yaml)
+[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml)
 
 Direct Launch Stack URL:
 
 ```text
-https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct.yaml
+https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml
 ```
 
 Public S3 direct-input template URL:
 
 ```text
-https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct.yaml
+https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet.yaml
 ```
 
 Public S3 Secrets Manager template URL:
@@ -97,18 +102,18 @@ https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.
 GitHub source templates for review:
 
 ```text
-https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-direct.yaml
+https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-direct-autonet.yaml
 https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-secrets.yaml
 ```
 
 ### Launch prerequisites
 
 - AWS account with access to `us-east-2`
-- VPC and public subnet in `us-east-2`
-- EC2 Key Pair in `us-east-2`
-- Orbs validator private key for direct NoEcho input, or an AWS Secrets Manager secret in `us-east-2` if using the Secrets Manager template
 - Ethereum RPC endpoint URL
 - Orbs node address without leading `0x`
+- Orbs validator private key for direct NoEcho input
+
+The default autonet template creates its own VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP. SSH Key Pair, existing EIP reuse, and custom access CIDR are optional advanced settings.
 
 ### Required AWS permissions
 
@@ -116,10 +121,9 @@ The launching principal needs permission to create and manage the stack resource
 
 - CloudFormation stack operations
 - EC2 instance, Security Group, and EBS root volume operations
-- IAM Role, Instance Profile, and inline policy creation; the stack requires `CAPABILITY_IAM`
-- Permission to pass the created IAM role to EC2
+- EC2, VPC, subnet, Internet Gateway, route table, Security Group, EBS root volume, and Elastic IP operations
 
-The EC2 instance role created by the stack receives only `secretsmanager:GetSecretValue` for the specified `PrivateKeySecretArn`.
+The default autonet direct-input template does not create IAM roles and does not require `CAPABILITY_IAM`. The retained Secrets Manager template creates an EC2 instance role with only `secretsmanager:GetSecretValue` for the specified `PrivateKeySecretArn`.
 
 ### Private key input modes
 
@@ -141,33 +145,22 @@ This early-access GitHub Launch Stack supports `us-east-2` only. The official pu
 
 ### Estimated AWS costs
 
-The launcher software is free, but AWS infrastructure costs apply, primarily EC2 `r5.large`, a 256 GiB gp3 root volume, data transfer, and Secrets Manager secret storage/API calls.
+The launcher software is free, but AWS infrastructure costs apply, primarily EC2 `r5.large`, a 256 GiB gp3 root volume, data transfer, and Secrets Manager secret storage/API calls if using the Secrets Manager template.
 
 ## Launch steps
 
-1. Create or select a VPC and public subnet in `us-east-2`.
-2. Create or select an EC2 Key Pair.
-3. Create a Secrets Manager secret containing the validator private key.
-4. Launch the CloudFormation template:
+1. Prepare the three required values:
+   - Ethereum RPC endpoint
+   - Orbs node address without leading `0x`
+   - Orbs private key without leading `0x`
+2. Click the Launch Stack button, or launch the autonet template from CLI:
 
 ```bash
-aws cloudformation create-stack \
-  --region us-east-2 \
-  --stack-name orbs-boyar-validator \
-  --template-body file://cloudformation/template-medium-ami-secrets.yaml \
-  --capabilities CAPABILITY_IAM \
-  --parameters \
-    ParameterKey=VpcId,ParameterValue=<vpc-id> \
-    ParameterKey=SubnetId,ParameterValue=<subnet-id> \
-    ParameterKey=AccessCidr,ParameterValue=<your-ip>/32 \
-    ParameterKey=KeyName,ParameterValue=<ec2-key-pair-name> \
-    ParameterKey=EthereumEndpoint,ParameterValue=<ethereum-rpc-url> \
-    ParameterKey=NodeAddressWithNoLeading0x,ParameterValue=<40-hex-node-address> \
-    ParameterKey=PrivateKeyNoLeading0x,ParameterValue=<64-hex-private-key-without-0x>
+aws cloudformation create-stack   --region us-east-2   --stack-name orbs-boyar-validator   --template-body file://cloudformation/template-medium-ami-direct-autonet.yaml   --parameters     ParameterKey=EthereumEndpoint,ParameterValue=<ethereum-rpc-url>     ParameterKey=NodeAddressWithNoLeading0x,ParameterValue=<40-hex-node-address>     ParameterKey=PrivateKeyNoLeading0x,ParameterValue=<64-hex-private-key-without-0x>
 ```
 
-5. Wait for stack creation to complete.
-6. Open the stack outputs and check the Boyar and management status URLs.
+3. Wait for stack creation to complete.
+4. Open the stack outputs and check `ElasticIp`, `BoyarStatusUrl`, `ManagementStatusUrl`, and `SSHCommand`.
 
 ## Verify after launch
 
