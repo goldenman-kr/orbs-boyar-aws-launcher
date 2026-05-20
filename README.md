@@ -4,6 +4,20 @@ Public early-access release for launching an Orbs Boyar validator node on AWS wi
 
 This package is the **KRYP Labs** GitHub Launch Stack early-access flow. It is intended to evolve toward a future free AWS Marketplace distribution.
 
+## 🚀 Launch Orbs Network Full Node on AWS
+
+Deploy with only three required values.
+
+[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-AWS%20CloudFormation-orange?style=for-the-badge&logo=amazonaws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml)
+
+Plain link: [Launch Stack on AWS CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml)
+
+Required inputs:
+
+- Ethereum RPC endpoint
+- Orbs node address
+- Orbs private key
+
 ## Current early-access status
 
 - GitHub Launch Stack region support: `us-east-2` only
