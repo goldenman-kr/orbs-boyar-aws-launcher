@@ -1,4 +1,4 @@
-# KRYP Labs Orbs Boyar AWS Launcher
+# Orbs Boyar AWS Launcher
 
 Public early-access release for launching an Orbs Boyar validator node on AWS with CloudFormation.
 
