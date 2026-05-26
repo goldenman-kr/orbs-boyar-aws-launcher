@@ -1,6 +1,6 @@
 # Quick Start
 
-This guide launches the KRYP Labs Orbs Boyar AWS Launcher release candidate with the public S3-backed direct-input Launch Stack flow.
+This guide launches the KRYP Labs Orbs Boyar AWS Launcher release candidate with the public S3-backed AutoNet direct-input Launch Stack flow.
 
 ## 1. Prepare the private key value
 
@@ -36,15 +36,20 @@ Required parameters:
 - `NodeAddressWithNoLeading0x` — validator node address, 40 hex characters, no `0x`
 - `PrivateKeyNoLeading0x` — direct NoEcho private key parameter, 64 hex characters with no `0x`
 
-Optional advanced parameters include `AccessCidr`, `ExistingEipAllocationId`, `KeyName`, `InstanceType`, `VolumeSize`, and `ImageId`. VPC and subnet selection are no longer required; the template creates them automatically.
+Optional advanced parameters include `SshAccessCidr`, `AccessCidr`, `ExistingEipAllocationId`, `KeyName`, `InstanceType`, `VolumeSize`, and `ImageId`. VPC and subnet selection are no longer required; the template creates them automatically.
 
 Defaults:
 
-- `ImageId`: `ami-0bfc554348685c913` (public AMI in `us-east-2`)
+- `ImageId`: `ami-0111607018603b1cb` (public AMI in `us-east-2`; use `ami-071db7a079c2d5b0c` for the prepared `us-east-1` Marketplace source-region copy)
 - `InstanceType`: `r5.large`
 - `VolumeSize`: `256`
+- `SshAccessCidr`: `0.0.0.0/0` for Marketplace SSH validation; restrict this to a trusted operator IP/CIDR for production
+- `AccessCidr`: `127.0.0.1/32` for secure-by-default node/status endpoint access
+- `KeyName`: empty by default; provide an EC2 Key Pair for Marketplace review or operational SSH access
 
-No IAM capability acknowledgement is required for the default direct autonet template. Marketplace-safe default network access is restricted with `AccessCidr=127.0.0.1/32`. To connect after launch, enter your own trusted public IP as `x.x.x.x/32` or another CIDR you control. Public access is optional and user-controlled; enter `0.0.0.0/0` only if you intentionally want all IPs to reach the exposed endpoints.
+No IAM capability acknowledgement is required for the default direct AutoNet template.
+
+Marketplace SSH validation is supported by default with `SshAccessCidr=0.0.0.0/0`, while SSH remains key-only and `PasswordAuthentication no` is enforced during first boot. For production, restrict `SshAccessCidr` to your trusted public IP as `x.x.x.x/32` or another CIDR you control. Node/status endpoint access remains secure-by-default with `AccessCidr=127.0.0.1/32`; widen it only when you intentionally want external endpoint access.
 
 ## 4. Record the Elastic IP
 
@@ -68,9 +73,11 @@ Expected:
 :7666/status HTTP 200
 ```
 
-Optional SSH verification:
+Optional SSH / Marketplace reviewer verification:
 
 ```bash
+ssh -i <key-file.pem> ubuntu@<ElasticIp>
+# Expected: key-based login succeeds. Password login is rejected because PasswordAuthentication is disabled.
 sudo systemctl status boyar.service --no-pager --full
 sudo docker service ls
 sudo docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'

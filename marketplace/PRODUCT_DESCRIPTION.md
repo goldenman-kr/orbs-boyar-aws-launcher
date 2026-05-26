@@ -85,7 +85,7 @@ Expected status endpoints:
 - Private keys are not baked into the AMI.
 - Direct-input mode uses CloudFormation `NoEcho`, which hides values in UI/API outputs but is not a dedicated secret store.
 - Secrets Manager mode is recommended for higher-security production use.
-- Default network access exposes ports `22`, `80`, and `7666` to `0.0.0.0/0`; advanced users should restrict `AccessCidr` if appropriate.
+- SSH port `22` is reachable by default for Marketplace validation through `SshAccessCidr=0.0.0.0/0`, but only EC2 key-based login is allowed and password authentication is disabled. Node/status endpoints `80` and `7666` remain restricted by secure default `AccessCidr=127.0.0.1/32`; advanced users can widen or restrict each CIDR explicitly.
 - Users are responsible for EC2 key pair security, validator private key custody, IAM access, AWS account security, and RPC endpoint protection.
 - The current template does not configure TLS, DNS, monitoring, alerting, backups, or automatic upgrades.
 
@@ -109,3 +109,14 @@ This is an early-access deployment launcher, not a completed AWS Marketplace pro
 - Snapshot ID: `snap-0e5fc4a3dd3019e56`
 - Visibility: public
 - Purpose: AWS Marketplace source-region registration preparation
+
+
+## Architecture diagram
+
+Use the v0.1.1 AutoNet diagram for Marketplace review. It is generated from `cloudformation/template-medium-ami-direct-autonet.yaml`, uses current official AWS Architecture Icons, and reflects the auto-provisioned VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, root EBS block device, Elastic IP handling, Docker Swarm / Boyar runtime, management-service, runtime parameter flow, and public status endpoints.
+
+Public image URL:
+
+```text
+https://kryp-labs-marketplace-assets-617775257107-us-east-1.s3.us-east-1.amazonaws.com/marketplace-assets/orbs-boyar-autonet-marketplace-architecture-v0.1.1.png
+```

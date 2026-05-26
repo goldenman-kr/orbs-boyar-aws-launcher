@@ -37,7 +37,7 @@ https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/crea
 - [ ] Validate `cloudformation/template-medium-ami-secrets.yaml`.
 - [ ] Decide primary Marketplace template: direct-input or Secrets Manager.
 - [ ] Consider making Secrets Manager mode the primary Marketplace path.
-- [ ] Confirm secure default `AccessCidr=127.0.0.1/32` is accepted by Marketplace review.
+- [ ] Confirm `SshAccessCidr=0.0.0.0/0` supports Marketplace SSH validation while `AccessCidr=127.0.0.1/32` keeps node/status endpoints secure-by-default.
 - [ ] Confirm Elastic IP auto-create/reuse behavior is acceptable.
 - [ ] Confirm stack deletion cleanup behavior.
 - [ ] Confirm outputs are reviewer-friendly.
@@ -69,7 +69,7 @@ https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/crea
 
 - [ ] Document that direct NoEcho input is not a dedicated secret store.
 - [ ] Document Secrets Manager recommendation for production.
-- [ ] Warn users about public SSH default and `AccessCidr` restriction.
+- [ ] Warn users to restrict `SshAccessCidr` for production and to widen `AccessCidr` only intentionally.
 - [ ] Warn users about AWS infrastructure costs.
 - [ ] Warn users about retained/reused EIP charges.
 - [ ] Clarify that KRYP Labs does not custody private keys.
@@ -88,7 +88,7 @@ https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/crea
 - [ ] Marketplace AMI scan not run.
 - [ ] Final support contact details not approved.
 - [ ] EULA/license/support URLs not finalized.
-- [ ] Public SSH default needs Marketplace/security review.
+- [x] Public SSH validation path remediated with separate `SshAccessCidr`, key-only SSH, and explicit password-auth disablement.
 - [ ] Direct-input private key mode needs Marketplace/security review.
 - [ ] Root EBS encryption posture needs review.
 - [ ] Screenshots/assets not prepared.

@@ -131,7 +131,7 @@ Marketplace listing should include:
 
 Likely review questions/blockers:
 
-- Ingress default has been remediated to `AccessCidr=127.0.0.1/32`; users can explicitly choose broader CIDRs.
+- SSH ingress is Marketplace-reviewer reachable by default through `SshAccessCidr=0.0.0.0/0`, while first boot enforces key-only SSH with `PasswordAuthentication no`. Node/status endpoint ingress remains secure-by-default through `AccessCidr=127.0.0.1/32`; users can explicitly choose broader CIDRs.
 - Direct private key input: `NoEcho` hides values in CloudFormation UI/API outputs but does not equal Secrets Manager. Marketplace production flow should likely prefer `template-medium-ami-secrets.yaml`.
 - Root volume encryption: current template sets `Encrypted: false`; Marketplace/security review may require encryption or reliance on account default EBS encryption.
 - Region support: current AMI is `us-east-2` only. Marketplace may require source-region conventions, copies, or broader region support.
@@ -193,7 +193,7 @@ For Marketplace submission, prefer Secrets Manager mode in primary usage instruc
 - Marketplace source-region requirement not confirmed.
 - Marketplace AMI scan not run.
 - Final product title, support email, EULA/license posture, privacy/support URLs not confirmed.
-- Public SSH default needs review; consider changing Marketplace template default to restricted CIDR.
+- SSH reviewer accessibility remediated: `SshAccessCidr` is separate from node/status `AccessCidr`, key-based auth is required, and password auth is explicitly disabled.
 - Direct-input private key mode may not be acceptable as primary Marketplace path.
 - Root EBS encryption posture needs review.
 - No Marketplace-specific screenshots/assets prepared yet.
@@ -218,3 +218,14 @@ This preparation does not:
 - Snapshot ID: `snap-0e5fc4a3dd3019e56`
 - Visibility: public
 - Purpose: AWS Marketplace source-region registration preparation
+
+
+## Architecture diagram
+
+Use the v0.1.1 AutoNet diagram for Marketplace review. It is generated from `cloudformation/template-medium-ami-direct-autonet.yaml`, uses current official AWS Architecture Icons, and reflects the auto-provisioned VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, root EBS block device, Elastic IP handling, Docker Swarm / Boyar runtime, management-service, runtime parameter flow, and public status endpoints.
+
+Public image URL:
+
+```text
+https://kryp-labs-marketplace-assets-617775257107-us-east-1.s3.us-east-1.amazonaws.com/marketplace-assets/orbs-boyar-autonet-marketplace-architecture-v0.1.1.png
+```

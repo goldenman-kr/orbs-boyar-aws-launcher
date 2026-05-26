@@ -51,8 +51,8 @@ Everything else is automatically provisioned or optional:
 - VPC and public subnet are created automatically.
 - Internet Gateway, route table, default route, and Security Group are created automatically.
 - Elastic IP is created automatically, with optional `ExistingEipAllocationId` reuse for advanced reinstall/recovery.
-- SSH Key Pair is optional; leave `KeyName` empty to launch without SSH access.
-- `AccessCidr` defaults to secure ingress `127.0.0.1/32`; users may enter their own `x.x.x.x/32`, another trusted CIDR, or explicitly `0.0.0.0/0` if they want public access.
+- SSH Key Pair is optional for normal 3-value launches; for AWS Marketplace validation or operational SSH access, provide `KeyName` so EC2 can inject the reviewer/operator public key.
+- `SshAccessCidr` controls SSH (`22`) and defaults to `0.0.0.0/0` so Marketplace reviewers can reach SSH during validation; SSH remains key-only and password login is explicitly disabled at first boot. `AccessCidr` controls node/status endpoints (`80`, `7666`) and keeps secure default `127.0.0.1/32`.
 
 For the retained Secrets Manager template, the secret may contain either the raw 64-hex private key string or JSON with `PRIVATE_KEY_NO_LEADING_0x`, `privateKeyNoLeading0x`, or `privateKey`.
 
@@ -149,9 +149,11 @@ Recommended for higher-security production and future Marketplace packaging: use
 
 By default, the direct-input template automatically creates and associates an Elastic IP with the validator instance. Stack outputs use this stable `ElasticIp` value for Boyar status, management status, and SSH examples. Record the `ElasticIp` and `ElasticIpAllocationId` outputs after launch. When the stack creates the EIP, CloudFormation releases it automatically on stack deletion. Advanced users can pass `ExistingEipAllocationId` to preserve the same node IP across reinstall/recovery; in that mode CloudFormation associates the existing EIP but does not release it when the stack is deleted, and users are responsible for any retained EIP charges.
 
-### Network access default
+### Network access defaults
 
-For Marketplace review, the direct-input template now defaults `AccessCidr` to `127.0.0.1/32` instead of public ingress. Users should enter their own trusted public IP as `x.x.x.x/32` or another CIDR range they control. Public access remains optional and user-controlled: entering `0.0.0.0/0` allows all IPs to reach SSH (`tcp/22`) and the Boyar/status endpoints (`tcp/80`, `tcp/7666`).
+For AWS Marketplace validation, SSH is reachable by default with `SshAccessCidr=0.0.0.0/0` so reviewers can connect using the selected EC2 Key Pair. SSH remains key-only: first boot explicitly writes `PasswordAuthentication no`, disables keyboard-interactive/challenge-response authentication, enables the SSH service, and restarts it. For production, restrict `SshAccessCidr` to a trusted operator IP/CIDR.
+
+Node/status endpoint access remains secure-by-default with `AccessCidr=127.0.0.1/32`. Users should enter their own trusted public IP as `x.x.x.x/32` or another CIDR range they control when external endpoint validation is needed.
 
 ### Supported region
 
@@ -190,6 +192,7 @@ SSH example:
 
 ```bash
 ssh -i <key-file.pem> ubuntu@<ElasticIp>
+# Expected: key-based login succeeds. Password login is rejected because PasswordAuthentication is disabled.
 sudo systemctl status boyar.service --no-pager --full
 sudo docker service ls
 sudo docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'
