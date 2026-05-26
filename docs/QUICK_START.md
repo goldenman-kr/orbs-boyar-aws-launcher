@@ -20,12 +20,12 @@ For higher-security production use, use the separate Secrets Manager template in
 
 Launch in `us-east-2`:
 
-[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml)
+[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml)
 
 If you prefer to inspect the exact CloudFormation template before launching, open the public S3 template URL:
 
 ```text
-https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet.yaml
+https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet-github.yaml
 ```
 
 ## 3. Fill stack parameters
@@ -45,11 +45,11 @@ Defaults:
 - `VolumeSize`: `256`
 - `SshAccessCidr`: `0.0.0.0/0` for Marketplace SSH validation; restrict this to a trusted operator IP/CIDR for production
 - `AccessCidr`: `127.0.0.1/32` for secure-by-default node/status endpoint access
-- `KeyName`: empty by default; provide an EC2 Key Pair for Marketplace review or operational SSH access
+- `KeyName`: empty by default in the GitHub easy-mode template; provide an EC2 Key Pair only when you want operational SSH access
 
 No IAM capability acknowledgement is required for the default direct AutoNet template.
 
-Marketplace SSH validation is supported by default with `SshAccessCidr=0.0.0.0/0`, while SSH remains key-only and `PasswordAuthentication no` is enforced during first boot. For production, restrict `SshAccessCidr` to your trusted public IP as `x.x.x.x/32` or another CIDR you control. Node/status endpoint access remains secure-by-default with `AccessCidr=127.0.0.1/32`; widen it only when you intentionally want external endpoint access.
+GitHub easy-mode launches keep SSH optional: leave `KeyName` empty for the simplest 3-value deployment, or provide an EC2 Key Pair for operational SSH access. If SSH is enabled, `SshAccessCidr=0.0.0.0/0` is reachable by default and password authentication is disabled; restrict `SshAccessCidr` to your trusted public IP/CIDR for production. Node/status endpoint access remains secure-by-default with `AccessCidr=127.0.0.1/32`; widen it only when you intentionally want external endpoint access. The separate Marketplace template keeps the stable filename `template-medium-ami-direct-autonet.yaml` and requires `KeyName` for reviewer SSH validation.
 
 ## 4. Record the Elastic IP
 

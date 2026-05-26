@@ -7,7 +7,7 @@ Public early-access release for launching an Orbs Boyar validator node on AWS us
 Launch in `us-east-2`:
 
 ```text
-https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml
+https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml
 ```
 
 ## Public AMI
@@ -67,9 +67,16 @@ The launcher software is free. Users pay their own AWS infrastructure costs, inc
 
 ## 3-value deployment UX update
 
-The current Marketplace-oriented Launch Stack template now requires only three user-provided values by default: Ethereum RPC endpoint, Orbs node address, and Orbs private key. VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP are provisioned automatically. SSH Key Pair is optional.
+The GitHub easy-mode Launch Stack template `template-medium-ami-direct-autonet-github.yaml` requires only three user-provided values by default: Ethereum RPC endpoint, Orbs node address, and Orbs private key. VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP are provisioned automatically. SSH Key Pair is optional. The Marketplace template keeps the existing `template-medium-ami-direct-autonet.yaml` filename but now requires `KeyName` for AWS Marketplace SSH validation.
 
 
 ## v0.1.1 AutoNet AMI versioning update
 
 A distinct v0.1.1 AutoNet AMI has been prepared for the public Launch Stack in `us-east-2`: `ami-0111607018603b1cb` (snapshot `snap-0cce629ae703964d8`). A distinct Marketplace source AMI has been prepared in `us-east-1`: `ami-071db7a079c2d5b0c` (snapshot `snap-0e5fc4a3dd3019e56`). Existing v0.1.0 AMIs were not deleted.
+
+
+## Marketplace/GitHub SSH split
+
+- Marketplace template remains `cloudformation/template-medium-ami-direct-autonet.yaml` for review continuity and requires EC2 `KeyName` for reviewer SSH validation.
+- GitHub easy-mode template is `cloudformation/template-medium-ami-direct-autonet-github.yaml` and preserves optional SSH plus the 3-value deployment UX.
+- Both templates preserve AutoNet VPC/subnet/IGW/route table/Security Group/EIP behavior and direct NoEcho private key input.

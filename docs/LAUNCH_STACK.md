@@ -90,4 +90,4 @@ The public Launch Stack templates allocate and associate a new Elastic IP automa
 
 ## 3-value default
 
-The autonet Launch Stack requires only `EthereumEndpoint`, `NodeAddressWithNoLeading0x`, and `PrivateKeyNoLeading0x` by default. VPC, subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP are created automatically. `KeyName`, `AccessCidr`, and `ExistingEipAllocationId` are optional advanced parameters.
+The GitHub easy-mode AutoNet Launch Stack requires only `EthereumEndpoint`, `NodeAddressWithNoLeading0x`, and `PrivateKeyNoLeading0x` by default. VPC, subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP are created automatically. `KeyName`, `SshAccessCidr`, `AccessCidr`, and `ExistingEipAllocationId` are optional advanced parameters. The Marketplace AutoNet template keeps the stable filename `template-medium-ami-direct-autonet.yaml` and requires `KeyName` for reviewer SSH validation.

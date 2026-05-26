@@ -40,7 +40,7 @@ The AMI is a Medium AMI:
 
 ## Launch templates
 
-- `cloudformation/template-medium-ami-direct-autonet.yaml`: simpler early-access template. It accepts `PrivateKeyNoLeading0x` directly as a CloudFormation `NoEcho` parameter. This improves public testing usability, but the private key still passes through CloudFormation parameter handling during stack creation.
+- `cloudformation/template-medium-ami-direct-autonet.yaml`: simpler early-access template. It accepts `PrivateKeyNoLeading0x` directly as a CloudFormation `NoEcho` parameter. This Marketplace template keeps the stable filename for review continuity and requires `KeyName` so AWS Marketplace reviewers can validate SSH access. The private key still passes through CloudFormation parameter handling during stack creation.
 - `cloudformation/template-medium-ami-secrets.yaml`: retained for higher-security production and future Marketplace use. Users create an AWS Secrets Manager secret and pass only `PrivateKeySecretArn`.
 
 Recommended posture: use direct-input mode for early-access testers who need the simplest Launch Stack path; use Secrets Manager mode for Marketplace/public production packaging. The direct-input template automatically allocates an Elastic IP by default and now supports optional `ExistingEipAllocationId` reuse for reinstall/recovery. Auto-created EIPs are released on stack deletion; reused EIPs remain user-managed and may incur charges. The Secrets Manager template keeps automatic EIP behavior for higher-security testing.
@@ -86,7 +86,9 @@ The direct-input Marketplace-oriented template now defaults `AccessCidr` to `127
 
 ## 3-value deployment UX
 
-The Marketplace-oriented autonet template requires only three user-provided runtime values by default: `EthereumEndpoint`, `NodeAddressWithNoLeading0x`, and `PrivateKeyNoLeading0x`. It automatically provisions VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP. SSH `KeyName` is optional; if omitted, the EC2 instance launches without an SSH key pair.
+The GitHub easy-mode AutoNet template `template-medium-ami-direct-autonet-github.yaml` preserves the three-value default UX: `EthereumEndpoint`, `NodeAddressWithNoLeading0x`, and `PrivateKeyNoLeading0x`. It automatically provisions VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP, and SSH `KeyName` is optional.
+
+The Marketplace AutoNet template `template-medium-ami-direct-autonet.yaml` preserves the same AutoNet behavior but requires `KeyName` for AWS Marketplace reviewer/operational SSH validation while keeping the existing Marketplace filename and delivery option stable.
 
 
 ## v0.1.1 AutoNet AMI versioning

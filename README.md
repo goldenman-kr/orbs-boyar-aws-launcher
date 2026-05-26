@@ -8,9 +8,9 @@ This package is the **KRYP Labs** GitHub Launch Stack early-access flow. It is i
 
 Deploy with only three required values.
 
-[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-AWS%20CloudFormation-orange?style=for-the-badge&logo=amazonaws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml)
+[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-AWS%20CloudFormation-orange?style=for-the-badge&logo=amazonaws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml)
 
-Plain link: [Launch Stack on AWS CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml)
+Plain link: [Launch Stack on AWS CloudFormation](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml)
 
 Required inputs:
 
@@ -26,7 +26,8 @@ Required inputs:
 - GitHub Launch Stack snapshot v0.1.1 AutoNet: `snap-0cce629ae703964d8` retained by the publisher
 - Marketplace source snapshot v0.1.1 AutoNet: `snap-0e5fc4a3dd3019e56` retained by the publisher
 - Public AMI status: publicly launchable in `us-east-2` for early-access testing
-- Preferred early-access / Marketplace template: `cloudformation/template-medium-ami-direct-autonet.yaml`
+- GitHub easy-mode template: `cloudformation/template-medium-ami-direct-autonet-github.yaml`
+- Marketplace review template: `cloudformation/template-medium-ami-direct-autonet.yaml`
 - Higher-security production template: `cloudformation/template-medium-ami-secrets.yaml`
 - Marketplace submission: not yet started
 - Distribution mode: GitHub Launch Stack using a public S3 TemplateURL
@@ -51,7 +52,7 @@ Everything else is automatically provisioned or optional:
 - VPC and public subnet are created automatically.
 - Internet Gateway, route table, default route, and Security Group are created automatically.
 - Elastic IP is created automatically, with optional `ExistingEipAllocationId` reuse for advanced reinstall/recovery.
-- SSH Key Pair is optional for normal 3-value launches; for AWS Marketplace validation or operational SSH access, provide `KeyName` so EC2 can inject the reviewer/operator public key.
+- SSH Key Pair is optional in the GitHub easy-mode template. The Marketplace template requires `KeyName` so AWS Marketplace reviewers can validate SSH with the matching private key.
 - `SshAccessCidr` controls SSH (`22`) and defaults to `0.0.0.0/0` so Marketplace reviewers can reach SSH during validation; SSH remains key-only and password login is explicitly disabled at first boot. `AccessCidr` controls node/status endpoints (`80`, `7666`) and keeps secure default `127.0.0.1/32`.
 
 For the retained Secrets Manager template, the secret may contain either the raw 64-hex private key string or JSON with `PRIVATE_KEY_NO_LEADING_0x`, `privateKeyNoLeading0x`, or `privateKey`.
@@ -93,18 +94,18 @@ The public Launch Stack flow now uses a public S3 HTTPS object URL for the Cloud
 
 **Tradeoffs:** S3 delivery is accepted directly by CloudFormation and can be controlled with bucket policy, versioning, content type, and cache settings. GitHub remains the source repository, but GitHub raw URLs are no longer the primary Launch Stack delivery path because CloudFormation does not accept them reliably in all flows.
 
-[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml)
+[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml)
 
 Direct Launch Stack URL:
 
 ```text
-https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml
+https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml
 ```
 
 Public S3 direct-input template URL:
 
 ```text
-https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet.yaml
+https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet-github.yaml
 ```
 
 Public S3 Secrets Manager template URL:
@@ -116,7 +117,7 @@ https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.
 GitHub source templates for review:
 
 ```text
-https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-direct-autonet.yaml
+https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-direct-autonet-github.yaml
 https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-secrets.yaml
 ```
 
@@ -127,7 +128,7 @@ https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/clou
 - Orbs node address without leading `0x`
 - Orbs validator private key for direct NoEcho input
 
-The default autonet template creates its own VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP. SSH Key Pair, existing EIP reuse, and custom access CIDR are optional advanced settings.
+The GitHub easy-mode AutoNet template creates its own VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP. SSH Key Pair, existing EIP reuse, and custom access CIDR are optional advanced settings. The Marketplace AutoNet template preserves the same networking/runtime behavior but requires `KeyName` for reviewer SSH validation.
 
 ### Required AWS permissions
 
@@ -151,7 +152,7 @@ By default, the direct-input template automatically creates and associates an El
 
 ### Network access defaults
 
-For AWS Marketplace validation, SSH is reachable by default with `SshAccessCidr=0.0.0.0/0` so reviewers can connect using the selected EC2 Key Pair. SSH remains key-only: first boot explicitly writes `PasswordAuthentication no`, disables keyboard-interactive/challenge-response authentication, enables the SSH service, and restarts it. For production, restrict `SshAccessCidr` to a trusted operator IP/CIDR.
+For AWS Marketplace validation, use `cloudformation/template-medium-ami-direct-autonet.yaml`; it requires `KeyName`, and SSH is reachable by default with `SshAccessCidr=0.0.0.0/0` so reviewers can connect using the selected EC2 Key Pair. For GitHub easy-mode launches, use `cloudformation/template-medium-ami-direct-autonet-github.yaml`; `KeyName` remains optional. SSH remains key-only: first boot explicitly writes `PasswordAuthentication no`, disables keyboard-interactive/challenge-response authentication, enables the SSH service, and restarts it. For production, restrict `SshAccessCidr` to a trusted operator IP/CIDR.
 
 Node/status endpoint access remains secure-by-default with `AccessCidr=127.0.0.1/32`. Users should enter their own trusted public IP as `x.x.x.x/32` or another CIDR range they control when external endpoint validation is needed.
 
@@ -172,7 +173,7 @@ The launcher software is free, but AWS infrastructure costs apply, primarily EC2
 2. Click the Launch Stack button, or launch the autonet template from CLI:
 
 ```bash
-aws cloudformation create-stack   --region us-east-2   --stack-name orbs-boyar-validator   --template-body file://cloudformation/template-medium-ami-direct-autonet.yaml   --parameters     ParameterKey=EthereumEndpoint,ParameterValue=<ethereum-rpc-url>     ParameterKey=NodeAddressWithNoLeading0x,ParameterValue=<40-hex-node-address>     ParameterKey=PrivateKeyNoLeading0x,ParameterValue=<64-hex-private-key-without-0x>
+aws cloudformation create-stack   --region us-east-2   --stack-name orbs-boyar-validator   --template-body file://cloudformation/template-medium-ami-direct-autonet-github.yaml   --parameters     ParameterKey=EthereumEndpoint,ParameterValue=<ethereum-rpc-url>     ParameterKey=NodeAddressWithNoLeading0x,ParameterValue=<40-hex-node-address>     ParameterKey=PrivateKeyNoLeading0x,ParameterValue=<64-hex-private-key-without-0x>
 ```
 
 3. Wait for stack creation to complete.

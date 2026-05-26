@@ -31,7 +31,7 @@ The launcher creates a new Elastic IP and associates it with the validator insta
 
 ## Autonet deployment model
 
-The default Marketplace-oriented template creates an isolated VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP automatically. Users do not need to select an existing VPC or subnet. SSH key pair input is optional; leaving `KeyName` empty launches the instance without SSH key-pair access.
+The default Marketplace-oriented template creates an isolated VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP automatically. Users do not need to select an existing VPC or subnet. SSH key pair input is optional in the GitHub easy-mode template; leaving `KeyName` empty launches without SSH key-pair access. The Marketplace template requires `KeyName` for reviewer SSH validation while still enforcing key-only SSH and `PasswordAuthentication no`.
 
 ## Network exposure model
 

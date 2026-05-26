@@ -68,13 +68,14 @@ Parameters:
     Description: Root EBS volume size in GiB. Orbs documentation recommends 256GB SSD or larger.
 
   KeyName:
-    Type: AWS::EC2::KeyPair::KeyName
-    Description: EC2 Key Pair required for SSH access and AWS Marketplace validation.
+    Type: String
+    Default: ''
+    Description: Optional existing EC2 Key Pair name for SSH access. Leave empty to preserve the 3-value GitHub easy-mode launch without SSH key-pair login.
 
   SshAccessCidr:
     Type: String
     Default: 0.0.0.0/0
-    Description: CIDR allowed to reach SSH on TCP/22. The Marketplace validation default is reachable from reviewer networks, but SSH remains key-only and password authentication is disabled. For production, restrict this to a trusted x.x.x.x/32 or another CIDR you control.
+    Description: CIDR allowed to reach SSH on TCP/22 when KeyName is provided. Default is broadly reachable for easy testing, but SSH remains key-only and password authentication is disabled. For production, restrict this to a trusted x.x.x.x/32 or another CIDR you control.
     AllowedPattern: '^(\d{1,3}\.){3}\d{1,3}/\d{1,2}$'
     ConstraintDescription: Must be a valid IPv4 CIDR, for example 203.0.113.10/32 or 0.0.0.0/0.
 
@@ -116,6 +117,7 @@ Parameters:
 Conditions:
   UseExistingEip: !Not [!Equals [!Ref ExistingEipAllocationId, '']]
   CreateNewEip: !Equals [!Ref ExistingEipAllocationId, '']
+  HasKeyName: !Not [!Equals [!Ref KeyName, '']]
 
 Resources:
   OrbsBoyarVpc:
@@ -229,7 +231,7 @@ Resources:
     Properties:
       ImageId: !Ref ImageId
       InstanceType: !Ref InstanceType
-      KeyName: !Ref KeyName
+      KeyName: !If [HasKeyName, !Ref KeyName, !Ref AWS::NoValue]
       NetworkInterfaces:
         - DeviceIndex: '0'
           SubnetId: !Ref OrbsBoyarPublicSubnet
@@ -383,7 +385,10 @@ Outputs:
     Value: DirectNoEchoParameter
 
   SSHCommand:
-    Description: Example SSH command for the required Marketplace EC2 Key Pair.
-    Value: !Sub
-      - 'ssh -i <path-to-${KeyName}.pem> ubuntu@${ElasticIpAddress}'
-      - ElasticIpAddress: !GetAtt OrbsBoyarInstance.PublicIp
+    Description: Example SSH command when KeyName is provided. Empty when the GitHub easy-mode instance is launched without an SSH key pair.
+    Value: !If
+      - HasKeyName
+      - !Sub
+        - 'ssh -i <path-to-${KeyName}.pem> ubuntu@${ElasticIpAddress}'
+        - ElasticIpAddress: !GetAtt OrbsBoyarInstance.PublicIp
+      - ''

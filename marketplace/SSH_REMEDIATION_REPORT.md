@@ -1,5 +1,7 @@
 # Marketplace SSH Remediation Report
 
+> Superseded split-template update: the stable Marketplace template `template-medium-ami-direct-autonet.yaml` now requires `KeyName`; the separate GitHub easy-mode template `template-medium-ami-direct-autonet-github.yaml` preserves optional SSH and the 3-value UX.
+
 ## Summary
 
 AWS Marketplace reviewer SSH accessibility feedback has been remediated in the AutoNet CloudFormation template.
@@ -37,16 +39,11 @@ The existing `AccessCidr` now controls only node/status endpoints:
 - TCP/7666
 - Default remains secure-by-default: `127.0.0.1/32`
 
-This preserves the 3-value default UX for validator launch while making SSH reachable during AWS Marketplace validation when a reviewer/operator EC2 Key Pair is provided.
+This now pairs with the split-template approach: the Marketplace template requires `KeyName` for AWS Marketplace SSH validation, while the GitHub easy-mode template preserves the 3-value default UX and optional SSH.
 
-### Optional SSH KeyPair support preserved
+### SSH KeyPair behavior after split
 
-`KeyName` remains optional:
-
-- Empty `KeyName`: instance launches without SSH key login.
-- Provided `KeyName`: EC2 injects the selected public key and the `SSHCommand` output is populated.
-
-For Marketplace validation, the product notes now explicitly recommend providing `KeyName` so the reviewer can authenticate with the matching private key.
+Marketplace template `template-medium-ami-direct-autonet.yaml` requires `KeyName` so reviewers can authenticate with the matching private key. GitHub template `template-medium-ami-direct-autonet-github.yaml` preserves optional `KeyName`: empty launches without SSH key login, provided value injects the selected public key and populates `SSHCommand`.
 
 ## First-boot SSH hardening
 
@@ -107,7 +104,7 @@ Key rendered defaults:
 ImageId: ami-0111607018603b1cb
 SshAccessCidr: 0.0.0.0/0
 AccessCidr: 127.0.0.1/32
-KeyName: optional empty string
+Marketplace KeyName: required; GitHub KeyName: optional empty string
 ```
 
 ## Documentation updates
@@ -118,7 +115,7 @@ Updated documentation now states:
 - SSH remains key-only and password authentication is explicitly disabled at first boot.
 - Production users should restrict `SshAccessCidr` to trusted operator IP/CIDR.
 - Node/status endpoints remain secure-by-default through `AccessCidr=127.0.0.1/32`.
-- `KeyName` remains optional for normal 3-value launches but should be supplied for Marketplace validation or operational SSH access.
+- Marketplace `KeyName` is required for reviewer SSH validation; GitHub easy-mode `KeyName` remains optional for normal 3-value launches.
 
 ## Recommendation for Marketplace resubmission
 
@@ -128,7 +125,7 @@ Marketplace reviewer instructions should include:
 
 1. Launch the AutoNet CloudFormation template.
 2. Provide the three required Orbs runtime values.
-3. Select an EC2 Key Pair in `KeyName` for SSH validation.
+3. Select an EC2 Key Pair in `KeyName` for SSH validation; this parameter is required by the Marketplace template.
 4. Leave `SshAccessCidr` at the Marketplace validation default or set it to the reviewer-controlled CIDR.
 5. SSH as `ubuntu` using the matching private key.
 6. Confirm password authentication is disabled.
