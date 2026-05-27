@@ -33,7 +33,7 @@ Metadata:
       VolumeSize:
         default: Root volume size GiB
       KeyName:
-        default: Required EC2 Key Pair name
+        default: Existing EC2 Key Pair name (optional)
       SshAccessCidr:
         default: SSH access CIDR
       AccessCidr:
@@ -69,7 +69,8 @@ Parameters:
 
   KeyName:
     Type: AWS::EC2::KeyPair::KeyName
-    Description: EC2 Key Pair required for SSH access and AWS Marketplace validation.
+    Default: ''
+    Description: Optional existing EC2 Key Pair name for SSH access. Select an existing regional key pair to reuse it, or leave empty to let this stack create and use a new key pair automatically. Auto-created key pairs are deleted with the stack; existing key pairs are retained.
 
   SshAccessCidr:
     Type: String
@@ -115,6 +116,8 @@ Parameters:
 Conditions:
   UseExistingEip: !Not [!Equals [!Ref ExistingEipAllocationId, '']]
   CreateNewEip: !Equals [!Ref ExistingEipAllocationId, '']
+  UseExistingKeyPair: !Not [!Equals [!Ref KeyName, '']]
+  CreateNewKeyPair: !Equals [!Ref KeyName, '']
 
 Resources:
   OrbsBoyarVpc:
@@ -222,13 +225,28 @@ Resources:
         - Key: Project
           Value: orbs-boyar-aws-launcher
 
+  OrbsBoyarKeyPair:
+    Type: AWS::EC2::KeyPair
+    Condition: CreateNewKeyPair
+    Properties:
+      KeyName: !Sub '${AWS::StackName}-orbs-boyar-ssh-key'
+      KeyType: ed25519
+      KeyFormat: pem
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-orbs-boyar-ssh-key'
+        - Key: Project
+          Value: orbs-boyar-aws-launcher
+        - Key: ManagedBy
+          Value: CloudFormation
+
   OrbsBoyarInstance:
     Type: AWS::EC2::Instance
     DependsOn: OrbsBoyarDefaultRoute
     Properties:
       ImageId: !Ref ImageId
       InstanceType: !Ref InstanceType
-      KeyName: !Ref KeyName
+      KeyName: !If [UseExistingKeyPair, !Ref KeyName, !Ref OrbsBoyarKeyPair]
       NetworkInterfaces:
         - DeviceIndex: '0'
           SubnetId: !Ref OrbsBoyarPublicSubnet
@@ -359,8 +377,32 @@ Outputs:
     Description: Private key input mode used by this stack. The private key value is NoEcho and is never output.
     Value: DirectNoEchoParameter
 
-  SSHCommand:
-    Description: Example SSH command for the required Marketplace EC2 Key Pair.
+  AppliedKeyName:
+    Description: EC2 Key Pair name applied to the instance. This is either the selected existing KeyName or the stack-created key pair.
+    Value: !If [UseExistingKeyPair, !Ref KeyName, !Ref OrbsBoyarKeyPair]
+
+  KeyPairMode:
+    Description: Whether the EC2 Key Pair was reused from KeyName or auto-created by this stack. Existing key pairs are retained; auto-created key pairs are deleted with the stack.
+    Value: !If [UseExistingKeyPair, ReusedExistingKeyPair, AutoCreatedKeyPair]
+
+  AutoCreatedPrivateKeySsmParameterName:
+    Condition: CreateNewKeyPair
+    Description: SSM Parameter Store name containing the auto-created private key. Retrieve it before deleting the stack if you need future SSH access.
     Value: !Sub
-      - 'ssh -i <path-to-${KeyName}.pem> ubuntu@${ElasticIpAddress}'
-      - ElasticIpAddress: !GetAtt OrbsBoyarInstance.PublicIp
+      - '/ec2/keypair/${KeyPairId}'
+      - KeyPairId: !GetAtt OrbsBoyarKeyPair.KeyPairId
+
+  AutoCreatedPrivateKeyRetrievalCommand:
+    Condition: CreateNewKeyPair
+    Description: CLI command to retrieve the auto-created private key material. Requires ssm:GetParameter with decryption permission.
+    Value: !Sub
+      - 'aws ssm get-parameter --region ${AWS::Region} --name /ec2/keypair/${KeyPairId} --with-decryption --query Parameter.Value --output text > ${KeyName}.pem && chmod 600 ${KeyName}.pem'
+      - KeyPairId: !GetAtt OrbsBoyarKeyPair.KeyPairId
+        KeyName: !Ref OrbsBoyarKeyPair
+
+  SSHCommand:
+    Description: Example SSH command using the EC2 Key Pair applied to the instance.
+    Value: !Sub
+      - 'ssh -i <path-to-${AppliedKeyName}.pem> ubuntu@${ElasticIpAddress}'
+      - AppliedKeyName: !If [UseExistingKeyPair, !Ref KeyName, !Ref OrbsBoyarKeyPair]
+        ElasticIpAddress: !GetAtt OrbsBoyarInstance.PublicIp

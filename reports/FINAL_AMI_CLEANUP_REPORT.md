@@ -80,7 +80,7 @@ GitHub template ImageId: ami-0a56576d054e9228e
 
 Marketplace behavior remains:
 
-- `KeyName` required
+- `KeyName` optional with auto-create fallback
 - `SshAccessCidr` required / no default `0.0.0.0/0`
 - `AccessCidr` secure default `127.0.0.1/32`
 - No `VpcId` or `SubnetId` parameters

@@ -45,5 +45,5 @@ ami-0a56576d054e9228e -> snap-0b73679b56ef084b8
 - GitHub deployment flow now targets `us-east-1`.
 - Marketplace template now targets `us-east-1` AMI `ami-0a56576d054e9228e`.
 - GitHub `KeyName` remains optional.
-- Marketplace `KeyName` remains required.
+- Marketplace `KeyName` is optional with existing-key reuse or stack-managed auto-creation.
 - AutoNet behavior remains unchanged.

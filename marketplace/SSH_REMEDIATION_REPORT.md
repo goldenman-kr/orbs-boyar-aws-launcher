@@ -1,6 +1,6 @@
 # Marketplace SSH Remediation Report
 
-> Superseded split-template update: the stable Marketplace template `template-medium-ami-direct-autonet.yaml` now requires `KeyName`; the separate GitHub easy-mode template `template-medium-ami-direct-autonet-github.yaml` preserves optional SSH and the 3-value UX.
+> Superseded split-template update: the stable Marketplace template `template-medium-ami-direct-autonet.yaml` now supports optional `KeyName` with auto-created Key Pair fallback; the separate GitHub easy-mode template `template-medium-ami-direct-autonet-github.yaml` preserves optional SSH and the 3-value UX.
 
 ## Summary
 
@@ -39,11 +39,11 @@ The existing `AccessCidr` now controls only node/status endpoints:
 - TCP/7666
 - Default remains secure-by-default: `127.0.0.1/32`
 
-This now pairs with the split-template approach: the Marketplace template requires `KeyName` for AWS Marketplace SSH validation, while the GitHub easy-mode template preserves the 3-value default UX and optional SSH.
+This now pairs with the split-template approach: both Marketplace and GitHub templates support optional `KeyName`; empty values create a stack-managed Key Pair.
 
 ### SSH KeyPair behavior after split
 
-Marketplace template `template-medium-ami-direct-autonet.yaml` requires `KeyName` so reviewers can authenticate with the matching private key. GitHub template `template-medium-ami-direct-autonet-github.yaml` preserves optional `KeyName`: empty launches without SSH key login, provided value injects the selected public key and populates `SSHCommand`.
+Marketplace template `template-medium-ami-direct-autonet.yaml` and GitHub template `template-medium-ami-direct-autonet-github.yaml` both support optional `KeyName`: provided values reuse an existing regional Key Pair, empty values create a stack-managed Key Pair and populate SSH/key retrieval outputs.
 
 ## First-boot SSH hardening
 
@@ -104,7 +104,7 @@ Key rendered defaults:
 ImageId: ami-09399cf1f338175fc
 SshAccessCidr: 0.0.0.0/0
 AccessCidr: 127.0.0.1/32
-Marketplace KeyName: required; GitHub KeyName: optional empty string
+Marketplace/GitHub KeyName: optional empty string; empty creates a stack-managed Key Pair
 ```
 
 ## Documentation updates
@@ -115,7 +115,7 @@ Updated documentation now states:
 - SSH remains key-only and password authentication is explicitly disabled at first boot.
 - Production users should restrict `SshAccessCidr` to trusted operator IP/CIDR.
 - Node/status endpoints remain secure-by-default through `AccessCidr=127.0.0.1/32`.
-- Marketplace `KeyName` is required for reviewer SSH validation; GitHub easy-mode `KeyName` remains optional for normal 3-value launches.
+- Marketplace and GitHub `KeyName` are optional; reviewers/users can select an existing Key Pair or leave it empty for stack-managed auto-creation.
 
 ## Recommendation for Marketplace resubmission
 
@@ -125,7 +125,7 @@ Marketplace reviewer instructions should include:
 
 1. Launch the AutoNet CloudFormation template.
 2. Provide the three required Orbs runtime values.
-3. Select an EC2 Key Pair in `KeyName` for SSH validation; this parameter is required by the Marketplace template.
+3. Select an EC2 Key Pair in `KeyName` for SSH validation, or leave it empty so the stack auto-creates one and exposes the retrieval output.
 4. Leave `SshAccessCidr` at the Marketplace validation default or set it to the reviewer-controlled CIDR.
 5. SSH as `ubuntu` using the matching private key.
 6. Confirm password authentication is disabled.

@@ -113,7 +113,7 @@ Rendered parameter checks:
 
 ```text
 ImageId default: ami-0a56576d054e9228e
-KeyName: required
+KeyName: optional; existing-key reuse or auto-created Key Pair when omitted
 SshAccessCidr: required, no default
 AccessCidr default: 127.0.0.1/32
 VpcId parameter: absent

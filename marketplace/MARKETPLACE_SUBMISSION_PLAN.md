@@ -131,7 +131,7 @@ Marketplace listing should include:
 
 Likely review questions/blockers:
 
-- SSH ingress is Marketplace-reviewer reachable by default through `SshAccessCidr=0.0.0.0/0`, while first boot enforces key-only SSH with `PasswordAuthentication no`. Node/status endpoint ingress remains secure-by-default through `AccessCidr=127.0.0.1/32`; users can explicitly choose broader CIDRs.
+- SSH ingress is controlled through `SshAccessCidr`, while the AMI enforces key-only SSH with `PasswordAuthentication no`. Node/status endpoint ingress remains secure-by-default through `AccessCidr=127.0.0.1/32`; users can explicitly choose broader CIDRs.
 - Direct private key input: `NoEcho` hides values in CloudFormation UI/API outputs but does not equal Secrets Manager. Marketplace production flow should likely prefer `template-medium-ami-secrets.yaml`.
 - Root volume encryption: current template sets `Encrypted: false`; Marketplace/security review may require encryption or reliance on account default EBS encryption.
 - Region support: current AMI is `us-east-2` only. Marketplace may require source-region conventions, copies, or broader region support.
@@ -193,7 +193,7 @@ For Marketplace submission, prefer Secrets Manager mode in primary usage instruc
 - Marketplace source-region requirement not confirmed.
 - Marketplace AMI scan not run.
 - Final product title, support email, EULA/license posture, privacy/support URLs not confirmed.
-- SSH reviewer accessibility remediated: `SshAccessCidr` is separate from node/status `AccessCidr`, key-based auth is required, and password auth is explicitly disabled.
+- SSH reviewer accessibility remediated: `SshAccessCidr` is separate from node/status `AccessCidr`, key-based auth is required, password auth is disabled, and Key Pair handling supports existing-key reuse or stack-managed auto-creation.
 - Direct-input private key mode may not be acceptable as primary Marketplace path.
 - Root EBS encryption posture needs review.
 - No Marketplace-specific screenshots/assets prepared yet.

@@ -32,7 +32,7 @@ cloudformation/template-medium-ami-direct-autonet.yaml
 
 Changes applied:
 
-- `KeyName` is now required.
+- `KeyName` is now optional: select an existing regional Key Pair or leave empty for stack-managed auto-creation.
 - Empty `Default: ''` was removed.
 - Optional `HasKeyName` condition was removed.
 - EC2 instance now uses:
@@ -67,7 +67,7 @@ Behavior preserved:
 - `KeyName` remains optional with empty default.
 - `HasKeyName` condition remains.
 - EC2 instance omits `KeyName` when empty.
-- `SSHCommand` output remains empty when launched without an SSH key pair.
+- `SSHCommand` output always reflects the applied Key Pair; auto-created keys also expose SSM retrieval outputs.
 - 3-value UX is preserved: users only need `EthereumEndpoint`, `NodeAddressWithNoLeading0x`, and `PrivateKeyNoLeading0x` for the default launch.
 
 ## AutoNet behavior preserved in both templates
@@ -107,7 +107,7 @@ Parameter rendering confirmed:
 Marketplace template:
 
 ```text
-KeyName default: none / required
+KeyName default: empty / auto-create when omitted
 VpcId parameter: absent
 SubnetId parameter: absent
 Required runtime values: EthereumEndpoint, NodeAddressWithNoLeading0x, PrivateKeyNoLeading0x

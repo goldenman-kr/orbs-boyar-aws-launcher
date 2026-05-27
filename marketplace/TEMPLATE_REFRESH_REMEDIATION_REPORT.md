@@ -35,7 +35,7 @@ KeyName:
 Confirmed:
 
 - `KeyName` no longer has `Default: ''`.
-- `KeyName` is required.
+- `KeyName` was later changed to optional with stack-managed auto-creation when omitted.
 - `HasKeyName` optional-SSH conditional is absent.
 - EC2 instance uses `KeyName: !Ref KeyName`.
 - `VpcId` parameter is absent.
@@ -58,7 +58,7 @@ Observed in the snapshot:
 KeyName:
   Type: String
   Default: ''
-  Description: Optional existing EC2 Key Pair name for SSH access. Leave empty to launch without an SSH key pair.
+  Description: Optional existing EC2 Key Pair name for SSH access. Leave empty to auto-create a stack-managed Key Pair.
 ```
 
 Confirmed snapshot mismatch:
@@ -109,8 +109,8 @@ A new version may be unavoidable only if Marketplace does not allow refreshing t
 
 - Public seller-owned S3 TemplateURL: **updated / correct**
 - Marketplace `awsmp-cft` snapshot URL: **old / not refreshed**
-- Marketplace KeyName required reflected in public S3: **yes**
-- Marketplace KeyName required reflected in `awsmp-cft` snapshot: **no**
+- Marketplace KeyName auto-create behavior reflected in public S3: **yes**
+- Marketplace KeyName auto-create behavior reflected in `awsmp-cft` snapshot: pending Marketplace refresh
 
 ## Recommendation
 

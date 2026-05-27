@@ -37,7 +37,7 @@ https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/crea
 - [ ] Validate `cloudformation/template-medium-ami-secrets.yaml`.
 - [ ] Decide primary Marketplace template: direct-input or Secrets Manager.
 - [ ] Consider making Secrets Manager mode the primary Marketplace path.
-- [ ] Confirm `SshAccessCidr=0.0.0.0/0` supports Marketplace SSH validation while `AccessCidr=127.0.0.1/32` keeps node/status endpoints secure-by-default.
+- [ ] Confirm `SshAccessCidr` supports Marketplace SSH validation while `AccessCidr=127.0.0.1/32` keeps node/status endpoints secure-by-default, and confirm `KeyName` can be selected or left empty for auto-creation.
 - [ ] Confirm Elastic IP auto-create/reuse behavior is acceptable.
 - [ ] Confirm stack deletion cleanup behavior.
 - [ ] Confirm outputs are reviewer-friendly.

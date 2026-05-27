@@ -52,8 +52,8 @@ Everything else is automatically provisioned or optional:
 - VPC and public subnet are created automatically.
 - Internet Gateway, route table, default route, and Security Group are created automatically.
 - Elastic IP is created automatically, with optional `ExistingEipAllocationId` reuse for advanced reinstall/recovery.
-- SSH Key Pair is optional in the GitHub easy-mode template. The Marketplace template requires `KeyName` so AWS Marketplace reviewers can validate SSH with the matching private key.
-- `SshAccessCidr` controls SSH (`22`) and defaults to `0.0.0.0/0` so Marketplace reviewers can reach SSH during validation; SSH remains key-only and password login is explicitly disabled at first boot. `AccessCidr` controls node/status endpoints (`80`, `7666`) and keeps secure default `127.0.0.1/32`.
+- SSH Key Pair handling is automatic in both GitHub and Marketplace templates. Select an existing regional `KeyName` to reuse it, or leave it empty and the stack creates a new EC2 Key Pair automatically.
+- `SshAccessCidr` controls SSH (`22`) and defaults to `0.0.0.0/0` for easy validation/testing; SSH remains key-only and password login is disabled in the AMI. `AccessCidr` controls node/status endpoints (`80`, `7666`) and keeps secure default `127.0.0.1/32`.
 
 For the retained Secrets Manager template, the secret may contain either the raw 64-hex private key string or JSON with `PRIVATE_KEY_NO_LEADING_0x`, `privateKeyNoLeading0x`, or `privateKey`.
 
@@ -129,7 +129,7 @@ https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/clou
 - Orbs node address without leading `0x`
 - Orbs validator private key for direct NoEcho input
 
-The GitHub easy-mode AutoNet template creates its own VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP. SSH Key Pair, existing EIP reuse, and custom access CIDR are optional advanced settings. The Marketplace AutoNet template preserves the same networking/runtime behavior but requires `KeyName` for reviewer SSH validation.
+The GitHub easy-mode and Marketplace AutoNet templates create their own VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, Elastic IP, and — when `KeyName` is left empty — an EC2 Key Pair. Existing Key Pair reuse, existing EIP reuse, and custom access CIDR are optional advanced settings.
 
 ### Required AWS permissions
 
@@ -137,9 +137,9 @@ The launching principal needs permission to create and manage the stack resource
 
 - CloudFormation stack operations
 - EC2 instance, Security Group, and EBS root volume operations
-- EC2, VPC, subnet, Internet Gateway, route table, Security Group, EBS root volume, and Elastic IP operations
+- EC2, VPC, subnet, Internet Gateway, route table, Security Group, EBS root volume, Elastic IP, and EC2 Key Pair operations
 
-The default autonet direct-input template does not create IAM roles and does not require `CAPABILITY_IAM`. The retained Secrets Manager template creates an EC2 instance role with only `secretsmanager:GetSecretValue` for the specified `PrivateKeySecretArn`.
+The default autonet direct-input template does not create IAM roles and does not require `CAPABILITY_IAM`. If `KeyName` is left empty, CloudFormation creates an EC2 Key Pair and stores the generated private key in Systems Manager Parameter Store under `/ec2/keypair/<key-pair-id>`; retrieving it requires `ssm:GetParameter` with decryption permission. The retained Secrets Manager template creates an EC2 instance role with only `secretsmanager:GetSecretValue` for the specified `PrivateKeySecretArn`.
 
 ### Private key input modes
 
@@ -151,9 +151,11 @@ Recommended for higher-security production and future Marketplace packaging: use
 
 By default, the direct-input template automatically creates and associates an Elastic IP with the validator instance. Stack outputs use this stable `ElasticIp` value for Boyar status, management status, and SSH examples. Record the `ElasticIp` and `ElasticIpAllocationId` outputs after launch. When the stack creates the EIP, CloudFormation releases it automatically on stack deletion. Advanced users can pass `ExistingEipAllocationId` to preserve the same node IP across reinstall/recovery; in that mode CloudFormation associates the existing EIP but does not release it when the stack is deleted, and users are responsible for any retained EIP charges.
 
+Key Pair handling follows the same reuse-or-create pattern. Select an existing regional `KeyName` to reuse it; leave `KeyName` empty to auto-create a stack-managed EC2 Key Pair. Outputs show `AppliedKeyName` and `KeyPairMode`. If a key pair is auto-created, outputs also show the SSM parameter name and retrieval command for the private key. Auto-created key pairs and their private-key SSM parameters are deleted with the stack; existing key pairs are never deleted by this stack.
+
 ### Network access defaults
 
-For AWS Marketplace validation, use `cloudformation/template-medium-ami-direct-autonet.yaml`; it requires `KeyName` and requires customers/reviewers to explicitly provide `SshAccessCidr`. For GitHub easy-mode launches, use the region-specific GitHub templates; `KeyName` remains optional. SSH remains key-only because password authentication is disabled in the AMI. For production, restrict `SshAccessCidr` to a trusted operator IP/CIDR.
+For AWS Marketplace validation, use `cloudformation/template-medium-ami-direct-autonet.yaml`; `KeyName` is optional and supports the same reuse-or-auto-create behavior as the GitHub template. `SshAccessCidr` controls reviewer/operator SSH reachability. For GitHub easy-mode launches, use the region-specific GitHub template. SSH remains key-only because password authentication is disabled in the AMI. For production, restrict `SshAccessCidr` to a trusted operator IP/CIDR.
 
 Node/status endpoint access remains secure-by-default with `AccessCidr=127.0.0.1/32`. Users should enter their own trusted public IP as `x.x.x.x/32` or another CIDR range they control when external endpoint validation is needed.
 
@@ -178,7 +180,7 @@ aws cloudformation create-stack   --region us-east-1   --stack-name orbs-boyar-v
 ```
 
 3. Wait for stack creation to complete.
-4. Open the stack outputs and check `ElasticIp`, `BoyarStatusUrl`, `ManagementStatusUrl`, and `SSHCommand`.
+4. Open the stack outputs and check `ElasticIp`, `BoyarStatusUrl`, `ManagementStatusUrl`, `AppliedKeyName`, `KeyPairMode`, and `SSHCommand`. If the stack auto-created the key pair, also save the private key using `AutoCreatedPrivateKeyRetrievalCommand` before relying on SSH access.
 
 ## Verify after launch
 
@@ -194,6 +196,7 @@ SSH example:
 
 ```bash
 ssh -i <key-file.pem> ubuntu@<ElasticIp>
+# If KeyName was empty, first run the AutoCreatedPrivateKeyRetrievalCommand output to save the generated .pem file.
 # Expected: key-based login succeeds. Password login is rejected because PasswordAuthentication is disabled.
 sudo systemctl status boyar.service --no-pager --full
 sudo docker service ls
@@ -214,7 +217,7 @@ After deletion, confirm:
 
 - EC2 instance is terminated
 - Security Group is deleted
-- IAM Role and Instance Profile are deleted
+- Stack-managed EC2 Key Pair and generated private-key SSM parameter are deleted if `KeyName` was left empty; reused existing key pairs are retained
 - EBS root volume is deleted
 - Auto-created Elastic IP is released; reused EIP is retained
 

@@ -33,7 +33,7 @@ Metadata:
       VolumeSize:
         default: Root volume size GiB
       KeyName:
-        default: Optional EC2 Key Pair name
+        default: Existing EC2 Key Pair name (optional)
       SshAccessCidr:
         default: SSH access CIDR
       AccessCidr:
@@ -68,14 +68,14 @@ Parameters:
     Description: Root EBS volume size in GiB. Orbs documentation recommends 256GB SSD or larger.
 
   KeyName:
-    Type: String
+    Type: AWS::EC2::KeyPair::KeyName
     Default: ''
-    Description: Optional existing EC2 Key Pair name for SSH access. Leave empty to preserve the 3-value GitHub easy-mode launch without SSH key-pair login.
+    Description: Optional existing EC2 Key Pair name for SSH access. Select an existing regional key pair to reuse it, or leave empty to let this stack create and use a new key pair automatically. Auto-created key pairs are deleted with the stack; existing key pairs are retained.
 
   SshAccessCidr:
     Type: String
     Default: 0.0.0.0/0
-    Description: CIDR allowed to reach SSH on TCP/22 when KeyName is provided. Default is broadly reachable for easy testing, but SSH remains key-only and password authentication is disabled. For production, restrict this to a trusted x.x.x.x/32 or another CIDR you control.
+    Description: CIDR allowed to reach SSH on TCP/22. Default is broadly reachable for easy testing, but SSH remains key-only and password authentication is disabled. For production, restrict this to a trusted x.x.x.x/32 or another CIDR you control.
     AllowedPattern: '^(\d{1,3}\.){3}\d{1,3}/\d{1,2}$'
     ConstraintDescription: Must be a valid IPv4 CIDR, for example 203.0.113.10/32 or 0.0.0.0/0.
 
@@ -117,7 +117,8 @@ Parameters:
 Conditions:
   UseExistingEip: !Not [!Equals [!Ref ExistingEipAllocationId, '']]
   CreateNewEip: !Equals [!Ref ExistingEipAllocationId, '']
-  HasKeyName: !Not [!Equals [!Ref KeyName, '']]
+  UseExistingKeyPair: !Not [!Equals [!Ref KeyName, '']]
+  CreateNewKeyPair: !Equals [!Ref KeyName, '']
 
 Resources:
   OrbsBoyarVpc:
@@ -225,13 +226,28 @@ Resources:
         - Key: Project
           Value: orbs-boyar-aws-launcher
 
+  OrbsBoyarKeyPair:
+    Type: AWS::EC2::KeyPair
+    Condition: CreateNewKeyPair
+    Properties:
+      KeyName: !Sub '${AWS::StackName}-orbs-boyar-ssh-key'
+      KeyType: ed25519
+      KeyFormat: pem
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-orbs-boyar-ssh-key'
+        - Key: Project
+          Value: orbs-boyar-aws-launcher
+        - Key: ManagedBy
+          Value: CloudFormation
+
   OrbsBoyarInstance:
     Type: AWS::EC2::Instance
     DependsOn: OrbsBoyarDefaultRoute
     Properties:
       ImageId: !Ref ImageId
       InstanceType: !Ref InstanceType
-      KeyName: !If [HasKeyName, !Ref KeyName, !Ref AWS::NoValue]
+      KeyName: !If [UseExistingKeyPair, !Ref KeyName, !Ref OrbsBoyarKeyPair]
       NetworkInterfaces:
         - DeviceIndex: '0'
           SubnetId: !Ref OrbsBoyarPublicSubnet
@@ -384,11 +400,32 @@ Outputs:
     Description: Private key input mode used by this stack. The private key value is NoEcho and is never output.
     Value: DirectNoEchoParameter
 
+  AppliedKeyName:
+    Description: EC2 Key Pair name applied to the instance. This is either the selected existing KeyName or the stack-created key pair.
+    Value: !If [UseExistingKeyPair, !Ref KeyName, !Ref OrbsBoyarKeyPair]
+
+  KeyPairMode:
+    Description: Whether the EC2 Key Pair was reused from KeyName or auto-created by this stack. Existing key pairs are retained; auto-created key pairs are deleted with the stack.
+    Value: !If [UseExistingKeyPair, ReusedExistingKeyPair, AutoCreatedKeyPair]
+
+  AutoCreatedPrivateKeySsmParameterName:
+    Condition: CreateNewKeyPair
+    Description: SSM Parameter Store name containing the auto-created private key. Retrieve it before deleting the stack if you need future SSH access.
+    Value: !Sub
+      - '/ec2/keypair/${KeyPairId}'
+      - KeyPairId: !GetAtt OrbsBoyarKeyPair.KeyPairId
+
+  AutoCreatedPrivateKeyRetrievalCommand:
+    Condition: CreateNewKeyPair
+    Description: CLI command to retrieve the auto-created private key material. Requires ssm:GetParameter with decryption permission.
+    Value: !Sub
+      - 'aws ssm get-parameter --region ${AWS::Region} --name /ec2/keypair/${KeyPairId} --with-decryption --query Parameter.Value --output text > ${KeyName}.pem && chmod 600 ${KeyName}.pem'
+      - KeyPairId: !GetAtt OrbsBoyarKeyPair.KeyPairId
+        KeyName: !Ref OrbsBoyarKeyPair
+
   SSHCommand:
-    Description: Example SSH command when KeyName is provided. Empty when the GitHub easy-mode instance is launched without an SSH key pair.
-    Value: !If
-      - HasKeyName
-      - !Sub
-        - 'ssh -i <path-to-${KeyName}.pem> ubuntu@${ElasticIpAddress}'
-        - ElasticIpAddress: !GetAtt OrbsBoyarInstance.PublicIp
-      - ''
+    Description: Example SSH command using the EC2 Key Pair applied to the instance.
+    Value: !Sub
+      - 'ssh -i <path-to-${AppliedKeyName}.pem> ubuntu@${ElasticIpAddress}'
+      - AppliedKeyName: !If [UseExistingKeyPair, !Ref KeyName, !Ref OrbsBoyarKeyPair]
+        ElasticIpAddress: !GetAtt OrbsBoyarInstance.PublicIp

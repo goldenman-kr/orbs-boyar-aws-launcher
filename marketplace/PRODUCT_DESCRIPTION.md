@@ -61,7 +61,7 @@ https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/crea
 Before launch, customers need only three required runtime values by default:
 
 - AWS account with access to `us-east-2`. The template creates networking automatically.
-- EC2 Key Pair in `us-east-2`.
+- Optional existing EC2 Key Pair in `us-east-1`; if omitted, the stack auto-creates a Key Pair.
 - Ethereum RPC endpoint URL.
 - Orbs node address without leading `0x`.
 - Validator private key, either entered as a direct NoEcho parameter or stored in AWS Secrets Manager depending on template choice.
@@ -85,7 +85,7 @@ Expected status endpoints:
 - Private keys are not baked into the AMI.
 - Direct-input mode uses CloudFormation `NoEcho`, which hides values in UI/API outputs but is not a dedicated secret store.
 - Secrets Manager mode is recommended for higher-security production use.
-- SSH port `22` is reachable by default for Marketplace validation through `SshAccessCidr=0.0.0.0/0`, but only EC2 key-based login is allowed and password authentication is disabled. Node/status endpoints `80` and `7666` remain restricted by secure default `AccessCidr=127.0.0.1/32`; advanced users can widen or restrict each CIDR explicitly.
+- SSH port `22` is controlled by `SshAccessCidr`, only EC2 key-based login is allowed, and password authentication is disabled. Customers/reviewers can select an existing `KeyName` or leave it empty so the stack auto-creates a Key Pair and exposes the applied key name in outputs. Node/status endpoints `80` and `7666` remain restricted by secure default `AccessCidr=127.0.0.1/32`; advanced users can widen or restrict each CIDR explicitly.
 - Users are responsible for EC2 key pair security, validator private key custody, IAM access, AWS account security, and RPC endpoint protection.
 - The current template does not configure TLS, DNS, monitoring, alerting, backups, or automatic upgrades.
 
