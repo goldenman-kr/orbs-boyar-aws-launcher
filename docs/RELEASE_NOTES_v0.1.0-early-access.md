@@ -72,7 +72,7 @@ The GitHub easy-mode Launch Stack template `template-medium-ami-direct-autonet-g
 
 ## v0.1.1 AutoNet AMI versioning update
 
-A distinct v0.1.1 AutoNet AMI has been prepared for the public Launch Stack in `us-east-2`: `ami-0111607018603b1cb` (snapshot `snap-0cce629ae703964d8`). A distinct Marketplace source AMI has been prepared in `us-east-1`: `ami-071db7a079c2d5b0c` (snapshot `snap-0e5fc4a3dd3019e56`). Existing v0.1.0 AMIs were not deleted.
+A distinct v0.1.1 AutoNet AMI has been prepared for the public Launch Stack in `us-east-2`: `ami-09399cf1f338175fc` (snapshot `snap-0cce629ae703964d8`). A distinct Marketplace source AMI has been prepared in `us-east-1`: `ami-071db7a079c2d5b0c` (snapshot `snap-0e5fc4a3dd3019e56`). Existing v0.1.0 AMIs were not deleted.
 
 
 ## Marketplace/GitHub SSH split

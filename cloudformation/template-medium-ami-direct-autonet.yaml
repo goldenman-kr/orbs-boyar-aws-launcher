@@ -50,8 +50,8 @@ Metadata:
 Parameters:
   ImageId:
     Type: AWS::EC2::Image::Id
-    Default: ami-0111607018603b1cb
-    Description: Region-local Medium AMI with Docker, Boyar binary, and /opt/orbs/ami_creator installer files pre-baked.
+    Default: ami-09399cf1f338175fc
+    Description: Region-local Medium AMI with Docker, Boyar binary, /opt/orbs/ami_creator installer files, and baked AWS Marketplace SSH password-authentication hardening.
 
   InstanceType:
     Type: String
@@ -73,8 +73,7 @@ Parameters:
 
   SshAccessCidr:
     Type: String
-    Default: 0.0.0.0/0
-    Description: CIDR allowed to reach SSH on TCP/22. The Marketplace validation default is reachable from reviewer networks, but SSH remains key-only and password authentication is disabled. For production, restrict this to a trusted x.x.x.x/32 or another CIDR you control.
+    Description: CIDR allowed to reach SSH on TCP/22. Please set CIDR to x.x.x.x/32 to allow one specific IP address access, 0.0.0.0/0 to allow all IP addresses access, or another CIDR range you control. SSH remains key-only and password authentication is disabled in the AMI.
     AllowedPattern: '^(\d{1,3}\.){3}\d{1,3}/\d{1,2}$'
     ConstraintDescription: Must be a valid IPv4 CIDR, for example 203.0.113.10/32 or 0.0.0.0/0.
 
@@ -270,28 +269,6 @@ Resources:
           PRIVATE_KEY_VALUE='${PrivateKeyNoLeading0x}'
 
           log "Starting Orbs Boyar Medium AMI first-boot configuration with direct NoEcho private key input"
-
-          log "Ensuring SSH is enabled, running, and key-only before application configuration"
-          if command -v systemctl >/dev/null 2>&1; then
-            systemctl unmask ssh.service ssh.socket 2>/dev/null || true
-            systemctl enable ssh.service 2>/dev/null || systemctl enable ssh 2>/dev/null || true
-          fi
-          install -d -m 0755 /etc/ssh/sshd_config.d
-          cat >/etc/ssh/sshd_config.d/99-orbs-marketplace-key-only.conf <<'EOF'
-          PasswordAuthentication no
-          KbdInteractiveAuthentication no
-          ChallengeResponseAuthentication no
-          PubkeyAuthentication yes
-          PermitRootLogin prohibit-password
-          EOF
-          if command -v sshd >/dev/null 2>&1; then
-            sshd -t
-          fi
-          if command -v systemctl >/dev/null 2>&1; then
-            systemctl restart ssh.service 2>/dev/null || systemctl restart ssh 2>/dev/null || true
-            systemctl is-active --quiet ssh.service 2>/dev/null || systemctl is-active --quiet ssh 2>/dev/null
-          fi
-          log "SSH service is active with PasswordAuthentication disabled"
           log "Writing runtime environment file (private key is not logged)"
           umask 077
           ETHEREUM_ENDPOINT_VALUE="${!ETHEREUM_ENDPOINT_VALUE}" NODE_ADDRESS_VALUE="${!NODE_ADDRESS_VALUE}" PRIVATE_KEY_VALUE="${!PRIVATE_KEY_VALUE}" ENV_FILE="${!ENV_FILE}" python3 <<'PY'

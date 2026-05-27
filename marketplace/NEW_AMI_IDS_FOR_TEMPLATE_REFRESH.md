@@ -9,8 +9,8 @@ Purpose: provide fresh AMI IDs for a new AWS Marketplace version when Marketplac
 
 ## New AMIs
 
-- us-east-2: `ami-015e7593aa33c1200`
-- us-east-1: `ami-02f7ffd81a3e63a98`
+- us-east-2: `ami-09399cf1f338175fc`
+- us-east-1: `ami-0a56576d054e9228e`
 
 ## Status
 
@@ -32,7 +32,7 @@ Both AMIs are:
 For a new AWS Marketplace version, use the new source-region AMI:
 
 ```text
-us-east-1: ami-02f7ffd81a3e63a98
+us-east-1: ami-0a56576d054e9228e
 ```
 
 Keep the Marketplace CloudFormation template URL stable:
