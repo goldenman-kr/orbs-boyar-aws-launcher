@@ -4,13 +4,11 @@ Purpose: provide fresh AMI IDs for a new AWS Marketplace version when Marketplac
 
 ## Source AMIs copied
 
-- us-east-2 source: `ami-09399cf1f338175fc`
-- us-east-1 source: `ami-0a56576d054e9228e`
+- us-east-1 source/current: `ami-0a56576d054e9228e`
 
 ## New AMIs
 
-- us-east-2: `ami-09399cf1f338175fc`
-- us-east-1: `ami-0a56576d054e9228e`
+- - us-east-1: `ami-0a56576d054e9228e`
 
 ## Status
 

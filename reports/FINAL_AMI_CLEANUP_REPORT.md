@@ -2,7 +2,7 @@
 
 ## Summary
 
-Final legacy AMI cleanup is complete. Only the latest active public release AMIs and their active root snapshots remain in the two target regions.
+Final legacy AMI cleanup is complete. Only the latest active public release AMI and its active root snapshot remain. The prior us-east-2 AMI was removed in the follow-up us-east-1-only cleanup.
 
 ## Remaining active AMIs
 
@@ -13,14 +13,6 @@ Final legacy AMI cleanup is complete. Only the latest active public release AMIs
 - State: `available`
 - Public: `true`
 - Purpose: AWS Marketplace source-region AMI
-
-### us-east-2
-
-- AMI: `ami-09399cf1f338175fc`
-- Snapshot: `snap-04f014749b85ff413`
-- State: `available`
-- Public: `true`
-- Purpose: Marketplace/GitHub Launch Stack AMI
 
 ## Deleted AMIs
 
@@ -65,9 +57,9 @@ Actual billable reduction may be lower because EBS snapshots are incremental, bu
 Confirmed before deletion:
 
 - Marketplace public S3 template validates successfully.
-- Marketplace public S3 template references active `us-east-2` AMI `ami-09399cf1f338175fc`.
+- Marketplace public S3 template now references active `us-east-1` AMI `ami-0a56576d054e9228e`.
 - GitHub easy-mode public S3 template validates successfully.
-- GitHub easy-mode public S3 template was updated to active `us-east-2` AMI `ami-09399cf1f338175fc` before deleting the old GitHub AMI.
+- GitHub easy-mode public S3 template now references active `us-east-1` AMI `ami-0a56576d054e9228e`.
 - Current-facing README/docs/Marketplace notes were updated to remove obsolete AMI references.
 - AutoNet behavior remains intact; public templates still have no customer `VpcId` or `SubnetId` parameters.
 
@@ -77,14 +69,13 @@ Remaining Orbs-related AMIs:
 
 ```text
 us-east-1: ami-0a56576d054e9228e -> snap-0b73679b56ef084b8
-us-east-2: ami-09399cf1f338175fc -> snap-04f014749b85ff413
 ```
 
 Public CloudFormation TemplateURL validation passed after cleanup:
 
 ```text
-Marketplace template ImageId: ami-09399cf1f338175fc
-GitHub template ImageId: ami-09399cf1f338175fc
+Marketplace template ImageId: ami-0a56576d054e9228e
+GitHub template ImageId: ami-0a56576d054e9228e
 ```
 
 Marketplace behavior remains:

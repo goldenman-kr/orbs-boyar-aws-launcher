@@ -16,8 +16,8 @@ Reviewer feedback addressed:
 
 No new AMIs were required for this remediation. The fix is implemented in CloudFormation first-boot behavior and Marketplace launch defaults.
 
-- `us-east-2`: `ami-0111607018603b1cb`
-- `us-east-1`: `ami-071db7a079c2d5b0c`
+- `us-east-2`: `ami-09399cf1f338175fc`
+- `us-east-1`: `ami-0a56576d054e9228e`
 
 ## Template updated
 
@@ -73,7 +73,7 @@ PermitRootLogin prohibit-password
 Validation stack:
 
 - Region: `us-east-2`
-- AMI: `ami-0111607018603b1cb`
+- AMI: `ami-09399cf1f338175fc`
 - Instance: `i-059b75669f9676d40`
 - Final Elastic IP used for SSH validation: `18.226.10.192`
 - KeyName: `ssh-remediation-20260526234946-key`
@@ -101,7 +101,7 @@ Password login result: rejected
 Key rendered defaults:
 
 ```text
-ImageId: ami-0111607018603b1cb
+ImageId: ami-09399cf1f338175fc
 SshAccessCidr: 0.0.0.0/0
 AccessCidr: 127.0.0.1/32
 Marketplace KeyName: required; GitHub KeyName: optional empty string

@@ -18,14 +18,14 @@ For higher-security production use, use the separate Secrets Manager template in
 
 ## 2. Click Launch Stack
 
-Launch in `us-east-2`:
+Launch in `us-east-1`:
 
-[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml)
+[![Launch Stack](https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-1.s3.us-east-1.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github-us-east-1.yaml)
 
 If you prefer to inspect the exact CloudFormation template before launching, open the public S3 template URL:
 
 ```text
-https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet-github.yaml
+https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-1.s3.us-east-1.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet-github-us-east-1.yaml
 ```
 
 ## 3. Fill stack parameters
@@ -40,7 +40,7 @@ Optional advanced parameters include `SshAccessCidr`, `AccessCidr`, `ExistingEip
 
 Defaults:
 
-- `ImageId`: `ami-09399cf1f338175fc` (public AMI in `us-east-2`; use `ami-0a56576d054e9228e` for the prepared `us-east-1` Marketplace source-region copy)
+- `ImageId`: `ami-0a56576d054e9228e` (public AMI in `us-east-1`)
 - `InstanceType`: `r5.large`
 - `VolumeSize`: `256`
 - `SshAccessCidr`: `0.0.0.0/0` for Marketplace SSH validation; restrict this to a trusted operator IP/CIDR for production
@@ -89,7 +89,7 @@ Delete the CloudFormation stack when done:
 
 ```bash
 aws cloudformation delete-stack \
-  --region us-east-2 \
+  --region us-east-1 \
   --stack-name orbs-boyar-validator
 ```
 

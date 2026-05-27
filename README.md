@@ -8,12 +8,10 @@ This package is the **KRYP Labs** GitHub Launch Stack early-access flow. It is i
 
 Deploy with only three required values.
 
-<a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?style=for-the-badge&logo=amazonaws" alt="Launch Stack us-east-2" /></a>
 <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github-us-east-1.yaml" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Launch%20Stack-us--east--1-orange?style=for-the-badge&logo=amazonaws" alt="Launch Stack us-east-1" /></a>
 
 Plain links:
 
-- <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml" target="_blank" rel="noopener noreferrer">Launch Stack in us-east-2</a>
 - <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github-us-east-1.yaml" target="_blank" rel="noopener noreferrer">Launch Stack in us-east-1</a>
 
 Required inputs:
@@ -24,13 +22,11 @@ Required inputs:
 
 ## Current early-access status
 
-- GitHub Launch Stack region support: `us-east-2` and `us-east-1`
-- Public AMI ID for GitHub Launch Stack in `us-east-2`: `ami-09399cf1f338175fc`
+- GitHub Launch Stack region support: `us-east-1` only
 - Public AMI ID for GitHub Launch Stack / Marketplace source region in `us-east-1`: `ami-0a56576d054e9228e`
-- GitHub Launch Stack snapshot in `us-east-2`: `snap-04f014749b85ff413` retained by the publisher
 - GitHub Launch Stack / Marketplace source snapshot in `us-east-1`: `snap-0b73679b56ef084b8` retained by the publisher
-- Public AMI status: publicly launchable in `us-east-2` and `us-east-1` for early-access testing
-- GitHub easy-mode templates: `cloudformation/template-medium-ami-direct-autonet-github.yaml` for `us-east-2`, and `cloudformation/template-medium-ami-direct-autonet-github-us-east-1.yaml` for `us-east-1`
+- Public AMI status: publicly launchable in `us-east-1` for early-access testing
+- GitHub easy-mode template: `cloudformation/template-medium-ami-direct-autonet-github-us-east-1.yaml` for `us-east-1`
 - Marketplace review template: `cloudformation/template-medium-ami-direct-autonet.yaml`
 - Higher-security production template: `cloudformation/template-medium-ami-secrets.yaml`
 - Marketplace submission: not yet started
@@ -94,25 +90,22 @@ The existing Secrets Manager template is retained for higher-security production
 
 The public Launch Stack flow now uses a public S3 HTTPS object URL for the CloudFormation template.
 
-**Recommended delivery strategy:** KRYP Labs publishes the template to a dedicated public-read S3 object in `us-east-2`. This is more reliable for CloudFormation `TemplateURL` than GitHub raw URLs, while the same template remains version-controlled in GitHub for review.
+**Recommended delivery strategy:** KRYP Labs publishes the template to a dedicated public-read public S3 object. This is more reliable for CloudFormation `TemplateURL` than GitHub raw URLs, while the same template remains version-controlled in GitHub for review.
 
 **Tradeoffs:** S3 delivery is accepted directly by CloudFormation and can be controlled with bucket policy, versioning, content type, and cache settings. GitHub remains the source repository, but GitHub raw URLs are no longer the primary Launch Stack delivery path because CloudFormation does not accept them reliably in all flows.
 
-<a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Launch%20Stack-us--east--2-orange?logo=amazon-aws" alt="Launch Stack us-east-2" /></a>
 <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github-us-east-1.yaml" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Launch%20Stack-us--east--1-orange?logo=amazon-aws" alt="Launch Stack us-east-1" /></a>
 
-Direct Launch Stack URLs:
+Direct Launch Stack URL:
 
 ```text
-us-east-2: https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml
-us-east-1: https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github-us-east-1.yaml
+https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github-us-east-1.yaml
 ```
 
-Public S3 direct-input template URLs:
+Public S3 direct-input template URL:
 
 ```text
-us-east-2: https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet-github.yaml
-us-east-1: https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet-github-us-east-1.yaml
+https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet-github-us-east-1.yaml
 ```
 
 Public S3 Secrets Manager template URL:
@@ -131,7 +124,7 @@ https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/clou
 
 ### Launch prerequisites
 
-- AWS account with access to `us-east-2` or `us-east-1`
+- AWS account with access to `us-east-1`
 - Ethereum RPC endpoint URL
 - Orbs node address without leading `0x`
 - Orbs validator private key for direct NoEcho input
@@ -166,10 +159,7 @@ Node/status endpoint access remains secure-by-default with `AccessCidr=127.0.0.1
 
 ### Supported regions
 
-This early-access GitHub Launch Stack supports both `us-east-2` and `us-east-1`. The public AutoNet AMI IDs are:
-
-- `us-east-2`: `ami-09399cf1f338175fc`
-- `us-east-1`: `ami-0a56576d054e9228e`
+This early-access GitHub Launch Stack supports `us-east-1` only. The public AutoNet AMI ID is `ami-0a56576d054e9228e`.
 
 ### Estimated AWS costs
 
@@ -184,7 +174,7 @@ The launcher software is free, but AWS infrastructure costs apply, primarily EC2
 2. Click the Launch Stack button, or launch the autonet template from CLI:
 
 ```bash
-aws cloudformation create-stack   --region us-east-2   --stack-name orbs-boyar-validator   --template-body file://cloudformation/template-medium-ami-direct-autonet-github.yaml   --parameters     ParameterKey=EthereumEndpoint,ParameterValue=<ethereum-rpc-url>     ParameterKey=NodeAddressWithNoLeading0x,ParameterValue=<40-hex-node-address>     ParameterKey=PrivateKeyNoLeading0x,ParameterValue=<64-hex-private-key-without-0x>
+aws cloudformation create-stack   --region us-east-1   --stack-name orbs-boyar-validator   --template-body file://cloudformation/template-medium-ami-direct-autonet-github-us-east-1.yaml   --parameters     ParameterKey=EthereumEndpoint,ParameterValue=<ethereum-rpc-url>     ParameterKey=NodeAddressWithNoLeading0x,ParameterValue=<40-hex-node-address>     ParameterKey=PrivateKeyNoLeading0x,ParameterValue=<64-hex-private-key-without-0x>
 ```
 
 3. Wait for stack creation to complete.
@@ -216,7 +206,7 @@ To delete the launcher stack:
 
 ```bash
 aws cloudformation delete-stack \
-  --region us-east-2 \
+  --region us-east-1 \
   --stack-name orbs-boyar-validator
 ```
 
@@ -243,7 +233,7 @@ This launcher is intended to be free as software, but AWS infrastructure costs s
 
 ## Limitations
 
-- Current AMIs are available in `us-east-2` and `us-east-1`.
+- Current AMI is available in `us-east-1`.
 - The template is a release candidate, not a public Marketplace listing.
 - Direct-input users enter the private key as a NoEcho CloudFormation parameter; Secrets Manager users must create and manage the secret separately.
 - HTTPS/TLS, domain setup, monitoring dashboards, and alerting are not included.

@@ -57,19 +57,16 @@ There is no `Default: 0.0.0.0/0`.
 
 New AMIs were required because Marketplace version refresh appears to require a changed AMI ID.
 
-- us-east-2: `ami-09399cf1f338175fc`
-- us-east-1: `ami-0a56576d054e9228e`
+- - us-east-1: `ami-0a56576d054e9228e`
 
 Both AMIs are public and available.
 
 Source lineage:
 
-- Baked from us-east-2 source/copy: `ami-09399cf1f338175fc`
 - Copied to us-east-1 from the baked us-east-2 AMI
 
 Snapshots:
 
-- us-east-2: `snap-04f014749b85ff413`
 - us-east-1: `snap-0b73679b56ef084b8`
 
 ## Validation results
@@ -79,7 +76,7 @@ Snapshots:
 Validation was performed against a fresh instance launched from:
 
 ```text
-ami-09399cf1f338175fc
+ami-0a56576d054e9228e
 ```
 
 Observed:
@@ -103,19 +100,19 @@ Password login was rejected.
 Local validation passed:
 
 ```text
-aws cloudformation validate-template --region us-east-2 --template-body file://cloudformation/template-medium-ami-direct-autonet.yaml
+aws cloudformation validate-template --region us-east-1 --template-body file://cloudformation/template-medium-ami-direct-autonet.yaml
 ```
 
 Public TemplateURL validation passed after S3 upload:
 
 ```text
-aws cloudformation validate-template --region us-east-2 --template-url https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet.yaml
+aws cloudformation validate-template --region us-east-1 --template-url https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet.yaml
 ```
 
 Rendered parameter checks:
 
 ```text
-ImageId default: ami-09399cf1f338175fc
+ImageId default: ami-0a56576d054e9228e
 KeyName: required
 SshAccessCidr: required, no default
 AccessCidr default: 127.0.0.1/32

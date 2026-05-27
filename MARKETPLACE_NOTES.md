@@ -18,7 +18,7 @@ Current public early-access AMI:
 
 ```text
 Region: us-east-2
-AMI ID: ami-09399cf1f338175fc
+AMI ID: ami-0a56576d054e9228e
 Snapshot: snap-0cce629ae703964d8
 AMI visibility: public in us-east-2 for early-access GitHub Launch Stack testing
 ```
@@ -93,4 +93,4 @@ The Marketplace AutoNet template `template-medium-ami-direct-autonet.yaml` prese
 
 ## current AutoNet AMI versioning
 
-AWS Marketplace product versions require distinct AMI IDs. current AutoNet uses `ami-09399cf1f338175fc` in `us-east-2` for the public GitHub Launch Stack and `ami-0a56576d054e9228e` in `us-east-1` as the Marketplace source AMI. The previous v0.1.0 AMIs remain available and were not deleted in this phase.
+AWS Marketplace product versions require distinct AMI IDs. current AutoNet uses `ami-0a56576d054e9228e` in `us-east-1` for both the GitHub Launch Stack and Marketplace source-region flow. Legacy `us-east-2` AMIs and snapshots have been removed.

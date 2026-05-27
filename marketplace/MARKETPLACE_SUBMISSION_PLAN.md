@@ -3,21 +3,21 @@
 - Brand: KRYP Labs
 - Product type: AWS Marketplace AMI-based product
 - Intended pricing: free software; customers pay their own AWS infrastructure costs
-- Current public AMI: `ami-09399cf1f338175fc`
+- Current public AMI: `ami-0a56576d054e9228e`
 - Current GitHub Launch Stack AMI region: `us-east-2`
 - Current CloudFormation template: `cloudformation/template-medium-ami-direct-autonet.yaml`
 - GitHub repository: https://github.com/goldenman-kr/orbs-boyar-aws-launcher
 - Current Launch Stack URL:
 
 ```text
-https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml
+https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=orbs-boyar-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet.yaml
 ```
 
 ## 1. Current release-candidate structure and public assets
 
 Current public early-access distribution consists of:
 
-- Public sanitized AMI `ami-09399cf1f338175fc` in `us-east-2`.
+- Public sanitized AMI `ami-0a56576d054e9228e` in `us-east-1`.
 - Public S3-backed direct-input CloudFormation template:
   - `cloudformation/template-medium-ami-direct-autonet.yaml`
   - Public TemplateURL: `https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet.yaml`
@@ -51,7 +51,7 @@ Before product submission, KRYP Labs should complete or confirm:
 Expected Marketplace AMI product review areas:
 
 - AMI must be owned by the seller account or shared/copied into the correct publishing account.
-- Marketplace-supported source region must be confirmed. Current AMI is only in `us-east-2`.
+- Marketplace-supported source region must be confirmed. Current AMI is only in `us-east-1`.
 - AMI must pass AWS Marketplace security scanning.
 - AMI should not contain secrets, private keys, logs, cloud-init instance history, SSH authorized keys, or user-specific runtime configuration.
 - AMI should use supported OS packages and reasonable patch levels.
@@ -62,7 +62,7 @@ Expected Marketplace AMI product review areas:
 
 Current known AMI posture:
 
-- Public AMI: `ami-09399cf1f338175fc`
+- Public AMI: `ami-0a56576d054e9228e`
 - Backing snapshot: `snap-0cce629ae703964d8`
 - Sanitized release scan previously passed for no baked validator secrets, no shell history, no cloud-init instance state, and no root authorized keys.
 - Runtime configuration is injected at first boot.

@@ -33,7 +33,7 @@ Metadata:
       VolumeSize:
         default: Root volume size GiB
       KeyName:
-        default: Optional EC2 Key Pair name
+        default: Required EC2 Key Pair name
       SshAccessCidr:
         default: SSH access CIDR
       AccessCidr:
@@ -50,8 +50,8 @@ Metadata:
 Parameters:
   ImageId:
     Type: AWS::EC2::Image::Id
-    Default: ami-09399cf1f338175fc
-    Description: Region-local Medium AMI with Docker, Boyar binary, /opt/orbs/ami_creator installer files, and baked AWS Marketplace SSH password-authentication hardening.
+    Default: ami-0a56576d054e9228e
+    Description: Region-local us-east-1 Medium AMI with Docker, Boyar binary, /opt/orbs/ami_creator installer files, and baked AWS Marketplace SSH password-authentication hardening.
 
   InstanceType:
     Type: String
