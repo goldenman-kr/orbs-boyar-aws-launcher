@@ -40,7 +40,7 @@ Optional advanced parameters include `SshAccessCidr`, `AccessCidr`, `ExistingEip
 
 Defaults:
 
-- `ImageId`: `ami-09399cf1f338175fc` (public AMI in `us-east-2`; use `ami-071db7a079c2d5b0c` for the prepared `us-east-1` Marketplace source-region copy)
+- `ImageId`: `ami-09399cf1f338175fc` (public AMI in `us-east-2`; use `ami-0a56576d054e9228e` for the prepared `us-east-1` Marketplace source-region copy)
 - `InstanceType`: `r5.large`
 - `VolumeSize`: `256`
 - `SshAccessCidr`: `0.0.0.0/0` for Marketplace SSH validation; restrict this to a trusted operator IP/CIDR for production

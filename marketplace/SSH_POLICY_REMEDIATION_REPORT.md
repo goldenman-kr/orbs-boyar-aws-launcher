@@ -64,7 +64,7 @@ Both AMIs are public and available.
 
 Source lineage:
 
-- Baked from us-east-2 source/copy: `ami-015e7593aa33c1200`
+- Baked from us-east-2 source/copy: `ami-09399cf1f338175fc`
 - Copied to us-east-1 from the baked us-east-2 AMI
 
 Snapshots:

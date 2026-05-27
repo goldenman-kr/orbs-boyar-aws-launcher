@@ -14,14 +14,14 @@ https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/crea
 
 ```text
 Region: us-east-2
-AMI ID: ami-0bfc554348685c913
+AMI ID: ami-09399cf1f338175fc
 ```
 
 Marketplace source-region copy prepared after the early-access release:
 
 ```text
 Region: us-east-1
-AMI ID: ami-0c8d6f2b1c7acdc67
+AMI ID: ami-0a56576d054e9228e
 Snapshot: snap-0ed6a777975da2ea5
 ```
 
@@ -70,9 +70,9 @@ The launcher software is free. Users pay their own AWS infrastructure costs, inc
 The GitHub easy-mode Launch Stack template `template-medium-ami-direct-autonet-github.yaml` requires only three user-provided values by default: Ethereum RPC endpoint, Orbs node address, and Orbs private key. VPC, public subnet, Internet Gateway, route table, Security Group, EC2 instance, and Elastic IP are provisioned automatically. SSH Key Pair is optional. The Marketplace template keeps the existing `template-medium-ami-direct-autonet.yaml` filename but now requires `KeyName` for AWS Marketplace SSH validation.
 
 
-## v0.1.1 AutoNet AMI versioning update
+## current AutoNet AMI versioning update
 
-A distinct v0.1.1 AutoNet AMI has been prepared for the public Launch Stack in `us-east-2`: `ami-09399cf1f338175fc` (snapshot `snap-0cce629ae703964d8`). A distinct Marketplace source AMI has been prepared in `us-east-1`: `ami-071db7a079c2d5b0c` (snapshot `snap-0e5fc4a3dd3019e56`). Existing v0.1.0 AMIs were not deleted.
+A distinct current AutoNet AMI has been prepared for the public Launch Stack in `us-east-2`: `ami-09399cf1f338175fc` (snapshot `snap-0cce629ae703964d8`). A distinct Marketplace source AMI has been prepared in `us-east-1`: `ami-0a56576d054e9228e` (snapshot `snap-0e5fc4a3dd3019e56`). Existing v0.1.0 AMIs were not deleted.
 
 
 ## Marketplace/GitHub SSH split

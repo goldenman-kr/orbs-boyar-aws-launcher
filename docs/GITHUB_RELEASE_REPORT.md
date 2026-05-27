@@ -3,7 +3,7 @@
 - Brand: KRYP Labs
 - Release tag: `v0.1.0-early-access`
 - Release title: `KRYP Labs Orbs Boyar AWS Launcher v0.1.0 Early Access`
-- Public AMI: `ami-0bfc554348685c913`
+- Public AMI: `ami-09399cf1f338175fc`
 - Region: `us-east-2`
 - Release prep commit / tag target: `5f0b7e0`
 - Latest main after report finalization: see current `origin/main` (report-only follow-up commits may be newer than the release tag)

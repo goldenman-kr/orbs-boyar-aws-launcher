@@ -14,7 +14,7 @@ KRYP Labs Orbs Boyar Validator Launcher helps operators deploy an Orbs Boyar val
 
 The AMI includes stable non-secret components such as Ubuntu, Docker, the Boyar binary, and installer files. Validator-specific runtime configuration is provided at first boot, so private keys and node-specific settings are not baked into the AMI.
 
-The current public early-access version is available in `us-east-2` with public AMI `ami-0111607018603b1cb`. The GitHub Launch Stack flow uses a public CloudFormation template that creates an EC2 instance, Security Group, root EBS volume, and Elastic IP. It starts the validator through `/opt/orbs/ami_creator/install.sh --configure-and-start`.
+The current public early-access version is available in `us-east-2` with public AMI `ami-09399cf1f338175fc`. The GitHub Launch Stack flow uses a public CloudFormation template that creates an EC2 instance, Security Group, root EBS volume, and Elastic IP. It starts the validator through `/opt/orbs/ami_creator/install.sh --configure-and-start`.
 
 For early-access testing, the direct-input template accepts the validator private key as a CloudFormation `NoEcho` parameter. For higher-security production and Marketplace-oriented deployments, KRYP Labs also maintains a Secrets Manager template where operators store the private key in AWS Secrets Manager and pass only the secret ARN to CloudFormation.
 
@@ -35,7 +35,7 @@ For early-access testing, the direct-input template accepts the validator privat
 Public AMI:
 
 ```text
-ami-0111607018603b1cb
+ami-09399cf1f338175fc
 ```
 
 Supported region:
@@ -105,7 +105,7 @@ This is an early-access deployment launcher, not a completed AWS Marketplace pro
 ## Marketplace source-region copy
 
 - Region: `us-east-1`
-- AMI ID: `ami-071db7a079c2d5b0c`
+- AMI ID: `ami-0a56576d054e9228e`
 - Snapshot ID: `snap-0e5fc4a3dd3019e56`
 - Visibility: public
 - Purpose: AWS Marketplace source-region registration preparation
