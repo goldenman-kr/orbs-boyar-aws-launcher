@@ -21,7 +21,7 @@ Marketplace source-region copy prepared after the early-access release:
 
 ```text
 Region: us-east-1
-AMI ID: ami-0a56576d054e9228e
+AMI ID: ami-05171a26aaa49fa0d
 Snapshot: snap-0ed6a777975da2ea5
 ```
 
@@ -72,7 +72,7 @@ The GitHub easy-mode Launch Stack template `template-medium-ami-direct-autonet-g
 
 ## current AutoNet AMI versioning update
 
-A distinct current AutoNet AMI has been prepared for the public Launch Stack in `us-east-2`: `ami-09399cf1f338175fc` (snapshot `snap-0cce629ae703964d8`). A distinct Marketplace source AMI has been prepared in `us-east-1`: `ami-0a56576d054e9228e` (snapshot `snap-0e5fc4a3dd3019e56`). Existing v0.1.0 AMIs were not deleted.
+A distinct current AutoNet AMI has been prepared for the public Launch Stack in `us-east-2`: `ami-09399cf1f338175fc` (snapshot `snap-0cce629ae703964d8`). A distinct Marketplace source AMI has been prepared in `us-east-1`: `ami-05171a26aaa49fa0d` (snapshot `snap-0e5fc4a3dd3019e56`). Existing v0.1.0 AMIs were not deleted.
 
 
 ## Marketplace/GitHub SSH split

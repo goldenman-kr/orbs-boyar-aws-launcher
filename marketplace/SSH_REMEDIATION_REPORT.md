@@ -17,7 +17,7 @@ Reviewer feedback addressed:
 No new AMIs were required for this remediation. The fix is implemented in CloudFormation first-boot behavior and Marketplace launch defaults.
 
 - `us-east-2`: `ami-09399cf1f338175fc`
-- `us-east-1`: `ami-0a56576d054e9228e`
+- `us-east-1`: `ami-05171a26aaa49fa0d`
 
 ## Template updated
 

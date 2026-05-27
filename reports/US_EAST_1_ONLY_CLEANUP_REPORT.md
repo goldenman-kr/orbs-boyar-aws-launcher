@@ -6,8 +6,8 @@ The Orbs Boyar AWS Launcher distribution has been converted to `us-east-1` only.
 
 The remaining active public AMI is:
 
-- `us-east-1`: `ami-0a56576d054e9228e`
-- active snapshot: `snap-0b73679b56ef084b8`
+- `us-east-1`: `ami-05171a26aaa49fa0d`
+- active snapshot: `snap-0e0b5e6379b74d120`
 
 The previous `us-east-2` AMI and snapshot were deregistered/deleted:
 
@@ -16,7 +16,7 @@ The previous `us-east-2` AMI and snapshot were deregistered/deleted:
 
 ## Public template state
 
-The public S3 templates were updated without changing their URLs. All now reference only the `us-east-1` active AMI `ami-0a56576d054e9228e`:
+The public S3 templates were updated without changing their URLs. All now reference only the `us-east-1` active AMI `ami-05171a26aaa49fa0d`:
 
 - `template-medium-ami-direct-autonet.yaml`
 - `template-medium-ami-direct-autonet-github.yaml`
@@ -37,13 +37,13 @@ Post-cleanup checks show no remaining self-owned Orbs-related AMIs in `us-east-2
 The active `us-east-1` AMI remains public and available:
 
 ```text
-ami-0a56576d054e9228e -> snap-0b73679b56ef084b8
+ami-05171a26aaa49fa0d -> snap-0e0b5e6379b74d120
 ```
 
 ## Functional confirmation
 
 - GitHub deployment flow now targets `us-east-1`.
-- Marketplace template now targets `us-east-1` AMI `ami-0a56576d054e9228e`.
+- Marketplace template now targets `us-east-1` AMI `ami-05171a26aaa49fa0d`.
 - GitHub `KeyName` remains optional.
 - Marketplace `KeyName` is optional with existing-key reuse or stack-managed auto-creation.
 - AutoNet behavior remains unchanged.

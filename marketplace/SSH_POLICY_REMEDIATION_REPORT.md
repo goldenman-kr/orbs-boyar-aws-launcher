@@ -57,17 +57,17 @@ There is no `Default: 0.0.0.0/0`.
 
 New AMIs were required because Marketplace version refresh appears to require a changed AMI ID.
 
-- - us-east-1: `ami-0a56576d054e9228e`
+- us-east-1: `ami-05171a26aaa49fa0d`
 
-Both AMIs are public and available.
+The current us-east-1 AMI is public and available.
 
 Source lineage:
 
-- Copied to us-east-1 from the baked us-east-2 AMI
+- Copied from previous validated us-east-1 AMI for Marketplace version update
 
 Snapshots:
 
-- us-east-1: `snap-0b73679b56ef084b8`
+- us-east-1: `snap-0e0b5e6379b74d120`
 
 ## Validation results
 
@@ -76,7 +76,7 @@ Snapshots:
 Validation was performed against a fresh instance launched from:
 
 ```text
-ami-0a56576d054e9228e
+ami-05171a26aaa49fa0d
 ```
 
 Observed:
@@ -112,7 +112,7 @@ aws cloudformation validate-template --region us-east-1 --template-url https://k
 Rendered parameter checks:
 
 ```text
-ImageId default: ami-0a56576d054e9228e
+ImageId default: ami-05171a26aaa49fa0d
 KeyName: optional; existing-key reuse or auto-created Key Pair when omitted
 SshAccessCidr: required, no default
 AccessCidr default: 127.0.0.1/32
@@ -131,7 +131,7 @@ https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.
 Use the new version AMI ID required by Marketplace:
 
 ```text
-us-east-1 source-region AMI: ami-0a56576d054e9228e
+us-east-1 source-region AMI: ami-05171a26aaa49fa0d
 ```
 
 Use the stable Marketplace CloudFormation template URL above.

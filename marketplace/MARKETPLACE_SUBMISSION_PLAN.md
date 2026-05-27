@@ -3,7 +3,7 @@
 - Brand: KRYP Labs
 - Product type: AWS Marketplace AMI-based product
 - Intended pricing: free software; customers pay their own AWS infrastructure costs
-- Current public AMI: `ami-0a56576d054e9228e`
+- Current public AMI: `ami-05171a26aaa49fa0d`
 - Current GitHub Launch Stack AMI region: `us-east-2`
 - Current CloudFormation template: `cloudformation/template-medium-ami-direct-autonet.yaml`
 - GitHub repository: https://github.com/goldenman-kr/orbs-boyar-aws-launcher
@@ -17,7 +17,7 @@ https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/crea
 
 Current public early-access distribution consists of:
 
-- Public sanitized AMI `ami-0a56576d054e9228e` in `us-east-1`.
+- Public sanitized AMI `ami-05171a26aaa49fa0d` in `us-east-1`.
 - Public S3-backed direct-input CloudFormation template:
   - `cloudformation/template-medium-ami-direct-autonet.yaml`
   - Public TemplateURL: `https://kryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com/orbs-boyar-aws-launcher/template-medium-ami-direct-autonet.yaml`
@@ -62,7 +62,7 @@ Expected Marketplace AMI product review areas:
 
 Current known AMI posture:
 
-- Public AMI: `ami-0a56576d054e9228e`
+- Public AMI: `ami-05171a26aaa49fa0d`
 - Backing snapshot: `snap-0cce629ae703964d8`
 - Sanitized release scan previously passed for no baked validator secrets, no shell history, no cloud-init instance state, and no root authorized keys.
 - Runtime configuration is injected at first boot.
@@ -214,8 +214,8 @@ This preparation does not:
 ## Marketplace source-region copy
 
 - Region: `us-east-1`
-- AMI ID: `ami-0a56576d054e9228e`
-- Snapshot ID: `snap-0e5fc4a3dd3019e56`
+- AMI ID: `ami-05171a26aaa49fa0d`
+- Snapshot ID: `snap-0e0b5e6379b74d120`
 - Visibility: public
 - Purpose: AWS Marketplace source-region registration preparation
 

@@ -50,7 +50,7 @@ Metadata:
 Parameters:
   ImageId:
     Type: AWS::EC2::Image::Id
-    Default: ami-0a56576d054e9228e
+    Default: ami-05171a26aaa49fa0d
     Description: Region-local us-east-1 Medium AMI with Docker, Boyar binary, /opt/orbs/ami_creator installer files, and baked AWS Marketplace SSH password-authentication hardening.
 
   InstanceType:

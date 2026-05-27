@@ -8,8 +8,8 @@ Final legacy AMI cleanup is complete. Only the latest active public release AMI 
 
 ### us-east-1
 
-- AMI: `ami-0a56576d054e9228e`
-- Snapshot: `snap-0b73679b56ef084b8`
+- AMI: `ami-05171a26aaa49fa0d`
+- Snapshot: `snap-0e0b5e6379b74d120`
 - State: `available`
 - Public: `true`
 - Purpose: AWS Marketplace source-region AMI
@@ -57,9 +57,9 @@ Actual billable reduction may be lower because EBS snapshots are incremental, bu
 Confirmed before deletion:
 
 - Marketplace public S3 template validates successfully.
-- Marketplace public S3 template now references active `us-east-1` AMI `ami-0a56576d054e9228e`.
+- Marketplace public S3 template now references active `us-east-1` AMI `ami-05171a26aaa49fa0d`.
 - GitHub easy-mode public S3 template validates successfully.
-- GitHub easy-mode public S3 template now references active `us-east-1` AMI `ami-0a56576d054e9228e`.
+- GitHub easy-mode public S3 template now references active `us-east-1` AMI `ami-05171a26aaa49fa0d`.
 - Current-facing README/docs/Marketplace notes were updated to remove obsolete AMI references.
 - AutoNet behavior remains intact; public templates still have no customer `VpcId` or `SubnetId` parameters.
 
@@ -68,14 +68,14 @@ Confirmed before deletion:
 Remaining Orbs-related AMIs:
 
 ```text
-us-east-1: ami-0a56576d054e9228e -> snap-0b73679b56ef084b8
+us-east-1: ami-05171a26aaa49fa0d -> snap-0e0b5e6379b74d120
 ```
 
 Public CloudFormation TemplateURL validation passed after cleanup:
 
 ```text
-Marketplace template ImageId: ami-0a56576d054e9228e
-GitHub template ImageId: ami-0a56576d054e9228e
+Marketplace template ImageId: ami-05171a26aaa49fa0d
+GitHub template ImageId: ami-05171a26aaa49fa0d
 ```
 
 Marketplace behavior remains:

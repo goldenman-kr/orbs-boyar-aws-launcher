@@ -23,8 +23,8 @@ Required inputs:
 ## Current early-access status
 
 - GitHub Launch Stack region support: `us-east-1` only
-- Public AMI ID for GitHub Launch Stack / Marketplace source region in `us-east-1`: `ami-0a56576d054e9228e`
-- GitHub Launch Stack / Marketplace source snapshot in `us-east-1`: `snap-0b73679b56ef084b8` retained by the publisher
+- Public AMI ID for GitHub Launch Stack / Marketplace source region in `us-east-1`: `ami-05171a26aaa49fa0d`
+- GitHub Launch Stack / Marketplace source snapshot in `us-east-1`: `snap-0e0b5e6379b74d120` retained by the publisher
 - Public AMI status: publicly launchable in `us-east-1` for early-access testing
 - GitHub easy-mode template: `cloudformation/template-medium-ami-direct-autonet-github-us-east-1.yaml` for `us-east-1`
 - Marketplace review template: `cloudformation/template-medium-ami-direct-autonet.yaml`
@@ -161,7 +161,7 @@ Node/status endpoint access remains secure-by-default with `AccessCidr=127.0.0.1
 
 ### Supported regions
 
-This early-access GitHub Launch Stack supports `us-east-1` only. The public AutoNet AMI ID is `ami-0a56576d054e9228e`.
+This early-access GitHub Launch Stack supports `us-east-1` only. The public AutoNet AMI ID is `ami-05171a26aaa49fa0d`.
 
 ### Estimated AWS costs
 
