@@ -68,9 +68,10 @@ Parameters:
     Description: Root EBS volume size in GiB. Orbs documentation recommends 256GB SSD or larger.
 
   KeyName:
-    Type: AWS::EC2::KeyPair::KeyName
+    Type: String
     Default: ''
-    Description: Optional existing EC2 Key Pair name for SSH access. Select an existing regional key pair to reuse it, or leave empty to let this stack create and use a new key pair automatically. Auto-created key pairs are deleted with the stack; existing key pairs are retained.
+    Description: >-
+      Optional existing EC2 Key Pair name for SSH access. Enter an existing regional key pair name to reuse it, or leave empty to let this stack create and use a new key pair automatically. Auto-created key pairs are deleted with the stack; existing key pairs are retained. Note: CloudFormation cannot provide a Key Pair dropdown and also allow an empty auto-create value, so this field is free text.
 
   SshAccessCidr:
     Type: String
