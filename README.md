@@ -8,17 +8,14 @@ This package is the **KRYP Labs** GitHub Launch Stack early-access flow. It is i
 
 Deploy with only three required values.
 
-<a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Launch%20Stack-us--east--1-orange?style=for-the-badge&logo=amazonaws" alt="Launch Stack US East 1 / N. Virginia" /></a>
-<a href="https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-2#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Launch%20Stack-Korea%20Seoul-orange?style=for-the-badge&logo=amazonaws" alt="Launch Stack Korea / Seoul" /></a>
-<a href="https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Launch%20Stack-Japan%20Tokyo-orange?style=for-the-badge&logo=amazonaws" alt="Launch Stack Japan / Tokyo" /></a>
-<a href="https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Launch%20Stack-us--west--1-orange?style=for-the-badge&logo=amazonaws" alt="Launch Stack US West 1 / N. California" /></a>
+<a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Launch%20Stack-us--east--1-orange?style=for-the-badge&logo=amazonaws" alt="Launch Stack us-east-1" /></a>
 
-Plain links:
+Plain link:
 
 - <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml" target="_blank" rel="noopener noreferrer">Launch Stack in US East 1 / N. Virginia (`us-east-1`)</a>
-- <a href="https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-2#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml" target="_blank" rel="noopener noreferrer">Launch Stack in Korea / Seoul (`ap-northeast-2`)</a>
-- <a href="https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml" target="_blank" rel="noopener noreferrer">Launch Stack in Japan / Tokyo (`ap-northeast-1`)</a>
-- <a href="https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml" target="_blank" rel="noopener noreferrer">Launch Stack in US West 1 / N. California (`us-west-1`)</a>
+
+> [!TIP]
+> Need another AWS Region? Use the AWS Marketplace listing instead: https://aws.amazon.com/marketplace/pp?sku=51c282skmep4qmamtmspsi8f3
 
 Required inputs:
 
@@ -28,18 +25,14 @@ Required inputs:
 
 ## Current early-access status
 
-- GitHub Launch Stack region support: `us-east-1`, `ap-northeast-2`, `ap-northeast-1`, `us-west-1`
+- GitHub Launch Stack region support: `us-east-1` only
 - Latest GitHub Launch Stack AMI version: `v0.1.4`
-- Public AMI IDs:
-  - `us-east-1` / US East 1 N. Virginia — `ami-05171a26aaa49fa0d`
-  - `ap-northeast-2` / Korea Seoul — `ami-01891737bbdcbe0e1`
-  - `ap-northeast-1` / Japan Tokyo — `ami-0885491ddc7bbab02`
-  - `us-west-1` / US West 1 N. California — `ami-0f239455ab6157bf9`
-- Public AMI status: publicly launchable in all supported GitHub Launch Stack regions
-- GitHub easy-mode template: `cloudformation/template-medium-ami-direct-autonet-github.yaml` for all supported regions
+- Public AMI ID for GitHub Launch Stack in `us-east-1`: `ami-05171a26aaa49fa0d`
+- Public AMI status: publicly launchable in `us-east-1` for early-access testing
+- GitHub easy-mode template: `cloudformation/template-medium-ami-direct-autonet-github.yaml` for `us-east-1`
 - Marketplace review template: `cloudformation/template-medium-ami-direct-autonet.yaml`
 - Higher-security production template: `cloudformation/template-medium-ami-secrets.yaml`
-- Marketplace submission: not yet started
+- Marketplace submission: available separately through AWS Marketplace
 - Distribution mode: GitHub Launch Stack using a public S3 TemplateURL
 - AWS costs: users pay their own EC2, EBS, data transfer, Elastic IP, and optional Secrets Manager costs
 
@@ -104,32 +97,20 @@ The public Launch Stack flow now uses a public S3 HTTPS object URL for the Cloud
 
 **Tradeoffs:** S3 delivery is accepted directly by CloudFormation and can be controlled with bucket policy, versioning, content type, and cache settings. GitHub remains the source repository, but GitHub raw URLs are no longer the primary Launch Stack delivery path because CloudFormation does not accept them reliably in all flows.
 
-### Region-specific Launch Stack buttons
+### GitHub Launch Stack button
 
-Use the button for the AWS region where you want to run the node. The template automatically selects the official region-local AMI for that region.
+Use this button to launch in **US East 1 / N. Virginia (`us-east-1`)**. GitHub Launch Stack is intentionally limited to `us-east-1`.
 
-| Region | AMI ID | Launch |
-| --- | --- | --- |
-| **US East 1 — N. Virginia (`us-east-1`)** | `ami-05171a26aaa49fa0d` | [![Launch Stack US East 1 / N. Virginia](https://img.shields.io/badge/Launch%20Stack-us--east--1-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml) |
-| **Korea — Seoul (`ap-northeast-2`)** | `ami-01891737bbdcbe0e1` | [![Launch Stack Korea / Seoul](https://img.shields.io/badge/Launch%20Stack-Korea%20Seoul-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-2#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml) |
-| **Japan — Tokyo (`ap-northeast-1`)** | `ami-0885491ddc7bbab02` | [![Launch Stack Japan / Tokyo](https://img.shields.io/badge/Launch%20Stack-Japan%20Tokyo-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml) |
-| **US West 1 — N. California (`us-west-1`)** | `ami-0f239455ab6157bf9` | [![Launch Stack US West 1 / N. California](https://img.shields.io/badge/Launch%20Stack-us--west--1-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml) |
+[![Launch Stack us-east-1](https://img.shields.io/badge/Launch%20Stack-us--east--1-orange?logo=amazon-aws)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml)
 
-Direct Launch Stack URLs:
+Direct Launch Stack URL:
 
 ```text
-US East 1 / N. Virginia:
 https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml
-
-Korea / Seoul:
-https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-2#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml
-
-Japan / Tokyo:
-https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml
-
-US West 1 / N. California:
-https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/create/review?stackName=orbs-node-validator&templateURL=https%3A%2F%2Fkryp-labs-orbs-boyar-cloudformation-617775257107-us-east-2.s3.us-east-2.amazonaws.com%2Forbs-boyar-aws-launcher%2Ftemplate-medium-ami-direct-autonet-github.yaml
 ```
+
+> [!TIP]
+> For Korea, Japan, US West 1, or other AWS Regions, use the AWS Marketplace listing instead: https://aws.amazon.com/marketplace/pp?sku=51c282skmep4qmamtmspsi8f3
 
 Public S3 direct-input template URL:
 
@@ -147,13 +128,12 @@ GitHub source templates for review:
 
 ```text
 https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-direct-autonet-github.yaml
-https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-direct-autonet-github.yaml
 https://raw.githubusercontent.com/goldenman-kr/orbs-boyar-aws-launcher/main/cloudformation/template-medium-ami-secrets.yaml
 ```
 
 ### Launch prerequisites
 
-- AWS account with access to the selected supported region
+- AWS account with access to `us-east-1`
 - Ethereum RPC endpoint URL
 - Orbs node address without leading `0x`
 - Orbs validator private key for direct NoEcho input
@@ -184,13 +164,13 @@ Key Pair handling follows the same reuse-or-create pattern. Select an existing r
 
 ### Network access defaults
 
-For AWS Marketplace validation, use `cloudformation/template-medium-ami-direct-autonet.yaml`; `KeyName` is optional and supports the same reuse-or-auto-create behavior as the GitHub template. `SshAccessCidr` controls reviewer/operator SSH reachability. For GitHub easy-mode launches, use the multi-region GitHub template. SSH remains key-only because password authentication is disabled in the AMI. For production, restrict `SshAccessCidr` to a trusted operator IP/CIDR.
+For AWS Marketplace validation, use `cloudformation/template-medium-ami-direct-autonet.yaml`; `KeyName` is optional and supports the same reuse-or-auto-create behavior as the GitHub template. `SshAccessCidr` controls reviewer/operator SSH reachability. For GitHub easy-mode launches, use the `us-east-1` GitHub template. SSH remains key-only because password authentication is disabled in the AMI. For production, restrict `SshAccessCidr` to a trusted operator IP/CIDR.
 
 GitHub easy-mode node/status endpoint access defaults to `AccessCidr=0.0.0.0/0` so the launched node can be validated immediately. Marketplace review uses the separate `cloudformation/template-medium-ami-direct-autonet.yaml` template and keeps the stricter `AccessCidr=127.0.0.1/32` default. For production, restrict `AccessCidr` to a trusted public IP as `x.x.x.x/32` or another CIDR range you control.
 
 ### Supported regions
 
-This early-access GitHub Launch Stack supports `us-east-1`, `ap-northeast-2`, `ap-northeast-1`, and `us-west-1`. The CloudFormation template uses a region-to-AMI mapping, so users should normally leave `CustomImageId` empty.
+This early-access GitHub Launch Stack supports `us-east-1` only. For other AWS Regions, use the AWS Marketplace listing: https://aws.amazon.com/marketplace/pp?sku=51c282skmep4qmamtmspsi8f3
 
 ### Estimated AWS costs
 
@@ -205,7 +185,7 @@ The launcher software is free, but AWS infrastructure costs apply, primarily EC2
 2. Click the Launch Stack button, or launch the autonet template from CLI:
 
 ```bash
-aws cloudformation create-stack   --region <supported-region>   --stack-name orbs-node-validator   --template-body file://cloudformation/template-medium-ami-direct-autonet-github.yaml   --parameters     ParameterKey=EthereumEndpoint,ParameterValue=<ethereum-rpc-url>     ParameterKey=NodeAddressWithNoLeading0x,ParameterValue=<40-hex-node-address>     ParameterKey=PrivateKeyNoLeading0x,ParameterValue=<64-hex-private-key-without-0x>
+aws cloudformation create-stack   --region us-east-1   --stack-name orbs-node-validator   --template-body file://cloudformation/template-medium-ami-direct-autonet-github.yaml   --parameters     ParameterKey=EthereumEndpoint,ParameterValue=<ethereum-rpc-url>     ParameterKey=NodeAddressWithNoLeading0x,ParameterValue=<40-hex-node-address>     ParameterKey=PrivateKeyNoLeading0x,ParameterValue=<64-hex-private-key-without-0x>
 ```
 
 3. Wait for stack creation to complete.
@@ -238,7 +218,7 @@ To delete the launcher stack:
 
 ```bash
 aws cloudformation delete-stack \
-  --region <supported-region> \
+  --region us-east-1 \
   --stack-name orbs-node-validator
 ```
 
@@ -265,7 +245,7 @@ This launcher is intended to be free as software, but AWS infrastructure costs s
 
 ## Limitations
 
-- Current AMI version is available in `us-east-1`, `ap-northeast-2`, `ap-northeast-1`, and `us-west-1`.
-- The template is a release candidate, not a public Marketplace listing.
+- Current GitHub Launch Stack AMI version is available in `us-east-1` only. For other AWS Regions, use AWS Marketplace.
+- GitHub Launch Stack is limited to `us-east-1`; use AWS Marketplace for other supported AWS Regions.
 - Direct-input users enter the private key as a NoEcho CloudFormation parameter; Secrets Manager users must create and manage the secret separately.
 - HTTPS/TLS, domain setup, monitoring dashboards, and alerting are not included.

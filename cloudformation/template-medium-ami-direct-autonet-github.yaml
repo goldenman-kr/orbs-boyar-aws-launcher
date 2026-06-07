@@ -21,13 +21,13 @@ Metadata:
       - Label:
           default: Optional EC2 configuration
         Parameters:
-          - CustomImageId
+          - ImageId
           - InstanceType
           - VolumeSize
           - KeyName
     ParameterLabels:
-      CustomImageId:
-        default: Custom AMI ID override
+      ImageId:
+        default: Medium AMI ID
       InstanceType:
         default: EC2 instance type
       VolumeSize:
@@ -47,24 +47,11 @@ Metadata:
       PrivateKeyNoLeading0x:
         default: Orbs private key without 0x
 
-Mappings:
-  RegionAmiMap:
-    us-east-1:
-      AmiId: ami-05171a26aaa49fa0d
-    ap-northeast-2:
-      AmiId: ami-01891737bbdcbe0e1
-    ap-northeast-1:
-      AmiId: ami-0885491ddc7bbab02
-    us-west-1:
-      AmiId: ami-0f239455ab6157bf9
-
 Parameters:
-  CustomImageId:
-    Type: String
-    Default: ''
-    Description: Optional override for a region-local Medium AMI. Leave empty to use the official KRYP Labs AMI for the selected AWS region.
-    AllowedPattern: '^(|ami-[0-9a-f]+)$'
-    ConstraintDescription: Must be empty or a valid AMI ID such as ami-0123456789abcdef0.
+  ImageId:
+    Type: AWS::EC2::Image::Id
+    Default: ami-05171a26aaa49fa0d
+    Description: Region-local us-east-1 Medium AMI with Docker, Boyar binary, /opt/orbs/ami_creator installer files, and baked AWS Marketplace SSH password-authentication hardening.
 
   InstanceType:
     Type: String
@@ -129,7 +116,6 @@ Parameters:
     ConstraintDescription: Must be 64 hex characters without 0x.
 
 Conditions:
-  UseCustomImageId: !Not [!Equals [!Ref CustomImageId, '']]
   UseExistingEip: !Not [!Equals [!Ref ExistingEipAllocationId, '']]
   CreateNewEip: !Equals [!Ref ExistingEipAllocationId, '']
   UseExistingKeyPair: !Not [!Equals [!Ref KeyName, '']]
@@ -260,7 +246,7 @@ Resources:
     Type: AWS::EC2::Instance
     DependsOn: OrbsBoyarDefaultRoute
     Properties:
-      ImageId: !If [UseCustomImageId, !Ref CustomImageId, !FindInMap [RegionAmiMap, !Ref 'AWS::Region', AmiId]]
+      ImageId: !Ref ImageId
       InstanceType: !Ref InstanceType
       KeyName: !If [UseExistingKeyPair, !Ref KeyName, !Ref OrbsBoyarKeyPair]
       NetworkInterfaces:
