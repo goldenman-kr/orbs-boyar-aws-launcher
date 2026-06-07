@@ -95,8 +95,8 @@ Parameters:
 
   AccessCidr:
     Type: String
-    Default: 127.0.0.1/32
-    Description: CIDR allowed to access Boyar/node endpoints on ports 80 and 7666. Secure default is closed to public networks; use x.x.x.x/32, another trusted CIDR, or 0.0.0.0/0 only if you intentionally want public endpoint access.
+    Default: 0.0.0.0/0
+    Description: CIDR allowed to access Boyar/node endpoints on ports 80 and 7666. GitHub easy-mode default is open for straightforward node/status validation; restrict this to x.x.x.x/32 or another trusted CIDR for production.
     AllowedPattern: '^(\d{1,3}\.){3}\d{1,3}/\d{1,2}$'
     ConstraintDescription: Must be a valid IPv4 CIDR, for example 127.0.0.1/32, 203.0.113.10/32, or 0.0.0.0/0.
 

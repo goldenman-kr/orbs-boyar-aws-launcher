@@ -63,7 +63,7 @@ Everything else is automatically provisioned or optional:
 - Internet Gateway, route table, default route, and Security Group are created automatically.
 - Elastic IP is created automatically, with optional `ExistingEipAllocationId` reuse for advanced reinstall/recovery.
 - SSH Key Pair handling is automatic in both GitHub and Marketplace templates. Select an existing regional `KeyName` to reuse it, or leave it empty and the stack creates a new EC2 Key Pair automatically.
-- `SshAccessCidr` controls SSH (`22`) and defaults to `0.0.0.0/0` for easy validation/testing; SSH remains key-only and password login is disabled in the AMI. `AccessCidr` controls node/status endpoints (`80`, `7666`) and keeps secure default `127.0.0.1/32`.
+- `SshAccessCidr` controls SSH (`22`) and defaults to `0.0.0.0/0` for easy validation/testing; SSH remains key-only and password login is disabled in the AMI. `AccessCidr` controls node/status endpoints (`80`, `7666`). GitHub easy-mode defaults it to `0.0.0.0/0` for straightforward validation; Marketplace review keeps the stricter default in its separate template.
 
 For the retained Secrets Manager template, the secret may contain either the raw 64-hex private key string or JSON with `PRIVATE_KEY_NO_LEADING_0x`, `privateKeyNoLeading0x`, or `privateKey`.
 
@@ -186,7 +186,7 @@ Key Pair handling follows the same reuse-or-create pattern. Select an existing r
 
 For AWS Marketplace validation, use `cloudformation/template-medium-ami-direct-autonet.yaml`; `KeyName` is optional and supports the same reuse-or-auto-create behavior as the GitHub template. `SshAccessCidr` controls reviewer/operator SSH reachability. For GitHub easy-mode launches, use the multi-region GitHub template. SSH remains key-only because password authentication is disabled in the AMI. For production, restrict `SshAccessCidr` to a trusted operator IP/CIDR.
 
-Node/status endpoint access remains secure-by-default with `AccessCidr=127.0.0.1/32`. Users should enter their own trusted public IP as `x.x.x.x/32` or another CIDR range they control when external endpoint validation is needed.
+GitHub easy-mode node/status endpoint access defaults to `AccessCidr=0.0.0.0/0` so the launched node can be validated immediately. Marketplace review uses the separate `cloudformation/template-medium-ami-direct-autonet.yaml` template and keeps the stricter `AccessCidr=127.0.0.1/32` default. For production, restrict `AccessCidr` to a trusted public IP as `x.x.x.x/32` or another CIDR range you control.
 
 ### Supported regions
 
