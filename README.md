@@ -1,6 +1,6 @@
-# Orbs Boyar AWS Launcher
+# Orbs AWS Launcher
 
-Public early-access release for launching an Orbs Boyar validator node on AWS with CloudFormation.
+Public early-access release for launching an Orbs validator node on AWS with CloudFormation.
 
 This package is the **KRYP Labs** GitHub Launch Stack early-access flow. It is intended to evolve toward a future free AWS Marketplace distribution.
 
@@ -38,9 +38,9 @@ Required inputs:
 
 ## What this launcher does
 
-The CloudFormation template launches one EC2 instance from a validated Medium AMI and configures an Orbs Boyar validator node at first boot.
+The CloudFormation template launches one EC2 instance from a validated Medium AMI and configures an Orbs validator node at first boot.
 
-The AMI already contains the stable non-secret components: Ubuntu 22.04, Docker, the Boyar binary, and installer files. First boot only injects runtime configuration and starts the node.
+The AMI already contains the stable non-secret components: Ubuntu 22.04, Docker, the node runtime, and installer files. First boot only injects runtime configuration and starts the node.
 
 ## Required user inputs
 
@@ -158,7 +158,7 @@ Recommended for higher-security production and future Marketplace packaging: use
 
 ### Elastic IP behavior
 
-By default, the direct-input template automatically creates and associates an Elastic IP with the validator instance. Stack outputs use this stable `ElasticIp` value for Boyar status, management status, and SSH examples. Record the `ElasticIp` and `ElasticIpAllocationId` outputs after launch. When the stack creates the EIP, CloudFormation releases it automatically on stack deletion. Advanced users can pass `ExistingEipAllocationId` to preserve the same node IP across reinstall/recovery; in that mode CloudFormation associates the existing EIP but does not release it when the stack is deleted, and users are responsible for any retained EIP charges.
+By default, the direct-input template automatically creates and associates an Elastic IP with the validator instance. Stack outputs use this stable `ElasticIp` value for node status, management status, and SSH examples. Record the `ElasticIp` and `ElasticIpAllocationId` outputs after launch. When the stack creates the EIP, CloudFormation releases it automatically on stack deletion. Advanced users can pass `ExistingEipAllocationId` to preserve the same node IP across reinstall/recovery; in that mode CloudFormation associates the existing EIP but does not release it when the stack is deleted, and users are responsible for any retained EIP charges.
 
 Key Pair handling follows the same reuse-or-create pattern. Select an existing regional `KeyName` to reuse it; leave `KeyName` empty to auto-create a stack-managed EC2 Key Pair. Outputs show `AppliedKeyName` and `KeyPairMode`. If a key pair is auto-created, outputs also show the SSM parameter name and retrieval command for the private key. Auto-created key pairs and their private-key SSM parameters are deleted with the stack; existing key pairs are never deleted by this stack.
 
@@ -189,16 +189,15 @@ aws cloudformation create-stack   --region us-east-1   --stack-name orbs-node-va
 ```
 
 3. Wait for stack creation to complete.
-4. Open the stack outputs and check `ElasticIp`, `BoyarStatusUrl`, `ManagementStatusUrl`, `AppliedKeyName`, `KeyPairMode`, and `SSHCommand`. If the stack auto-created the key pair, also save the private key using `AutoCreatedPrivateKeyRetrievalCommand` before relying on SSH access.
+4. Open the stack outputs and check `ElasticIp`, `ManagementStatusUrl`, `AppliedKeyName`, `KeyPairMode`, and `SSHCommand`. If the stack auto-created the key pair, also save the private key using `AutoCreatedPrivateKeyRetrievalCommand` before relying on SSH access.
 
 ## Verify after launch
 
 Expected results:
 
 - CloudFormation stack status: `CREATE_COMPLETE`
-- `http://<ElasticIp>/services/boyar/status`: HTTP 200
 - `http://<ElasticIp>:7666/status`: HTTP 200
-- `boyar.service`: active/running
+- Node service: active/running
 - `management-service`: healthy
 
 SSH example:
@@ -207,7 +206,6 @@ SSH example:
 ssh -i <key-file.pem> ubuntu@<ElasticIp>
 # If KeyName was empty, first run the AutoCreatedPrivateKeyRetrievalCommand output to save the generated .pem file.
 # Expected: key-based login succeeds. Password login is rejected because PasswordAuthentication is disabled.
-sudo systemctl status boyar.service --no-pager --full
 sudo docker service ls
 sudo docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'
 ```
