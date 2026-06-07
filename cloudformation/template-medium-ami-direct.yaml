@@ -16,7 +16,7 @@ Metadata:
       - Label:
           default: EC2 configuration
         Parameters:
-          - ImageId
+          - CustomImageId
           - InstanceType
           - VolumeSize
           - KeyName
@@ -27,8 +27,8 @@ Metadata:
           - NodeAddressWithNoLeading0x
           - PrivateKeyNoLeading0x
     ParameterLabels:
-      ImageId:
-        default: Medium AMI ID
+      CustomImageId:
+        default: Custom AMI ID override
       InstanceType:
         default: EC2 instance type
       VolumeSize:
@@ -50,11 +50,24 @@ Metadata:
       PrivateKeyNoLeading0x:
         default: Orbs private key without 0x
 
+Mappings:
+  RegionAmiMap:
+    us-east-1:
+      AmiId: ami-05171a26aaa49fa0d
+    ap-northeast-2:
+      AmiId: ami-01891737bbdcbe0e1
+    ap-northeast-1:
+      AmiId: ami-0885491ddc7bbab02
+    us-west-1:
+      AmiId: ami-0f239455ab6157bf9
+
 Parameters:
-  ImageId:
-    Type: AWS::EC2::Image::Id
-    Default: ami-0bfc554348685c913
-    Description: Region-local Medium AMI with Docker, Boyar binary, and /opt/orbs/ami_creator installer files pre-baked.
+  CustomImageId:
+    Type: String
+    Default: ''
+    Description: Optional override for a region-local Medium AMI. Leave empty to use the official KRYP Labs AMI for the selected AWS region.
+    AllowedPattern: '^(|ami-[0-9a-f]+)$'
+    ConstraintDescription: Must be empty or a valid AMI ID such as ami-0123456789abcdef0.
 
   InstanceType:
     Type: String
@@ -118,6 +131,7 @@ Parameters:
     ConstraintDescription: Must be 64 hex characters without 0x.
 
 Conditions:
+  UseCustomImageId: !Not [!Equals [!Ref CustomImageId, '']]
   UseExistingEip: !Not [!Equals [!Ref ExistingEipAllocationId, '']]
   CreateNewEip: !Equals [!Ref ExistingEipAllocationId, '']
 
@@ -167,7 +181,7 @@ Resources:
   OrbsBoyarInstance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: !Ref ImageId
+      ImageId: !If [UseCustomImageId, !Ref CustomImageId, !FindInMap [RegionAmiMap, !Ref 'AWS::Region', AmiId]]
       InstanceType: !Ref InstanceType
       KeyName: !Ref KeyName
       NetworkInterfaces:
